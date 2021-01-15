@@ -1,0 +1,163 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "menuId": 1,
+    "parentId": 0,
+    "name": "root",
+    "parentName": null,
+    "url": null,
+    "perms": null,
+    "icon": null,
+    "type": null,
+    "sort": 0,
+    "list": [
+      {
+        "menuId": 2,
+        "parentId": 0,
+        "name": "系统管理",
+        "parentName": "root",
+        "url": "",
+        "perms": "",
+        "icon": "system",
+        "type": 0,
+        "sort": 0,
+        "list": [
+          {
+            "menuId": 4,
+            "parentId": 0,
+            "name": "管理员列表",
+            "parentName": "系统管理",
+            "url": "sys/user",
+            "perms": "get/uaa/admin/**",
+            "icon": "admin",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 5,
+            "parentId": 0,
+            "name": "角色管理",
+            "parentName": "系统管理",
+            "url": "sys/role",
+            "perms": "get/uaa/role/**",
+            "icon": "role",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 6,
+            "parentId": 0,
+            "name": "菜单管理",
+            "parentName": "系统管理",
+            "url": "sys/menu",
+            "perms": "get/uaa/resource/**",
+            "icon": "menu",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 7,
+            "parentId": 0,
+            "name": "SQL监控",
+            "parentName": "系统管理",
+            "url": "http://gateway.api/uaa/druid/sql.html",
+            "perms": "",
+            "icon": "sql",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 8,
+            "parentId": 0,
+            "name": "定时任务",
+            "parentName": "系统管理",
+            "url": "job/schedule",
+            "perms": "",
+            "icon": "job",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 9,
+            "parentId": 0,
+            "name": "参数管理",
+            "parentName": "系统管理",
+            "url": "sys/config",
+            "perms": "",
+            "icon": "config",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 10,
+            "parentId": 0,
+            "name": "系统日志",
+            "parentName": "系统管理",
+            "url": "sys/log",
+            "perms": "",
+            "icon": "log",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          }
+        ]
+      },
+      {
+        "menuId": 3,
+        "parentId": 0,
+        "name": "平台管理",
+        "parentName": "root",
+        "url": "",
+        "perms": "",
+        "icon": "system",
+        "type": 0,
+        "sort": 0,
+        "list": [
+          {
+            "menuId": 11,
+            "parentId": 0,
+            "name": "商家入住",
+            "parentName": "平台管理",
+            "url": "sys/user",
+            "perms": "",
+            "icon": "admin",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 12,
+            "parentId": 0,
+            "name": "会员管理",
+            "parentName": "平台管理",
+            "url": "sys/role",
+            "perms": "",
+            "icon": "role",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          },
+          {
+            "menuId": 13,
+            "parentId": 0,
+            "name": "企业管理",
+            "parentName": "平台管理",
+            "url": "platform/company",
+            "perms": "get/uaa/organization/**",
+            "icon": "menu",
+            "type": 1,
+            "sort": 0,
+            "list": []
+          }
+        ]
+      }
+    ]
+  }
+}
