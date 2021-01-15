@@ -10,90 +10,97 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()"
+        <el-button v-if="isAuth('driver:internetdriver:delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
-      row-key="driverId"
+      :row-style="{height:'20px'}"
+      :cell-style="{padding:'0px'}"
       border
-      style="width: 100%; ">
+      v-loading="dataListLoading"
+      @selection-change="selectionChangeHandle"
+      style="width: 100%;">
+      <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column
         prop="driverName"
         header-align="center"
         align="center"
-        min-width="50"
+        width="180"
         label="姓名">
       </el-table-column>
       <el-table-column
         prop="drivingLicense"
         header-align="center"
         align="center"
-        width="150"
+        width="180"
         label="驾驶证编号">
       </el-table-column>
       <el-table-column
         prop="vehicleClass"
         header-align="center"
         align="center"
-        width="150"
+        width="180"
         label="准驾车型">
-        <!--<template slot-scope="scope">
-          <icon-svg :name="scope.row.icon || ''"></icon-svg>
-        </template>-->
       </el-table-column>
       <el-table-column
         prop="issuingOrganizations"
         header-align="center"
-        width="150"
         align="center"
+        width="180"
         label="驾驶证发证机关">
-        <!--<template slot-scope="scope">
-          <el-tag v-if="scope.row.type === 0" size="small">目录</el-tag>
-          <el-tag v-else-if="scope.row.type === 1" size="small" type="success">菜单</el-tag>
-          <el-tag v-else-if="scope.row.type === 2" size="small" type="info">按钮</el-tag>
-        </template>-->
       </el-table-column>
       <el-table-column
         prop="validPeriodFrom"
         header-align="center"
         align="center"
-        width="150"
+        width="180"
         label="驾驶证有效期自">
       </el-table-column>
       <el-table-column
         prop="validPeriodTo"
         header-align="center"
         align="center"
-        width="150"
-        :show-overflow-tooltip="true"
+        width="180"
         label="驾驶证有效期至">
       </el-table-column>
       <el-table-column
         prop="qualificationCertificate"
         header-align="center"
         align="center"
-        width="150"
-        :show-overflow-tooltip="true"
+        width="180"
         label="从业资格证号">
       </el-table-column>
       <el-table-column
         prop="telephone"
         header-align="center"
         align="center"
-        width="150"
-        :show-overflow-tooltip="true"
+        width="180"
         label="手机号码">
       </el-table-column>
       <el-table-column
         prop="remark"
         header-align="center"
         align="center"
-        width="150"
-        :show-overflow-tooltip="true"
+        width="180"
         label="备注">
+      </el-table-column>
+      <el-table-column
+        prop="updateTime"
+        header-align="center"
+        align="center"
+        width="180"
+        label="更新时间">
+        <template slot-scope="scope">
+          {{ scope.row.updateTime | dateFormat }}
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -102,10 +109,11 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:menu:update')" type="text" size="small"
-                     @click="addOrUpdateHandle(scope.row.menuId)">修改
+          <el-button v-if="isAuth('sys:carbasicinfo:update')" type="text" size="small"
+                     @click="addOrUpdateHandle(scope.row.id)">修改
           </el-button>
-          <el-button v-if="isAuth('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">
+          <el-button v-if="isAuth('driver:internetdriver:delete')" type="text" size="small"
+                     @click="deleteHandle(scope.row.id)">
             删除
           </el-button>
         </template>
@@ -126,58 +134,17 @@
 </template>
 
 <script>
-import AddOrUpdate from './driver-add-or-update'
-import {getAdminList} from '@/api/api'
+import AddOrUpdate from './internetdriver-add-or-update'
+import {getDriverPage,deleteDriver} from '@/api/api'
 
 export default {
-  data() {
+  data () {
     return {
       dataForm: {
-        userName: ''
+        driverName: '',
+        telephone: ''
       },
-      dataList: [
-        {
-            driverName: '王小虎',
-            drivingLicense: '412336222222222222',
-            vehicleClass: 'C1',
-            issuingOrganizations: '上海市普陀区金沙江路派出所',
-            validPeriodFrom: '2016-05-02',
-            validPeriodTo: '2016-05-02',
-            qualificationCertificate: 'IUO859JIU96855',
-            telephone: '13259869587',
-            remark: '无'
-          }, {
-            driverName: '张丽丽',
-            drivingLicense: '342336222222222222',
-            vehicleClass: 'C3',
-            issuingOrganizations: '上海市普陀区金沙江路派出所',
-            validPeriodFrom: '2016-05-02',
-            validPeriodTo: '2016-05-02',
-            qualificationCertificate: 'IUO859JIU96855',
-            telephone: '13259869587',
-            remark: '无'
-          }, {
-            driverName: '林妙可',
-            drivingLicense: '882336222222222222',
-            vehicleClass: 'C4',
-            issuingOrganizations: '上海市普陀区金沙江路派出所',
-            validPeriodFrom: '2016-05-02',
-            validPeriodTo: '2016-05-02',
-            qualificationCertificate: 'IUO859JIU96855',
-            telephone: '13259869587',
-            remark: '无'
-          }, {
-            driverName: '潘米拉',
-            drivingLicense: '662336222222222222',
-            vehicleClass: 'C2',
-            issuingOrganizations: '上海市普陀区金沙江路派出所',
-            validPeriodFrom: '2016-05-02',
-            validPeriodTo: '2016-05-02',
-            qualificationCertificate: 'IUO859JIU96855',
-            telephone: '13259869587',
-            remark: '无'
-          }
-      ],
+      DataList: [],
       pageIndex: 0,
       pageSize: 10,
       totalPage: 0,
@@ -189,26 +156,25 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated() {
-    //this.getDataList()
+  activated () {
+    this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true
       let params = {
         'page': this.pageIndex,
         'limit': this.pageSize,
-        'username': this.dataForm.userName,
+        'driverName': this.dataForm.driverName,
+        'telephone': this.dataForm.telephone,
         'organizationId': this.$store.state.user.organizationId
       }
-      getAdminList(params).then(({data}) => {
+      getDriverPage(params).then(({data}) => {
         if (data && data.code === 0) {
           let {data: {content, totalElements}} = data
           this.totalPage = totalElements
           this.dataList = content
-
-
         } else {
           this.dataList = []
           this.totalPage = 0
@@ -217,41 +183,41 @@ export default {
       })
     },
     // 每页数
-    sizeChangeHandle(val) {
+    sizeChangeHandle (val) {
       this.pageSize = val
       this.pageIndex = 1
       this.getDataList()
     },
     // 当前页
-    currentChangeHandle(val) {
+    currentChangeHandle (val) {
       this.pageIndex = val
       this.getDataList()
     },
     // 多选
-    selectionChangeHandle(val) {
+    selectionChangeHandle (val) {
       this.dataListSelections = val
     },
     // 新增 / 修改
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle(id) {
-      var adminIds = id ? [id] : this.dataListSelections.map(item => {
-        return item.id
+    deleteHandle (id) {
+      var driverIds = id ? [id] : this.dataListSelections.map(item => {
+       return item.id
       })
-      this.$confirm(`确定对[id=${adminIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[id=${driverIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/uaa/admin'),
+          url: this.$http.addUrl('/internetfreight/internetDrivers/delById'),
           method: 'delete',
-          data: this.$http.addParams(adminIds, false)
+          data: this.$http.addParams(id, false)
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({
@@ -262,6 +228,7 @@ export default {
                 this.getDataList()
               }
             })
+            this.visible = true
           } else {
             this.$message.error(data.msg)
           }

@@ -33,14 +33,14 @@ const getRolePage = (params) => getAction(`${uaaModel}/sys/role/page`, params)
 const getOrganizationList = (params) => getAction(`${uaaModel}/sys/organization/organizationList`, params)
 
 //网络货运模块
-const internetFreightModel = '/interpreter'
+const internetFreightModel = '/internetfreight'
 //车辆管理
-const getCarPage = (params) => getAction(`${internetFreightModel}/internetCars/getPageByCondition`, params)
+const getCarPage = (params)=>getAction(`${internetFreightModel}/internetCars/getPageByCondition`,params)
 
 //驾驶员管理
 const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) //获取分页列表
-const addDriver = (params, methodN) => httpAction(`${internetFreightModel}/internetDrivers`, params, methodN) //新增驾驶员
-const getDriverById=(params,methodI)=>httpAction(`${internetFreightModel}/interpreter/internetDrivers/getOneById`,params,methodI)//根据id获取对应的列表
+const addDriver = (params,methodN)=>httpAction(`${internetFreightModel}/internetDrivers`,params,methodN) //新增驾驶员
+const deleteDriver = (params,methodD)=>httpAction(`${internetFreightModel}/internetDrivers/delById`,params) //删除驾驶员
 
 export {
   getMenuList,
@@ -53,11 +53,11 @@ export {
   getRolePage,
   getOrganizationList,
   getSmsCode,
-  getCarPage,
   mobileLogin,
+  getCarPage,
   getDriverPage,
   addDriver,
-  getDriverById
+  deleteDriver
 }
 
 

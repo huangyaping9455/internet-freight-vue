@@ -21,7 +21,7 @@ for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
 export function list () {
   return {
     // isOpen: false,
-    url: '/driver/driver/list',
+    url: '/driver/internetdriver/list',
     type: 'get',
     data: {
       'msg': 'success',
@@ -41,12 +41,12 @@ export function list () {
 export function info () {
   return {
     // isOpen: false,
-    url: '/driver/driver/info',
+    url: '/driver/internetdriver/info',
     type: 'get',
     data: {
       'msg': 'success',
       'code': 0,
-      'driver':dataList[0]
+      'driver': dataList[0]
     }
   }
 }
@@ -56,7 +56,7 @@ export function info () {
 export function add () {
   return {
     // isOpen: false,
-    url: '/driver/driver/save',
+    url: '/driver/internetdriver/save',
     type: 'post',
     data: {
       'msg': 'success',
@@ -69,7 +69,7 @@ export function add () {
 export function update () {
   return {
     // isOpen: false,
-    url: '/driver/driver/update',
+    url: '/driver/internetdriver/update',
     type: 'post',
     data: {
       'msg': 'success',
@@ -82,7 +82,7 @@ export function update () {
 export function del () {
   return {
     // isOpen: false,
-    url: '/driver/driver/delete',
+    url: '/driver/internetdriver/delete',
     type: 'post',
     data: {
       'msg': 'success',

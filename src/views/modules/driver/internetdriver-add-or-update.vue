@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import {addDriver,getDriverById} from '@/api/api'
+import {addDriver} from '@/api/api'
 import {telephone} from '../../../utils/validate'
 export default {
   data () {
@@ -100,6 +100,7 @@ export default {
           {validator: telephone, trigger: 'blur'}
         ]
       },
+      /*日期*/
       pickerOptions1: {
         disabledDate (time) {
           return time.getTime() > Date.now()
@@ -113,11 +114,15 @@ export default {
     init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
-        let id=this.dataForm.id;
-        let methods='get';
-        getDriverById(id,methods).then(({data}) => {
+        this.$http({
+          url: this.$http.addUrl(`/internetfreight/internetDrivers/getOneById`),
+          method: 'get',
+          params: this.$http.addParams({
+            id: this.dataForm.id
+          })
+        }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataForm.driverName = data.data.driverName,
+               this.dataForm.driverName = data.data.driverName,
               this.dataForm.drivingLicense = data.data.drivingLicense,
               this.dataForm.vehicleClass = data.data.vehicleClass,
               this.dataForm.issuingOrganizations = data.data.issuingOrganizations,
@@ -134,7 +139,6 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      alert(111)
       this.$refs['dataForm'].validate((valid) => {
         let methods=`${!this.dataForm.id ? 'post' : 'put'}`;
         if (valid) {
@@ -150,8 +154,9 @@ export default {
             'telephone': this.dataForm.telephone,
             'remark': this.dataForm.remark,
           }
-          addDriver(dataForm,methods).then((data) => {
-          }).then(({data}) => {
+         addDriver(dataForm,methods).then((data) => {
+          })
+        .then(({data}) => {
             console.log(data)
             if (data && data.code === 0) {
               this.visible = false
@@ -160,7 +165,7 @@ export default {
                 type: 'success',
                 duration: 1500,
                 onClose: () => {
-                  this.visible = true
+                  this.visible = false
                   this.$emit('refreshDataList')
                 }
               })
