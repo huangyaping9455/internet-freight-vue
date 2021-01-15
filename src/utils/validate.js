@@ -29,3 +29,10 @@ export function isPhone (s) {
 export function isURL (s) {
   return /^http[s]?:\/\/.*/.test(s)
 }
+/**
+ * 驾驶员手机号码
+ * @param {*} s
+ */
+export function telephone (s) {
+  return /^1[0-9]{10}$/.test(s)
+}

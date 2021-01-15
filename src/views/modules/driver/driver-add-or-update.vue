@@ -4,33 +4,42 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
-             label-width="120px">
-      <el-form-item label="姓名" prop="driverName">
-        <el-input v-model="dataForm.name" placeholder="姓名"></el-input>
+             label-width="160px">
+      <el-form-item label="姓名" prop="driverName" :class="{ 'is-required': !dataForm.driverName }">
+        <el-input v-model="dataForm.driverName" placeholder="姓名"></el-input>
       </el-form-item>
-      <el-form-item label="驾驶证编号" prop="drivingLicense">
-        <el-input v-model="dataForm.drivingLicense" placeholder="驾驶证编号"></el-input>
+      <el-form-item label="身份证号" prop="drivingLicense" :class="{ 'is-required': !dataForm.drivingLicense }">
+        <el-input v-model="dataForm.drivingLicense" placeholder="身份证号"></el-input>
       </el-form-item>
-      <el-form-item label="准驾车型" prop="vehicleClass">
+      <el-form-item label="准驾车型" prop="vehicleClass" :class="{ 'is-required': !dataForm.vehicleClass }">
         <el-input v-model="dataForm.vehicleClass" placeholder="准驾车型"></el-input>
       </el-form-item>
-      <el-form-item label="驾驶证发证机关" prop="issuingOrganizations">
+      <el-form-item label="驾驶证发证机关" prop="issuingOrganizations" :class="{ 'is-required': !dataForm.issuingOrganizations }">
         <el-input v-model="dataForm.issuingOrganizations" placeholder="驾驶证发证机关"></el-input>
       </el-form-item>
-      <el-form-item label="驾驶证有效期">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="驾驶证有效期自" v-model="dataForm.validPeriodFrom" style="width: 100%;"></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="驾驶证有效期至" v-model="dataForm.validPeriodTo" style="width: 100%;"></el-date-picker>
-        </el-col>
+      <el-form-item label="驾驶证有效期自" prop="validPeriodFrom" :class="{ 'is-required': !dataForm.validPeriodFrom }">
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.validPeriodFrom"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </div>
       </el-form-item>
-      <el-form-item label="从业资格证号" prop="qualificationCertificate">
+      <el-form-item label="驾驶证有效期至" prop="validPeriodTo" :class="{ 'is-required': !dataForm.validPeriodTo }">
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.validPeriodTo"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </div>
+      </el-form-item>
+      <el-form-item label="从业资格证号" prop="qualificationCertificate" :class="{ 'is-required': !dataForm.qualificationCertificate }">
         <el-input v-model="dataForm.qualificationCertificate" placeholder="从业资格证号"></el-input>
       </el-form-item>
-      <el-form-item label="电话" prop="telephone">
-        <el-input v-model="dataForm.telephone" placeholder="电话"></el-input>
+      <el-form-item label="手机号码" prop="telephone" :class="{ 'is-required': !dataForm.telephone }">
+        <el-input v-model="dataForm.telephone" placeholder="手机号码"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
@@ -44,135 +53,114 @@
 </template>
 
 <script>
-import {isEmail, isMobile} from '@/utils/validate'
-import {getRoleList} from '@/api/api'
-
+import {addDriver,getDriverById} from '@/api/api'
+import {telephone} from '../../../utils/validate'
 export default {
-  data() {
-    var validatePassword = (rule, value, callback) => {
-      if (!this.dataForm.id && !/\S/.test(value)) {
-        callback(new Error('密码不能为空'))
-      } else {
-        callback()
-      }
-    }
-    var validateComfirmPassword = (rule, value, callback) => {
-      if (!this.dataForm.id && !/\S/.test(value)) {
-        callback(new Error('确认密码不能为空'))
-      } else if (this.dataForm.password !== value) {
-        callback(new Error('确认密码与密码输入不一致'))
-      } else {
-        callback()
-      }
-    }
-    var validateEmail = (rule, value, callback) => {
-      if (!isEmail(value)) {
-        callback(new Error('邮箱格式错误'))
-      } else {
-        callback()
-      }
-    }
-    var validateMobile = (rule, value, callback) => {
-      if (!isMobile(value)) {
-        callback(new Error('手机号格式错误'))
-      } else {
-        callback()
-      }
-    }
+  data () {
     return {
       visible: false,
       roleList: [],
       dataForm: {
         id: 0,
-        userName: '',
-        name:'',
-        password: '',
-        comfirmPassword: '',
-        organizationId: '',
-        email: '',
-        mobile: '',
-        roleIdList: [],
+        'driverName': '',
+        'drivingLicense': '',
+        'vehicleClass': '',
+        'issuingOrganizations': '',
+        'validPeriodFrom': '',
+        'validPeriodTo': '',
+        'qualificationCertificate': '',
+        'telephone': '',
+        'remark': '',
         delete: 1
       },
       dataRule: {
-        userName: [
-          {required: true, message: '用户名不能为空', trigger: 'blur'}
+        driverName: [
+          {required: true, message: '驾驶员姓名不能为空', trigger: 'blur'}
         ],
-        password: [
-          {validator: validatePassword, trigger: 'blur'}
+        drivingLicense: [
+          {required: true, message: '身份证号不能为空', trigger: 'blur'}
         ],
-        comfirmPassword: [
-          {validator: validateComfirmPassword, trigger: 'blur'}
+        vehicleClass: [
+          {required: true, message: '准驾车型不能为空', trigger: 'blur'}
         ],
-        email: [
-          {required: true, message: '邮箱不能为空', trigger: 'blur'},
-          {validator: validateEmail, trigger: 'blur'}
+        issuingOrganizations: [
+          {required: true, message: '驾驶证发证机关不能为空', trigger: 'blur'}
         ],
-        mobile: [
+        validPeriodFrom: [
+          {required: true, message: '驾驶证有效期自不能为空', trigger: 'blur'}
+        ],
+        validPeriodTo: [
+          {required: true, message: '驾驶证有效期至不能为空', trigger: 'blur'}
+        ],
+        qualificationCertificate: [
+          {required: true, message: '从业资格证号不能为空', trigger: 'blur'}
+        ],
+        telephone: [
           {required: true, message: '手机号不能为空', trigger: 'blur'},
-          {validator: validateMobile, trigger: 'blur'}
+          {validator: telephone, trigger: 'blur'}
         ]
-      }
+      },
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        },
+      },
+      validPeriodFrom: '',
+      validPeriodTo: '',
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
-      getRoleList().then(({data}) => {
-        this.roleList = data ? data : []
-      }).then(() => {
-        this.visible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-        })
-      }).then(() => {
-        if (this.dataForm.id) {
-          this.$http({
-            url: this.$http.addUrl(`/uaa/sys/admin/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.addParams()
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.dataForm.userName = data.data.username
-              this.dataForm.organizationId = data.data.organizationId
-              this.dataForm.email = data.data.email
-              this.dataForm.mobile = data.data.mobile
-              this.dataForm.name = data.data.name
-              this.dataForm.roleIdList = data.data.roleIdList
+      if (this.dataForm.id) {
+        let id=this.dataForm.id;
+        let methods='get';
+        getDriverById(id,methods).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataForm.driverName = data.data.driverName,
+              this.dataForm.drivingLicense = data.data.drivingLicense,
+              this.dataForm.vehicleClass = data.data.vehicleClass,
+              this.dataForm.issuingOrganizations = data.data.issuingOrganizations,
+              this.dataForm.validPeriodFrom = data.data.validPeriodFrom,
+              this.dataForm.validPeriodTo = data.data.validPeriodTo,
+              this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
+              this.dataForm.telephone = data.data.telephone,
+              this.dataForm.remark = data.data.remark,
               this.dataForm.delete = data.data.delete
-            }
-          })
-        }
-      })
+          }
+        })
+      }
+      this.visible = true
     },
     // 表单提交
-    dataFormSubmit() {
+    dataFormSubmit () {
+      alert(111)
       this.$refs['dataForm'].validate((valid) => {
+        let methods=`${!this.dataForm.id ? 'post' : 'put'}`;
         if (valid) {
-          this.$http({
-            url: this.$http.addUrl(`/uaa/sys/admin${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
-            method: `${!this.dataForm.id ? 'post' : 'put'}`,
-            data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'username': this.dataForm.userName,
-              'name': this.dataForm.name,
-              'password': this.dataForm.password,
-              'salt': this.dataForm.salt,
-              'email': this.dataForm.email,
-              'mobile': this.dataForm.mobile,
-              'delete': this.dataForm.delete,
-              'roleIdList': this.dataForm.roleIdList,
-              'organizationId': this.$store.state.user.organizationId
-
-            })
+          let dataForm = {
+            'id': this.dataForm.id || undefined,
+            'driverName': this.dataForm.driverName,
+            'drivingLicense': this.dataForm.drivingLicense,
+            'vehicleClass': this.dataForm.vehicleClass,
+            'issuingOrganizations': this.dataForm.issuingOrganizations,
+            'validPeriodFrom': this.dataForm.validPeriodFrom,
+            'validPeriodTo': this.dataForm.validPeriodTo,
+            'qualificationCertificate': this.dataForm.qualificationCertificate,
+            'telephone': this.dataForm.telephone,
+            'remark': this.dataForm.remark,
+          }
+          addDriver(dataForm,methods).then((data) => {
           }).then(({data}) => {
+            console.log(data)
             if (data && data.code === 0) {
+              this.visible = false
               this.$message({
                 message: '操作成功',
                 type: 'success',
                 duration: 1500,
                 onClose: () => {
-                  this.visible = false
+                  this.visible = true
                   this.$emit('refreshDataList')
                 }
               })
