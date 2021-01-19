@@ -275,7 +275,6 @@ export default {
     },
     // 表单提交
     dataFormSubmit() {
-      alert(this.dataForm.id);
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
