@@ -17,13 +17,13 @@
       row-key="id"
       border
       style="width: 100%; ">
-      <el-table-column
+<!--      <el-table-column
         prop="id"
         header-align="center"
         align="center"
         min-width="150"
         label="ID">
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         prop="vehicleNumber"
         header-align="center"
@@ -60,7 +60,7 @@
         label="使用性质">
       </el-table-column>
       <el-table-column
-        prop="VIN"
+        prop="vin"
         header-align="center"
         align="center"
         width="150"
@@ -240,18 +240,15 @@ export default {
     },
     // 删除
     deleteHandle(id) {
-      var adminIds = id ? [id] : this.dataListSelections.map(item => {
-        return item.id
-      })
-      this.$confirm(`确定对[id=${adminIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/internetfreight/internetCars'),
+          url: this.$http.addUrl(`/internetfreight/internetCars/${id}`),
           method: 'delete',
-          data: this.$http.addParams(adminIds, false)
+          data: this.$http.addData()
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({

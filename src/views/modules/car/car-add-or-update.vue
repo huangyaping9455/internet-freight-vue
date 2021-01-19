@@ -5,57 +5,117 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="120px">
+      <el-row>
+        <el-col :span="12">
       <el-form-item label="车辆牌照号" prop="vehicleNumber">
         <el-input v-model="dataForm.vehicleNumber" placeholder="车辆牌照号"></el-input>
       </el-form-item>
+        </el-col>
+        <el-col :span="12">
       <el-form-item label="车牌颜色代码" prop="vehiclePlateColorCode">
         <el-input v-model="dataForm.vehiclePlateColorCode" placeholder="车牌颜色代码"></el-input>
       </el-form-item>
+        </el-col>
+      </el-row>
+
+
+      <el-row>
+        <el-col :span="12">
       <el-form-item label="车辆类型代码" prop="vehicleType">
         <el-input v-model="dataForm.vehicleType" placeholder="车辆类型代码"></el-input>
       </el-form-item>
+        </el-col>
+        <el-col :span="12">
       <el-form-item label="所有人" prop="owner">
         <el-input v-model="dataForm.owner" placeholder="所有人"></el-input>
       </el-form-item>
+        </el-col>
+      </el-row>
+
+
+          <el-row>
+            <el-col :span="12">
       <el-form-item label="使用性质" prop="useCharacter">
         <el-input v-model="dataForm.useCharacter" placeholder="使用性质"></el-input>
       </el-form-item>
-      <el-form-item label="车辆识别代号" prop="VIN">
-        <el-input v-model="dataForm.VIN" placeholder="车辆识别代号"></el-input>
+            </el-col>
+            <el-col :span="12">
+      <el-form-item label="车辆识别代号" prop="vin">
+        <el-input v-model="dataForm.vin" placeholder="车辆识别代号"></el-input>
       </el-form-item>
+            </el-col>
+          </el-row>
+
+
+              <el-row>
+                <el-col :span="12">
       <el-form-item label="发证机关" prop="issuingOrganizations">
         <el-input v-model="dataForm.issuingOrganizations" placeholder="发证机关"></el-input>
       </el-form-item>
+                </el-col>
+                <el-col :span="12">
       <el-form-item label="注册日期">
         <el-col :span="11">
           <el-date-picker type="date" placeholder="注册日期" v-model="dataForm.registerDate"
                           style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
+                </el-col>
+              </el-row>
+
+
+                  <el-row>
+                    <el-col :span="12">
       <el-form-item label="发证日期">
         <el-col :span="11">
           <el-date-picker type="date" placeholder="发证日期" v-model="dataForm.issueDate"
                           style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
       <el-form-item label="车辆能源类型" prop="vehicleEnergyType">
         <el-input v-model="dataForm.vehicleEnergyType" placeholder="车辆能源类型"></el-input>
       </el-form-item>
+                    </el-col>
+                  </el-row>
+
+
+                      <el-row>
+                        <el-col :span="12">
       <el-form-item label="核定载质量" prop="vehicleTonnage">
         <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量"></el-input>
       </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
       <el-form-item label="总质量" prop="grossMass">
         <el-input v-model="dataForm.grossMass" placeholder="总质量"></el-input>
       </el-form-item>
+                        </el-col>
+                      </el-row>
+
+
+                          <el-row>
+                            <el-col :span="12">
       <el-form-item label="道路运输证号" prop="roadTransportCertificateNumber">
         <el-input v-model="dataForm.roadTransportCertificateNumber" placeholder="道路运输证号"></el-input>
       </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
       <el-form-item label="挂车牌照号" prop="trailerVehiclePlateNumber">
         <el-input v-model="dataForm.trailerVehiclePlateNumber" placeholder="挂车牌照号"></el-input>
       </el-form-item>
+                            </el-col>
+                          </el-row>
+
+
+                              <el-row>
+                                <el-col :span="12">
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
+                                </el-col>
+                              </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
