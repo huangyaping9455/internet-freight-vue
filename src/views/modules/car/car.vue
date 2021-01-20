@@ -191,7 +191,7 @@ export default {
       },
       dataList: [],
       pageIndex: 0,
-      pageSize: 10,
+      pageSize: 20,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
@@ -232,7 +232,7 @@ export default {
     // 每页数
     sizeChangeHandle(val) {
       this.pageSize = val
-      this.pageIndex = 1
+      this.pageIndex = 0
       this.getDataList()
     },
     // 当前页
