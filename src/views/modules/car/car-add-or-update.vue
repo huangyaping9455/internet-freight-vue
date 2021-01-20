@@ -55,7 +55,7 @@
                 </el-col>
                 <el-col :span="12">
       <el-form-item label="注册日期">
-        <el-col :span="11">
+        <el-col :span="35">
           <el-date-picker type="date" placeholder="注册日期" v-model="dataForm.registerDate"
                           style="width: 100%;"></el-date-picker>
         </el-col>
@@ -67,7 +67,7 @@
                   <el-row>
                     <el-col :span="12">
       <el-form-item label="发证日期">
-        <el-col :span="11">
+        <el-col :span="35">
           <el-date-picker type="date" placeholder="发证日期" v-model="dataForm.issueDate"
                           style="width: 100%;"></el-date-picker>
         </el-col>
@@ -116,6 +116,24 @@
       </el-form-item>
                                 </el-col>
                               </el-row>
+
+      <el-row>
+      <el-col :span="12">
+        <el-form-item label="挂车牌照号" prop="trailerVehiclePlateNumber">
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple>
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">上传行车证</div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+      </el-col>
+      </el-row>
+
+
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
