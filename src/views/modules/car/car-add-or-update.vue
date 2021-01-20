@@ -148,32 +148,16 @@ import {getRoleList} from '@/api/api'
 
 export default {
   data() {
-    var validatePassword = (rule, value, callback) => {
-      if (!this.dataForm.id && !/\S/.test(value)) {
-        callback(new Error('密码不能为空'))
+    let validateVehicleNumber = (rule, value, callback) => {
+      if (!this.dataForm.vehicleNumber && !/\S/.test(value)) {
+        callback(new Error('车牌号不能为空'))
       } else {
         callback()
       }
     }
-    var validateComfirmPassword = (rule, value, callback) => {
-      if (!this.dataForm.id && !/\S/.test(value)) {
-        callback(new Error('确认密码不能为空'))
-      } else if (this.dataForm.password !== value) {
-        callback(new Error('确认密码与密码输入不一致'))
-      } else {
-        callback()
-      }
-    }
-    var validateEmail = (rule, value, callback) => {
-      if (!isEmail(value)) {
-        callback(new Error('邮箱格式错误'))
-      } else {
-        callback()
-      }
-    }
-    var validateMobile = (rule, value, callback) => {
-      if (!isMobile(value)) {
-        callback(new Error('手机号格式错误'))
+    let validateOwner = (rule, value, callback) => {
+      if (!this.dataForm.owner && !/\S/.test(value)) {
+        callback(new Error('所有人不能为空'))
       } else {
         callback()
       }
@@ -201,22 +185,11 @@ export default {
         delete: 1
       },
       dataRule: {
-        userName: [
-          {required: true, message: '用户名不能为空', trigger: 'blur'}
+        vehicleNumber: [
+          {validator: validateVehicleNumber, message: '车牌号不能为空', trigger: 'blur'}
         ],
-        password: [
-          {validator: validatePassword, trigger: 'blur'}
-        ],
-        comfirmPassword: [
-          {validator: validateComfirmPassword, trigger: 'blur'}
-        ],
-        email: [
-          {required: true, message: '邮箱不能为空', trigger: 'blur'},
-          {validator: validateEmail, trigger: 'blur'}
-        ],
-        mobile: [
-          {required: true, message: '手机号不能为空', trigger: 'blur'},
-          {validator: validateMobile, trigger: 'blur'}
+        owner: [
+          {validator: validateOwner, message: '所有人不能为空', trigger: 'blur'}
         ]
       }
     }
