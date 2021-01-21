@@ -2,21 +2,38 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
+        <el-input v-model="dataForm.vehicleNumber" placeholder="车牌号" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.owner" placeholder="所有人" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()"
+        <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandleBach()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
-      row-key="driverId"
+      row-key="id"
       border
+      @selection-change="selectionChangeHandle"
       style="width: 100%; ">
+      <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
+      <!--      <el-table-column
+              prop="id"
+              header-align="center"
+              align="center"
+              min-width="150"
+              label="ID">
+            </el-table-column>-->
       <el-table-column
         prop="originalDocumentNumber"
         header-align="center"
@@ -32,17 +49,40 @@
         label="托运单号">
       </el-table-column>
       <el-table-column
+        prop="serialNumber"
+        header-align="center"
+        align="center"
+        width="150"
+        label="分段分单号">
+      </el-table-column>
+      <el-table-column
+        prop="vehicleAmount"
+        header-align="center"
+        width="150"
+        align="center"
+        label="运输总车辆数">
+      </el-table-column>
+      <el-table-column
+        prop="transportTypeCode"
+        header-align="center"
+        align="center"
+        width="150"
+        label="运输组织类型代码">
+      </el-table-column>
+      <el-table-column
         prop="sendToProDateTime"
         header-align="center"
         align="center"
         width="150"
+        :show-overflow-tooltip="true"
         label="运单上传时间">
       </el-table-column>
       <el-table-column
         prop="carrier"
         header-align="center"
-        width="150"
         align="center"
+        width="150"
+        :show-overflow-tooltip="true"
         label="网络货运经营者名称">
       </el-table-column>
       <el-table-column
@@ -50,6 +90,7 @@
         header-align="center"
         align="center"
         width="150"
+        :show-overflow-tooltip="true"
         label="统一社会信用代码">
       </el-table-column>
       <el-table-column
@@ -93,246 +134,12 @@
         label="收货日期时间">
       </el-table-column>
       <el-table-column
-        prop="consignorInfo"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="托运人信息">
-      </el-table-column>
-      <el-table-column
-        prop="consignor"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="托运人名称">
-      </el-table-column>
-      <el-table-column
-        prop="consignorID"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="托运人统一社会信用代码或个人证件号">
-      </el-table-column>
-      <el-table-column
-        prop="placeOfLoading"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="装货地址">
-      </el-table-column>
-      <el-table-column
-        prop="countrySubdivisionCode"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="装货地点的国家行政区划代码">
-      </el-table-column>
-      <el-table-column
-        prop="consigneeInfo"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="收货方信息">
-      </el-table-column>
-
-
-      <el-table-column
-        prop="consignee"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="收货方名称">
-      </el-table-column>
-      <el-table-column
-        prop="consigneeID"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="收货方统一社会信用代码或个人证件号码">
-      </el-table-column>
-      <el-table-column
-        prop="goodsReceiptPlace"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="收货地址">
-      </el-table-column>
-      <el-table-column
-        prop="countrySubdivisionCode"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="收货地点的国家行政区划代码">
-      </el-table-column>
-      <el-table-column
         prop="totalMonetaryAmount"
         header-align="center"
         align="center"
         width="150"
         :show-overflow-tooltip="true"
         label="运费金额">
-      </el-table-column>
-      <el-table-column
-        prop="vehicleInfo"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="车辆信息">
-      </el-table-column>
-      <el-table-column
-        prop="vehiclePlateColorCode"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="车牌颜色代码">
-      </el-table-column>
-      <el-table-column
-        prop="vehicleNumber"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="车辆牌照号">
-      </el-table-column>
-      <el-table-column
-        prop="driver"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="驾驶员">
-      </el-table-column>
-      <el-table-column
-        prop="driverName"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="驾驶员姓名">
-      </el-table-column>
-      <el-table-column
-        prop="drivingLicense"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="机动车驾驶证编号">
-      </el-table-column>
-      <el-table-column
-        prop="goodsInfo"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="货物信息">
-      </el-table-column>
-      <el-table-column
-        prop="descriptionOfGoods"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="货物名称">
-      </el-table-column>
-      <el-table-column
-        prop="cargoTypeClassificationCode"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="货物类型分类代码">
-      </el-table-column>
-      <el-table-column
-        prop="goodsItemGrossWeight"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="货物项毛重">
-      </el-table-column>
-      <el-table-column
-        prop="cube"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="体积">
-      </el-table-column>
-      <el-table-column
-        prop="totalNumberOfPackages"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="总件数">
-      </el-table-column>
-      <el-table-column
-        prop="actualCarrierInfo"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="实际承运人信息">
-      </el-table-column>
-      <el-table-column
-        prop="actualCarrierName"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="实际承运人名称">
-      </el-table-column>
-      <el-table-column
-        prop="actualCarrierBusinessLicense"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="实际承运人道路运输经营许可证号">
-      </el-table-column>
-      <el-table-column
-        prop="actualCarrierID"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="实际承运人统一社会信用代码或证件号码">
-      </el-table-column>
-      <el-table-column
-        prop="insuranceInformation"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="保险信息">
-      </el-table-column>
-      <el-table-column
-        prop="policyNumber"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="保险单号">
-      </el-table-column>
-      <el-table-column
-        prop="insuranceCompany"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="保险公司">
       </el-table-column>
       <el-table-column
         prop="remark"
@@ -342,9 +149,6 @@
         :show-overflow-tooltip="true"
         label="备注">
       </el-table-column>
-
-
-
       <el-table-column
         fixed="right"
         header-align="center"
@@ -353,12 +157,9 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="isAuth('sys:menu:update')" type="text" size="small"
-                     @click="addOrUpdateHandle(scope.row.menuId)">修改
+                     @click="addOrUpdateHandle(scope.row.id)">修改
           </el-button>
-          <el-button v-if="isAuth('sys:menu:update')" type="text" size="small"
-                     @click="upload(scope.row.orderId)">上传
-          </el-button>
-          <el-button v-if="isAuth('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">
+          <el-button v-if="isAuth('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">
             删除
           </el-button>
         </template>
@@ -380,187 +181,18 @@
 
 <script>
 import AddOrUpdate from './order-add-or-update'
-import {getAdminList} from '@/api/api'
+import {getCarPage} from '@/api/api'
+import {getOrderPage} from '@/api/api'
 
 export default {
   data() {
     return {
       dataForm: {
-        userName: ''
+        //userName: ''
       },
-      dataList: [
-        {
-            originalDocumentNumber: '98566',
-            shippingNoteNumber: '536987854523685456',
-            sendToProDateTime: '2016-05-02',
-            carrier: '张三',
-            unifiedSocialCreditIdentifier: '98566',
-            permitNumber: '536987854523685456',
-            consignmentDateTime: '2016-05-02',
-            businessTypeCode: '98566',
-            despatchActualDateTime: '2016-05-02',
-            goodsReceiptDateTime: '2016-05-02',
-            consignorInfo: '98566',
-            consignor: '张三',
-            consignorID: '536987854523685456',
-            placeOfLoading: '张三',
-            countrySubdivisionCode: '98566',
-            consigneeInfo: '张三',
-            consignee: '张三',
-            consigneeID: '536987854523685456',
-            goodsReceiptPlace: '张三',
-            countrySubdivisionCode: '98566',
-            totalMonetaryAmount: '800',
-            vehicleInfo: '张三',
-            vehiclePlateColorCode: '98566',
-            vehicleNumber: '536987854523685456',
-            driver: '张三',
-            driverName: '张三',
-            drivingLicense: '98566',
-            goodsInfo: '张三',
-            descriptionOfGoods: '土豆',
-            cargoTypeClassificationCode: '98566',
-            goodsItemGrossWeight: '20',
-            cube: '14',
-            totalNumberOfPackages: '92',
-            actualCarrierInfo: '张三',
-            actualCarrierName: '张三',
-            actualCarrierBusinessLicense: '98566',
-            actualCarrierID: '536987854523685456',
-            insuranceInformation: '98566',
-            policyNumber: '98566',
-            insuranceCompany: '中国人寿',
-            remark: '备注'
-          }, {
-            originalDocumentNumber: '98566',
-            shippingNoteNumber: '536987854523685456',
-            sendToProDateTime: '2016-05-02',
-            carrier: '张三',
-            unifiedSocialCreditIdentifier: '98566',
-            permitNumber: '536987854523685456',
-            consignmentDateTime: '2016-05-02',
-            businessTypeCode: '98566',
-            despatchActualDateTime: '2016-05-02',
-            goodsReceiptDateTime: '2016-05-02',
-            consignorInfo: '98566',
-            consignor: '张三',
-            consignorID: '536987854523685456',
-            placeOfLoading: '张三',
-            countrySubdivisionCode: '98566',
-            consigneeInfo: '张三',
-            consignee: '张三',
-            consigneeID: '536987854523685456',
-            goodsReceiptPlace: '张三',
-            countrySubdivisionCode: '98566',
-            totalMonetaryAmount: '800',
-            vehicleInfo: '张三',
-            vehiclePlateColorCode: '98566',
-            vehicleNumber: '536987854523685456',
-            driver: '张三',
-            driverName: '张三',
-            drivingLicense: '98566',
-            goodsInfo: '张三',
-            descriptionOfGoods: '土豆',
-            cargoTypeClassificationCode: '98566',
-            goodsItemGrossWeight: '20',
-            cube: '14',
-            totalNumberOfPackages: '92',
-            actualCarrierInfo: '张三',
-            actualCarrierName: '张三',
-            actualCarrierBusinessLicense: '98566',
-            actualCarrierID: '536987854523685456',
-            insuranceInformation: '98566',
-            policyNumber: '98566',
-            insuranceCompany: '中国人寿',
-            remark: '备注'
-          }, {
-            originalDocumentNumber: '98566',
-            shippingNoteNumber: '536987854523685456',
-            sendToProDateTime: '2016-05-02',
-            carrier: '张三',
-            unifiedSocialCreditIdentifier: '98566',
-            permitNumber: '536987854523685456',
-            consignmentDateTime: '2016-05-02',
-            businessTypeCode: '98566',
-            despatchActualDateTime: '2016-05-02',
-            goodsReceiptDateTime: '2016-05-02',
-            consignorInfo: '98566',
-            consignor: '张三',
-            consignorID: '536987854523685456',
-            placeOfLoading: '张三',
-            countrySubdivisionCode: '98566',
-            consigneeInfo: '张三',
-            consignee: '张三',
-            consigneeID: '536987854523685456',
-            goodsReceiptPlace: '张三',
-            countrySubdivisionCode: '98566',
-            totalMonetaryAmount: '800',
-            vehicleInfo: '张三',
-            vehiclePlateColorCode: '98566',
-            vehicleNumber: '536987854523685456',
-            driver: '张三',
-            driverName: '张三',
-            drivingLicense: '98566',
-            goodsInfo: '张三',
-            descriptionOfGoods: '土豆',
-            cargoTypeClassificationCode: '98566',
-            goodsItemGrossWeight: '20',
-            cube: '14',
-            totalNumberOfPackages: '92',
-            actualCarrierInfo: '张三',
-            actualCarrierName: '张三',
-            actualCarrierBusinessLicense: '98566',
-            actualCarrierID: '536987854523685456',
-            insuranceInformation: '98566',
-            policyNumber: '98566',
-            insuranceCompany: '中国人寿',
-            remark: '备注'
-          }, {
-            originalDocumentNumber: '98566',
-            shippingNoteNumber: '536987854523685456',
-            sendToProDateTime: '2016-05-02',
-            carrier: '张三',
-            unifiedSocialCreditIdentifier: '98566',
-            permitNumber: '536987854523685456',
-            consignmentDateTime: '2016-05-02',
-            businessTypeCode: '98566',
-            despatchActualDateTime: '2016-05-02',
-            goodsReceiptDateTime: '2016-05-02',
-            consignorInfo: '98566',
-            consignor: '张三',
-            consignorID: '536987854523685456',
-            placeOfLoading: '张三',
-            countrySubdivisionCode: '98566',
-            consigneeInfo: '张三',
-            consignee: '张三',
-            consigneeID: '536987854523685456',
-            goodsReceiptPlace: '张三',
-            countrySubdivisionCode: '98566',
-            totalMonetaryAmount: '800',
-            vehicleInfo: '张三',
-            vehiclePlateColorCode: '98566',
-            vehicleNumber: '536987854523685456',
-            driver: '张三',
-            driverName: '张三',
-            drivingLicense: '98566',
-            goodsInfo: '张三',
-            descriptionOfGoods: '土豆',
-            cargoTypeClassificationCode: '98566',
-            goodsItemGrossWeight: '20',
-            cube: '14',
-            totalNumberOfPackages: '92',
-            actualCarrierInfo: '张三',
-            actualCarrierName: '张三',
-            actualCarrierBusinessLicense: '98566',
-            actualCarrierID: '536987854523685456',
-            insuranceInformation: '98566',
-            policyNumber: '98566',
-            insuranceCompany: '中国人寿',
-            remark: '备注'
-          }
-      ],
+      dataList: [],
       pageIndex: 0,
-      pageSize: 10,
+      pageSize: 20,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
@@ -571,7 +203,7 @@ export default {
     AddOrUpdate
   },
   activated() {
-    //this.getDataList()
+    this.getDataList()
   },
   methods: {
     // 获取数据列表
@@ -579,11 +211,12 @@ export default {
       this.dataListLoading = true
       let params = {
         'page': this.pageIndex,
-        'limit': this.pageSize,
-        'username': this.dataForm.userName,
-        'organizationId': this.$store.state.user.organizationId
+        'vehicleNumber': this.dataForm.vehicleNumber,
+        'owner': this.dataForm.owner,
+        //'organizationId': this.$store.state.user.organizationId
+        'limit': this.pageSize
       }
-      getAdminList(params).then(({data}) => {
+      getCarPage(params).then(({data}) => {
         if (data && data.code === 0) {
           let {data: {content, totalElements}} = data
           this.totalPage = totalElements
@@ -600,7 +233,7 @@ export default {
     // 每页数
     sizeChangeHandle(val) {
       this.pageSize = val
-      this.pageIndex = 1
+      this.pageIndex = 0
       this.getDataList()
     },
     // 当前页
@@ -619,20 +252,49 @@ export default {
         this.$refs.addOrUpdate.init(id)
       })
     },
-    // 删除
-    deleteHandle(id) {
-      var adminIds = id ? [id] : this.dataListSelections.map(item => {
+
+    deleteHandleBach(id) {
+      let ids = id ? [id] : this.dataListSelections.map(item => {
         return item.id
       })
-      this.$confirm(`确定对[id=${adminIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/uaa/admin'),
+          url: this.$http.addUrl(`/internetfreight/internetOrders/${ids}`),
           method: 'delete',
-          data: this.$http.addParams(adminIds, false)
+          data: this.$http.addParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }).catch(() => {
+      })
+    },
+
+    // 删除
+    deleteHandle(id) {
+      this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http({
+          url: this.$http.addUrl(`/internetfreight/internetOrders/${id}`),
+          method: 'delete',
+          data: this.$http.addData()
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({
