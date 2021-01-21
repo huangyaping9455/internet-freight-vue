@@ -3,18 +3,20 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+<!--   :rules="dataRule"-->
+    <el-form :model="dataForm"  ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="160px">
       <el-form-item label="姓名" prop="driverName" :class="{ 'is-required': !dataForm.driverName }">
         <el-input v-model="dataForm.driverName" placeholder="姓名"></el-input>
       </el-form-item>
-      <el-form-item label="身份证号" prop="drivingLicense" :class="{ 'is-required': !dataForm.drivingLicense }">
-        <el-input v-model="dataForm.drivingLicense" placeholder="身份证号"></el-input>
+      <el-form-item label="驾驶证编号" prop="drivingLicense" :class="{ 'is-required': !dataForm.drivingLicense }">
+        <el-input v-model="dataForm.drivingLicense" placeholder="驾驶证编号"></el-input>
       </el-form-item>
       <el-form-item label="准驾车型" prop="vehicleClass" :class="{ 'is-required': !dataForm.vehicleClass }">
         <el-input v-model="dataForm.vehicleClass" placeholder="准驾车型"></el-input>
       </el-form-item>
-      <el-form-item label="驾驶证发证机关" prop="issuingOrganizations" :class="{ 'is-required': !dataForm.issuingOrganizations }">
+      <el-form-item label="驾驶证发证机关" prop="issuingOrganizations"
+                    :class="{ 'is-required': !dataForm.issuingOrganizations }">
         <el-input v-model="dataForm.issuingOrganizations" placeholder="驾驶证发证机关"></el-input>
       </el-form-item>
       <el-form-item label="驾驶证有效期自" prop="validPeriodFrom" :class="{ 'is-required': !dataForm.validPeriodFrom }">
@@ -35,7 +37,8 @@
           </el-date-picker>
         </div>
       </el-form-item>
-      <el-form-item label="从业资格证号" prop="qualificationCertificate" :class="{ 'is-required': !dataForm.qualificationCertificate }">
+      <el-form-item label="从业资格证号" prop="qualificationCertificate"
+                    :class="{ 'is-required': !dataForm.qualificationCertificate }">
         <el-input v-model="dataForm.qualificationCertificate" placeholder="从业资格证号"></el-input>
       </el-form-item>
       <el-form-item label="手机号码" prop="telephone" :class="{ 'is-required': !dataForm.telephone }">
@@ -43,6 +46,18 @@
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+      </el-form-item>
+
+      <el-form-item label="驾驶证" prop="driverLicense">
+        <el-upload
+          class="upload-demo"
+          drag
+          action="addDriverLicense/posts/"
+          multiple>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text" v-model="dataForm.driverLicense">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -53,10 +68,11 @@
 </template>
 
 <script>
-import {addDriver} from '@/api/api'
+import {addDriver, updateDriverById} from '@/api/api'
 import {telephone} from '../../../utils/validate'
+
 export default {
-  data () {
+  data() {
     return {
       visible: false,
       roleList: [],
@@ -71,38 +87,39 @@ export default {
         'qualificationCertificate': '',
         'telephone': '',
         'remark': '',
+        'driverLicense':'',
         delete: 1
       },
-      dataRule: {
-        driverName: [
-          {required: true, message: '驾驶员姓名不能为空', trigger: 'blur'}
-        ],
-        drivingLicense: [
-          {required: true, message: '身份证号不能为空', trigger: 'blur'}
-        ],
-        vehicleClass: [
-          {required: true, message: '准驾车型不能为空', trigger: 'blur'}
-        ],
-        issuingOrganizations: [
-          {required: true, message: '驾驶证发证机关不能为空', trigger: 'blur'}
-        ],
-        validPeriodFrom: [
-          {required: true, message: '驾驶证有效期自不能为空', trigger: 'blur'}
-        ],
-        validPeriodTo: [
-          {required: true, message: '驾驶证有效期至不能为空', trigger: 'blur'}
-        ],
-        qualificationCertificate: [
-          {required: true, message: '从业资格证号不能为空', trigger: 'blur'}
-        ],
-        telephone: [
-          {required: true, message: '手机号不能为空', trigger: 'blur'},
-          {validator: telephone, trigger: 'blur'}
-        ]
-      },
+      /*  dataRule: {
+    driverName: [
+         {required: true, message: '驾驶员姓名不能为空', trigger: 'blur'}
+       ],
+       drivingLicense: [
+         {required: true, message: '身份证号不能为空', trigger: 'blur'}
+       ],
+       vehicleClass: [
+         {required: true, message: '准驾车型不能为空', trigger: 'blur'}
+       ],
+       issuingOrganizations: [
+         {required: true, message: '驾驶证发证机关不能为空', trigger: 'blur'}
+       ],
+       validPeriodFrom: [
+         {required: true, message: '驾驶证有效期自不能为空', trigger: 'blur'}
+       ],
+       validPeriodTo: [
+         {required: true, message: '驾驶证有效期至不能为空', trigger: 'blur'}
+       ],
+       qualificationCertificate: [
+         {required: true, message: '从业资格证号不能为空', trigger: 'blur'}
+       ],
+      telephone: [
+        {required: true, message: '手机号不能为空', trigger: 'blur'},
+        {validator: telephone, trigger: 'blur'}
+      ]
+    }*/
       /*日期*/
       pickerOptions1: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() > Date.now()
         },
       },
@@ -111,18 +128,16 @@ export default {
     }
   },
   methods: {
-    init (id) {
+    init(id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
         this.$http({
           url: this.$http.addUrl(`/internetfreight/internetDrivers/getOneById`),
           method: 'get',
-          params: this.$http.addParams({
-            id: this.dataForm.id
-          })
+          params: this.$http.addParams({id: this.dataForm.id})
         }).then(({data}) => {
           if (data && data.code === 0) {
-               this.dataForm.driverName = data.data.driverName,
+              this.dataForm.driverName = data.data.driverName,
               this.dataForm.drivingLicense = data.data.drivingLicense,
               this.dataForm.vehicleClass = data.data.vehicleClass,
               this.dataForm.issuingOrganizations = data.data.issuingOrganizations,
@@ -131,16 +146,16 @@ export default {
               this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
               this.dataForm.telephone = data.data.telephone,
               this.dataForm.remark = data.data.remark,
-              this.dataForm.delete = data.data.delete
+              this.dataForm.driverLicense = data.data.driverLicense
           }
         })
       }
       this.visible = true
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
-        let methods=`${!this.dataForm.id ? 'post' : 'put'}`;
+        let methods = `${!this.dataForm.id ? 'post' : 'put'}`;
         if (valid) {
           let dataForm = {
             'id': this.dataForm.id || undefined,
@@ -153,13 +168,10 @@ export default {
             'qualificationCertificate': this.dataForm.qualificationCertificate,
             'telephone': this.dataForm.telephone,
             'remark': this.dataForm.remark,
+            'driverLicense': this.dataForm.driverLicense
           }
-         addDriver(dataForm,methods).then((data) => {
-          })
-        .then(({data}) => {
-            console.log(data)
+          addDriver(dataForm, methods).then(({data}) => {
             if (data && data.code === 0) {
-              this.visible = false
               this.$message({
                 message: '操作成功',
                 type: 'success',

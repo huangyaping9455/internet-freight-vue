@@ -4,9 +4,9 @@
       <el-form-item>
         <el-input v-model="dataForm.driverName" placeholder="驾驶员姓名" clearable></el-input>
       </el-form-item>
-      <el-form-item>
+<!--      <el-form-item>
         <el-input v-model="dataForm.telephone" placeholder="电话号码" clearable></el-input>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -93,6 +93,13 @@
         label="备注">
       </el-table-column>
       <el-table-column
+        prop="driverLicense"
+        header-align="center"
+        align="center"
+        width="180"
+        label="驾驶证">
+      </el-table-column>
+      <el-table-column
         prop="updateTime"
         header-align="center"
         align="center"
@@ -109,7 +116,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:carbasicinfo:update')" type="text" size="small"
+          <el-button v-if="isAuth('driver:internetdriver:update')" type="text" size="small"
                      @click="addOrUpdateHandle(scope.row.id)">修改
           </el-button>
           <el-button v-if="isAuth('driver:internetdriver:delete')" type="text" size="small"
@@ -126,6 +133,7 @@
       :page-sizes="[10, 20, 50, 100]"
       :page-size="pageSize"
       :total="totalPage"
+      :background="true"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
@@ -135,18 +143,18 @@
 
 <script>
 import AddOrUpdate from './internetdriver-add-or-update'
-import {getDriverPage,deleteDriver} from '@/api/api'
+import {getDriverPage} from '@/api/api'
 
 export default {
   data () {
     return {
       dataForm: {
-        driverName: '',
-        telephone: ''
+        driverName: ''//,
+        //telephone: ''
       },
-      DataList: [],
+      dataList: [],
       pageIndex: 0,
-      pageSize: 10,
+      pageSize: 20,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
@@ -167,7 +175,7 @@ export default {
         'page': this.pageIndex,
         'limit': this.pageSize,
         'driverName': this.dataForm.driverName,
-        'telephone': this.dataForm.telephone,
+        //'telephone': this.dataForm.telephone,
         'organizationId': this.$store.state.user.organizationId
       }
       getDriverPage(params).then(({data}) => {
@@ -206,18 +214,17 @@ export default {
     },
     // 删除
     deleteHandle (id) {
-      var driverIds = id ? [id] : this.dataListSelections.map(item => {
+      var ids = id ? [id] : this.dataListSelections.map(item => {
        return item.id
       })
-      this.$confirm(`确定对[id=${driverIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/internetfreight/internetDrivers/delById'),
+          url: this.$http.addUrl(`/internetfreight/internetDrivers/${ids}`),
           method: 'delete',
-          data: this.$http.addParams(id, false)
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({
@@ -228,6 +235,7 @@ export default {
                 this.getDataList()
               }
             })
+            alert(message)
             this.visible = true
           } else {
             this.$message.error(data.msg)
