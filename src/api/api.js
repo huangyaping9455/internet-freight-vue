@@ -37,6 +37,13 @@ const internetFreightModel = '/internetfreight'
 //车辆管理
 const getCarPage = (params)=>getAction(`${internetFreightModel}/internetCars/getPageByCondition`,params)
 
+//驾驶员管理
+const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) //获取分页列表
+const addDriver = (params,methodN)=>httpAction(`${internetFreightModel}/internetDrivers`,params,methodN) //新增驾驶员
+const addDriverLicense = (params)=>httpAction(`${internetFreightModel}/fileFastDFS/upload`,params) //上传驾驶证
+
+//资金流水管理
+const getCapitalfowPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) //获取分页列表
 export {
   getMenuList,
   getImageCode,
@@ -48,8 +55,11 @@ export {
   getRolePage,
   getOrganizationList,
   getSmsCode,
+  mobileLogin,
   getCarPage,
-  mobileLogin
+  getDriverPage,
+  addDriver,
+  addDriverLicense
 }
 
 
