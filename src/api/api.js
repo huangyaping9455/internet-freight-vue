@@ -38,6 +38,8 @@ const internetFreightModel = '/internetfreight'
 const getCarPage = (params)=>getAction(`${internetFreightModel}/internetCars/getPageByCondition`,params)
 //订单管理
 const getOrderPage = (params)=>getAction(`${internetFreightModel}/internetOrders/getPageByCondition`,params)
+//货物管理
+const getGoodsPage = (params)=>getAction(`${internetFreightModel}/internetGoods/getPageByCondition`,params)
 
 //驾驶员管理
 const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) //获取分页列表
@@ -60,6 +62,7 @@ export {
   mobileLogin,
   getCarPage,
   getOrderPage,
+  getGoodsPage,
   getDriverPage,
   addDriver,
   addDriverLicense
