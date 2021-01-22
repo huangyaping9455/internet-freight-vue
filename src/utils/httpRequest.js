@@ -43,7 +43,6 @@ http.interceptors.response.use(response => {
  */
 http.addUrl = (actionName) => {
 
-  console.log(actionName);
   // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!
   return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi' : window.SITE_CONFIG.baseUrl) + actionName
 }
@@ -73,6 +72,8 @@ http.addData = (data = {}, openDefultdata = false, contentType = 'json') => {
     't': new Date().getTime()
   }
   data = openDefultdata ? merge(defaults, data) : data
+  console.log(contentType);
+  if (contentType === 'multipart/form-data') return data; //如果是文件类型不需要序列化
   return contentType === 'json' ? JSON.stringify(data) : qs.stringify(data)
 }
 

@@ -107,7 +107,13 @@ export function loginAction(url, params) {
   })
 }
 
-
+export function uploadImageAction(url, data) {
+  return http({
+    url: http.addUrl(url),
+    method: 'post',
+    data: http.addData(data, false, 'multipart/form-data')
+  })
+}
 
 
 
