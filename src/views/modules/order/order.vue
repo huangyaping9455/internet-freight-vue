@@ -2,10 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.vehicleNumber" placeholder="车牌号" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.owner" placeholder="所有人" clearable></el-input>
+        <el-input v-model="dataForm.shippingNoteNumber" placeholder="订单编号" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -210,8 +207,7 @@ export default {
       this.dataListLoading = true
       let params = {
         'page': this.pageIndex,
-        'vehicleNumber': this.dataForm.vehicleNumber,
-        'owner': this.dataForm.owner,
+        'shippingNoteNumber': this.dataForm.shippingNoteNumber,
         //'organizationId': this.$store.state.user.organizationId
         'limit': this.pageSize
       }
