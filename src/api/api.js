@@ -71,8 +71,7 @@ export {
   getDriverPage,
   addDriver,
   addDriverLicense,
-  getFinancialPage,
-  upload,
+  getFinancialPage
 }
 
 

@@ -52,7 +52,7 @@
         <el-upload
           class="upload-demo"
           drag
-          action="addDriverLicense/posts/"
+          action="filesystem/fileFastDFS/upload"
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text" v-model="dataForm.driverLicense">将文件拖到此处，或<em>点击上传</em></div>
@@ -132,21 +132,18 @@ export default {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetDrivers/getOneById`),
+          url: this.$http.addUrl(`/internetfreight/financials/getOneById`),
           method: 'get',
           params: this.$http.addParams({id: this.dataForm.id})
         }).then(({data}) => {
           if (data && data.code === 0) {
-              this.dataForm.driverName = data.data.driverName,
-              this.dataForm.drivingLicense = data.data.drivingLicense,
-              this.dataForm.vehicleClass = data.data.vehicleClass,
-              this.dataForm.issuingOrganizations = data.data.issuingOrganizations,
-              this.dataForm.validPeriodFrom = data.data.validPeriodFrom,
-              this.dataForm.validPeriodTo = data.data.validPeriodTo,
-              this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
-              this.dataForm.telephone = data.data.telephone,
-              this.dataForm.remark = data.data.remark,
-              this.dataForm.driverLicense = data.data.driverLicense
+              this.dataForm.documentNumber = data.data.driverName,
+              this.dataForm.sendToProDateTime = data.data.drivingLicense,
+              this.dataForm.carrier = data.data.vehicleClass,
+              this.dataForm.actualCarrierId = data.data.issuingOrganizations,
+              this.dataForm.vehicleNumber = data.data.validPeriodFrom,
+              this.dataForm.vehiclePlateColorCode = data.data.validPeriodTo,
+              this.dataForm.remark = data.data.qualificationCertificate
           }
         })
       }
