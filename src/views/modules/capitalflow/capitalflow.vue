@@ -2,11 +2,8 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.driverName" placeholder="驾驶员姓名" clearable></el-input>
+        <el-input v-model="dataForm.documentNumber" placeholder="单证号" clearable></el-input>
       </el-form-item>
-<!--      <el-form-item>
-        <el-input v-model="dataForm.telephone" placeholder="电话号码" clearable></el-input>
-      </el-form-item>-->
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -30,60 +27,46 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="driverName"
+        prop="documentNumber"
         header-align="center"
         align="center"
         width="180"
-        label="姓名">
+        label="单证号">
       </el-table-column>
       <el-table-column
-        prop="drivingLicense"
+        prop="sendToProDateTime"
         header-align="center"
         align="center"
         width="180"
-        label="驾驶证编号">
+        label="资金流水单上传到省级监测系统的时间">
       </el-table-column>
       <el-table-column
-        prop="vehicleClass"
+        prop="carrier"
         header-align="center"
         align="center"
         width="180"
-        label="准驾车型">
+        label="实际承运人名称">
       </el-table-column>
       <el-table-column
-        prop="issuingOrganizations"
+        prop="actualCarrierId"
         header-align="center"
         align="center"
         width="180"
-        label="驾驶证发证机关">
+        label="实际承运人统一社会信用代码或证件号码">
       </el-table-column>
       <el-table-column
-        prop="validPeriodFrom"
+        prop="vehicleNumber"
         header-align="center"
         align="center"
         width="180"
-        label="驾驶证有效期自">
+        label="车辆牌照号">
       </el-table-column>
       <el-table-column
-        prop="validPeriodTo"
+        prop="vehiclePlateColorCode"
         header-align="center"
         align="center"
         width="180"
-        label="驾驶证有效期至">
-      </el-table-column>
-      <el-table-column
-        prop="qualificationCertificate"
-        header-align="center"
-        align="center"
-        width="180"
-        label="从业资格证号">
-      </el-table-column>
-      <el-table-column
-        prop="telephone"
-        header-align="center"
-        align="center"
-        width="180"
-        label="手机号码">
+        label="车牌颜色代码">
       </el-table-column>
       <el-table-column
         prop="remark"
@@ -93,11 +76,81 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        prop="driverLicense"
+        prop="shippingNoteList"
         header-align="center"
         align="center"
         width="180"
-        label="驾驶证">
+        label="运单列表">
+      </el-table-column>
+      <el-table-column
+        prop="shippingNoteNumber"
+        header-align="center"
+        align="center"
+        width="180"
+        label="托运单号">
+      </el-table-column>
+      <el-table-column
+        prop="shippingNoteNumber"
+        header-align="center"
+        align="center"
+        width="180"
+        label="托运单号">
+      </el-table-column>
+      <el-table-column
+        prop="financiallist"
+        header-align="center"
+        align="center"
+        width="180"
+        label="财务列表">
+      </el-table-column>
+      <el-table-column
+        prop=paymentMeansCode"
+        header-align="center"
+        align="center"
+        width="180"
+        label="付款方式代码">
+      </el-table-column>
+      <el-table-column
+        prop="recipient"
+        header-align="center"
+        align="center"
+        width="180"
+        label="收款方名称">
+      </el-table-column>
+      <el-table-column
+        prop="receiptAccount"
+        header-align="center"
+        align="center"
+        width="180"
+        label="收款帐户信息">
+      </el-table-column>
+      <el-table-column
+        prop="bankCode"
+        header-align="center"
+        align="center"
+        width="180"
+        label="银行代码">
+      </el-table-column>
+      <el-table-column
+        prop="sequenceCode"
+        header-align="center"
+        align="center"
+        width="180"
+        label="流水号/序列号">
+      </el-table-column>
+      <el-table-column
+        prop="monetaryAmount"
+        header-align="center"
+        align="center"
+        width="180"
+        label="实际支付金额">
+      </el-table-column>
+      <el-table-column
+        prop="dateTime"
+        header-align="center"
+        align="center"
+        width="180"
+        label="日期时间">
       </el-table-column>
       <el-table-column
         prop="updateTime"
@@ -116,10 +169,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('driver:internetdriver:update')" type="text" size="small"
+          <el-button v-if="isAuth('capitalflow:capitalflow:update')" type="text" size="small"
                      @click="addOrUpdateHandle(scope.row.id)">修改
           </el-button>
-          <el-button v-if="isAuth('driver:internetdriver:delete')" type="text" size="small"
+          <el-button v-if="isAuth('capitalflow:capitalflow:delete')" type="text" size="small"
                      @click="deleteHandle(scope.row.id)">
             删除
           </el-button>
@@ -142,15 +195,14 @@
 </template>
 
 <script>
-import AddOrUpdate from './internetdriver-add-or-update'
-import {getDriverPage} from '@/api/api'
+import AddOrUpdate from './capitalflow-add-or-update'
+import {getFinancialPage} from '@/api/api'
 
 export default {
   data () {
     return {
       dataForm: {
-        driverName: ''//,
-        //telephone: ''
+        documentNumber: ''
       },
       dataList: [],
       pageIndex: 0,
@@ -174,11 +226,11 @@ export default {
       let params = {
         'page': this.pageIndex,
         'limit': this.pageSize,
-        'driverName': this.dataForm.driverName,
+        'documentNumber': this.dataForm.documentNumber,
         //'telephone': this.dataForm.telephone,
         'organizationId': this.$store.state.user.organizationId
       }
-      getDriverPage(params).then(({data}) => {
+      getFinancialPage(params).then(({data}) => {
         if (data && data.code === 0) {
           let {data: {content, totalElements}} = data
           this.totalPage = totalElements
@@ -224,7 +276,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetDrivers/${ids}`),
+          url: this.$http.addUrl(`/internetfreight/financials/${ids}`),
           method: 'delete',
         }).then(({data}) => {
           if (data && data.code === 0) {

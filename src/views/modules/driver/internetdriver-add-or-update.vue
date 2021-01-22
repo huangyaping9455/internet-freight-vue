@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import {addDriver, updateDriverById} from '@/api/api'
+import {addDriver, upload} from '@/api/api'
 import {telephone} from '../../../utils/validate'
 
 export default {
@@ -136,6 +136,7 @@ export default {
           method: 'get',
           params: this.$http.addParams({id: this.dataForm.id})
         }).then(({data}) => {
+          alert(44444)
           if (data && data.code === 0) {
               this.dataForm.documentNumber = data.data.driverName,
               this.dataForm.sendToProDateTime = data.data.drivingLicense,
