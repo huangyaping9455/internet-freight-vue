@@ -43,7 +43,7 @@ const addDriver = (params,methodN)=>httpAction(`${internetFreightModel}/internet
 const addDriverLicense = (params)=>httpAction(`${internetFreightModel}/fileFastDFS/upload`,params) //上传驾驶证
 
 //资金流水管理
-const getCapitalfowPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) //获取分页列表
+const getFinancialPage = (params) => getAction(`${internetFreightModel}/financials/getPageByCondition`, params) //获取分页列表
 export {
   getMenuList,
   getImageCode,
@@ -59,7 +59,8 @@ export {
   getCarPage,
   getDriverPage,
   addDriver,
-  addDriverLicense
+  addDriverLicense,
+  getFinancialPage
 }
 
 

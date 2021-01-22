@@ -207,8 +207,6 @@ export default {
           let {data: {content, totalElements}} = data
           this.totalPage = totalElements
           this.dataList = content
-
-
         } else {
           this.dataList = []
           this.totalPage = 0
