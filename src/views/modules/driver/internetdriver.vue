@@ -226,6 +226,7 @@ export default {
         this.$http({
           url: this.$http.addUrl(`/internetfreight/internetDrivers/${ids}`),
           method: 'delete',
+          data: this.$http.addData()
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({

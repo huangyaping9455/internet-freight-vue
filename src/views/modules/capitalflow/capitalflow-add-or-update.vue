@@ -53,9 +53,7 @@
 </template>
 
 <script>
-import {addDriver, updateDriverById} from '@/api/api'
-import {telephone} from '../../../utils/validate'
-
+import {addFinancial} from '@/api/api'
 export default {
   data() {
     return {
@@ -86,12 +84,12 @@ export default {
     init(id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
-        alert(333333)
         this.$http({
           url: this.$http.addUrl(`/internetfreight/financials/getOneById`),
           method: 'get',
           params: this.$http.addParams({id: this.dataForm.id})
         }).then(({data}) => {
+          alert(333333)
           if (data && data.code === 0) {
               this.dataForm.documentNumber = data.data.documentNumber,
               this.dataForm.sendToProDateTime = data.data.sendToProDateTime,
@@ -110,6 +108,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         let methods = `${!this.dataForm.id ? 'post' : 'put'}`;
         if (valid) {
+          alert(methods)
           let dataForm = {
             'id': this.dataForm.id || undefined,
             'documentNumber': this.dataForm.documentNumber,
@@ -120,7 +119,7 @@ export default {
             'vehiclePlateColorCode': this.dataForm.vehiclePlateColorCode,
             'remark': this.dataForm.remark
           }
-          addDriver(dataForm, methods).then(({data}) => {
+          addFinancial(dataForm, methods).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',
