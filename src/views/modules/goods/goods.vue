@@ -135,7 +135,7 @@ export default {
         //'organizationId': this.$store.state.user.organizationId
         'limit': this.pageSize
       }
-      getCarPage(params).then(({data}) => {
+      getGoodsPage(params).then(({data}) => {
         if (data && data.code === 0) {
           let {data: {content, totalElements}} = data
           this.totalPage = totalElements
