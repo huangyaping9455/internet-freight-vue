@@ -138,16 +138,9 @@ import {getRoleList} from '@/api/api'
 
 export default {
   data() {
-    let validateVehicleNumber = (rule, value, callback) => {
-      if (!this.dataForm.vehicleNumber && !/\S/.test(value)) {
-        callback(new Error('车牌号不能为空'))
-      } else {
-        callback()
-      }
-    }
-    let validateOwner = (rule, value, callback) => {
-      if (!this.dataForm.owner && !/\S/.test(value)) {
-        callback(new Error('所有人不能为空'))
+    let validateShippingNoteNumber = (rule, value, callback) => {
+      if (!this.dataForm.shippingNoteNumber && !/\S/.test(value)) {
+        callback(new Error('订单编号不能为空'))
       } else {
         callback()
       }
@@ -176,10 +169,7 @@ export default {
       },
       dataRule: {
         vehicleNumber: [
-          {validator: validateVehicleNumber, message: '车牌号不能为空', trigger: 'blur'}
-        ],
-        owner: [
-          {validator: validateOwner, message: '所有人不能为空', trigger: 'blur'}
+          {validator: validateShippingNoteNumber, message: '订单编号不能为空', trigger: 'blur'}
         ]
       }
     }

@@ -49,6 +49,8 @@ const addDriverLicense = (params) => httpAction(`${internetFreightModel}/fileFas
 
 //资金流水管理
 const getFinancialPage = (params) => getAction(`${internetFreightModel}/financials/getPageByCondition`, params) //获取分页列表
+const addFinancial= (params,methodN)=>httpAction(`${internetFreightModel}/financials`,params,methodN)//新增资金流水
+
 //文件上传模块
 const fileUploadModel = '/filesystem'
 //文件上传
@@ -73,7 +75,9 @@ export {
   addDriver,
   addDriverLicense,
   getFinancialPage,
-  uploadImage
+  uploadImage,
+  addFinancial,
+
 }
 
 
