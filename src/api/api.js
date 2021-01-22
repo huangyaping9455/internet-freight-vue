@@ -48,6 +48,11 @@ const addDriverLicense = (params)=>httpAction(`${internetFreightModel}/fileFastD
 
 //资金流水管理
 const getFinancialPage = (params) => getAction(`${internetFreightModel}/financials/getPageByCondition`, params) //获取分页列表
+//文件上传模块
+const fileUploadModel = '/fileUpload'
+
+const  upload = (params)=>postAction(`${fileUploadModel}/fileFastDFS/upload`,params)
+
 export {
   getMenuList,
   getImageCode,
@@ -66,7 +71,8 @@ export {
   getDriverPage,
   addDriver,
   addDriverLicense,
-  getFinancialPage
+  getFinancialPage,
+  upload,
 }
 
 
