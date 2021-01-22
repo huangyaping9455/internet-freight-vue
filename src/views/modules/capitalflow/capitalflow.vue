@@ -2,7 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
+        <el-input v-model="dataForm.documentNumber" placeholder="单证号" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -172,13 +172,13 @@
 
 <script>
 import AddOrUpdate from './capitalflow-add-or-update'
-import {getAdminList} from '@/api/api'
+import {getFinancialPage} from "@/api/api";
 
 export default {
   data() {
     return {
       dataForm: {
-        userName: ''
+        documentNumber: ''
       },
       dataList: [
         {
@@ -263,7 +263,7 @@ export default {
     AddOrUpdate
   },
   activated() {
-    //this.getDataList()
+    this.getDataList()
   },
   methods: {
     // 获取数据列表
@@ -272,16 +272,15 @@ export default {
       let params = {
         'page': this.pageIndex,
         'limit': this.pageSize,
-        'username': this.dataForm.userName,
+        'documentNumber': this.dataForm.documentNumber,
         'organizationId': this.$store.state.user.organizationId
       }
-      getAdminList(params).then(({data}) => {
+      getFinancialPage(params).then(({data}) => {
+
         if (data && data.code === 0) {
           let {data: {content, totalElements}} = data
           this.totalPage = totalElements
           this.dataList = content
-
-
         } else {
           this.dataList = []
           this.totalPage = 0
@@ -322,7 +321,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/uaa/admin'),
+          url: this.$http.addUrl('/internetfreight/financials'),
           method: 'delete',
           data: this.$http.addParams(adminIds, false)
         }).then(({data}) => {
