@@ -27,127 +27,47 @@
         align="center"
         width="50">
       </el-table-column>
-      <!--      <el-table-column
-              prop="id"
-              header-align="center"
-              align="center"
-              min-width="150"
-              label="ID">
-            </el-table-column>-->
-      <el-table-column
-        prop="originalDocumentNumber"
+<!--      <el-table-column
+        prop="id"
         header-align="center"
         align="center"
         min-width="150"
-        label="原始单号">
+        label="ID">
+      </el-table-column>-->
+      <el-table-column
+        prop="descriptionOfGoods"
+        header-align="center"
+        align="center"
+        min-width="150"
+        label="货物名称">
       </el-table-column>
       <el-table-column
-        prop="shippingNoteNumber"
+        prop="cargoTypeClassificationCode"
         header-align="center"
         align="center"
         width="150"
-        label="托运单号">
+        label="货物类型分类代码">
       </el-table-column>
       <el-table-column
-        prop="serialNumber"
+        prop="goodsItemGrossWeight"
         header-align="center"
         align="center"
         width="150"
-        label="分段分单号">
+        label="货物项毛重">
       </el-table-column>
       <el-table-column
-        prop="vehicleAmount"
+        prop="cube"
         header-align="center"
         width="150"
         align="center"
-        label="运输总车辆数">
+        label="体积">
       </el-table-column>
       <el-table-column
-        prop="transportTypeCode"
+        prop="totalNumberOfPackages"
         header-align="center"
         align="center"
         width="150"
-        label="运输组织类型代码">
-      </el-table-column>
-      <el-table-column
-        prop="sendToProDateTime"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="运单上传时间">
-      </el-table-column>
-      <el-table-column
-        prop="carrier"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="网络货运经营者名称">
-      </el-table-column>
-      <el-table-column
-        prop="unifiedSocialCreditIdentifier"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="统一社会信用代码">
-      </el-table-column>
-      <el-table-column
-        prop="permitNumber"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="道路运输经营许可证编号">
-      </el-table-column>
-      <el-table-column
-        prop="consignmentDateTime"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="运单生成时间">
-      </el-table-column>
-      <el-table-column
-        prop="businessTypeCode"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="业务类型代码">
-      </el-table-column>
-      <el-table-column
-        prop="despatchActualDateTime"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="发货日期时间">
-      </el-table-column>
-      <el-table-column
-        prop="goodsReceiptDateTime"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="收货日期时间">
-      </el-table-column>
-      <el-table-column
-        prop="totalMonetaryAmount"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="运费金额">
-      </el-table-column>
-      <el-table-column
-        prop="remark"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="备注">
+        label="总件数">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -180,8 +100,8 @@
 </template>
 
 <script>
-import AddOrUpdate from './order-add-or-update'
-import {getOrderPage} from '@/api/api'
+import AddOrUpdate from './goods-add-or-update'
+import {getGoodsPage} from '@/api/api'
 
 export default {
   data() {
@@ -262,7 +182,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetOrders/${ids}`),
+          url: this.$http.addUrl(`/internetfreight/internetGoods/${ids}`),
           method: 'delete',
           data: this.$http.addParams()
         }).then(({data}) => {
@@ -291,7 +211,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetOrders/${id}`),
+          url: this.$http.addUrl(`/internetfreight/internetGoods/${id}`),
           method: 'delete',
           data: this.$http.addData()
         }).then(({data}) => {

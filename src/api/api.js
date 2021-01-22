@@ -36,6 +36,10 @@ const getOrganizationList = (params) => getAction(`${uaaModel}/sys/organization/
 const internetFreightModel = '/internetfreight'
 //车辆管理
 const getCarPage = (params)=>getAction(`${internetFreightModel}/internetCars/getPageByCondition`,params)
+//订单管理
+const getOrderPage = (params)=>getAction(`${internetFreightModel}/internetOrders/getPageByCondition`,params)
+//货物管理
+const getGoodsPage = (params)=>getAction(`${internetFreightModel}/internetGoods/getPageByCondition`,params)
 
 //驾驶员管理
 const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) //获取分页列表
@@ -57,6 +61,8 @@ export {
   getSmsCode,
   mobileLogin,
   getCarPage,
+  getOrderPage,
+  getGoodsPage,
   getDriverPage,
   addDriver,
   addDriverLicense,
