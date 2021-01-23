@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import {isEmail, isMobile} from '@/utils/validate'
-import {getRoleList} from '@/api/api'
+import { isEmail, isMobile } from '@/utils/validate'
+import { getRoleList } from '@/api/api'
 
 export default {
-  data() {
-    let validateDescriptionOfGoods = (rule, value, callback) => {
+  data () {
+    const validateDescriptionOfGoods = (rule, value, callback) => {
       if (!this.dataForm.descriptionOfGoods && !/\S/.test(value)) {
         callback(new Error('货物名称不能为空'))
       } else {
@@ -43,7 +43,7 @@ export default {
     }
     return {
       visible: false,
-      //roleList: [],
+      // roleList: [],
       dataForm: {
         id: 0,
         descriptionOfGoods: '',
@@ -55,24 +55,21 @@ export default {
       },
       dataRule: {
         vehicleNumber: [
-          {validator: validateDescriptionOfGoods, message: '货物名称不能为空', trigger: 'blur'}
+          { validator: validateDescriptionOfGoods, message: '货物名称不能为空', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
-
-
-
 
       if (this.dataForm.id) {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetGoods/getOneById`),
+          url: this.$http.addUrl('/internetfreight/internetGoods/getOneById'),
           method: 'get',
-          params: this.$http.addParams({id: this.dataForm.id})
-        }).then(({data}) => {
+          params: this.$http.addParams({ id: this.dataForm.id })
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.dataForm.descriptionOfGoods = data.data.descriptionOfGoods
             this.dataForm.cargoTypeClassificationCode = data.data.cargoTypeClassificationCode
@@ -84,25 +81,24 @@ export default {
       }
 
       this.visible = true
-
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/internetfreight/internetGoods${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
             data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'descriptionOfGoods': this.dataForm.descriptionOfGoods,
-              'cargoTypeClassificationCode': this.dataForm.cargoTypeClassificationCode,
-              'goodsItemGrossWeight': this.dataForm.goodsItemGrossWeight,
-              'cube': this.dataForm.cube,
-              'totalNumberOfPackages': this.dataForm.totalNumberOfPackages
+              id: this.dataForm.id || undefined,
+              descriptionOfGoods: this.dataForm.descriptionOfGoods,
+              cargoTypeClassificationCode: this.dataForm.cargoTypeClassificationCode,
+              goodsItemGrossWeight: this.dataForm.goodsItemGrossWeight,
+              cube: this.dataForm.cube,
+              totalNumberOfPackages: this.dataForm.totalNumberOfPackages
 
             })
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

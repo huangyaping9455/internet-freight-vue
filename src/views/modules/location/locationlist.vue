@@ -109,50 +109,50 @@
 
 <script>
 import AddOrUpdate from './location-add-or-update'
-import {treeDataTranslate} from '@/utils'
-import {getResourceList} from '@/api/api'
+import { treeDataTranslate } from '@/utils'
+import { getResourceList } from '@/api/api'
 export default {
-  data() {
+  data () {
     return {
       dataForm: {},
       dataList: [
         {
-            sendToProDateTime: '2016-05-02',
-            shippingNoteNumber: '412336222222222222',
-            locationType: '发货地',
-            sendDateTime: '2016-05-02',
-            longitude: '54',
-            latitude: '62',
-            countrySubdivisionCode: '650000',
-            locationText: '就不填又怎么样'
-          }, {
-            sendToProDateTime: '2016-05-02',
-            shippingNoteNumber: '412336222222222222',
-            locationType: '发货地',
-            sendDateTime: '2016-05-02',
-            longitude: '54',
-            latitude: '62',
-            countrySubdivisionCode: '650000',
-            locationText: '就不填又怎么样'
-          }, {
-            sendToProDateTime: '2016-05-02',
-            shippingNoteNumber: '412336222222222222',
-            locationType: '发货地',
-            sendDateTime: '2016-05-02',
-            longitude: '54',
-            latitude: '62',
-            countrySubdivisionCode: '650000',
-            locationText: '就不填又怎么样'
-          }, {
-            sendToProDateTime: '2016-05-02',
-            shippingNoteNumber: '412336222222222222',
-            locationType: '发货地',
-            sendDateTime: '2016-05-02',
-            longitude: '54',
-            latitude: '62',
-            countrySubdivisionCode: '650000',
-            locationText: '就不填又怎么样'
-          }
+          sendToProDateTime: '2016-05-02',
+          shippingNoteNumber: '412336222222222222',
+          locationType: '发货地',
+          sendDateTime: '2016-05-02',
+          longitude: '54',
+          latitude: '62',
+          countrySubdivisionCode: '650000',
+          locationText: '就不填又怎么样'
+        }, {
+          sendToProDateTime: '2016-05-02',
+          shippingNoteNumber: '412336222222222222',
+          locationType: '发货地',
+          sendDateTime: '2016-05-02',
+          longitude: '54',
+          latitude: '62',
+          countrySubdivisionCode: '650000',
+          locationText: '就不填又怎么样'
+        }, {
+          sendToProDateTime: '2016-05-02',
+          shippingNoteNumber: '412336222222222222',
+          locationType: '发货地',
+          sendDateTime: '2016-05-02',
+          longitude: '54',
+          latitude: '62',
+          countrySubdivisionCode: '650000',
+          locationText: '就不填又怎么样'
+        }, {
+          sendToProDateTime: '2016-05-02',
+          shippingNoteNumber: '412336222222222222',
+          locationType: '发货地',
+          sendDateTime: '2016-05-02',
+          longitude: '54',
+          latitude: '62',
+          countrySubdivisionCode: '650000',
+          locationText: '就不填又怎么样'
+        }
       ],
       dataListLoading: false,
       addOrUpdateVisible: false
@@ -161,27 +161,27 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated() {
+  activated () {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true
-     getResourceList().then(({data:{data}}) => {
+      getResourceList().then(({ data: { data } }) => {
         this.dataList = this.dataList = treeDataTranslate(data, 'menuId')
         this.dataListLoading = false
       })
     },
     // 新增 / 修改
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
-           this.$refs.addOrUpdate.init(id)
+        this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle(id) {
+    deleteHandle (id) {
       this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -191,7 +191,7 @@ export default {
           url: this.$http.addUrl(`/uaa/resource/${id}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

@@ -3,17 +3,17 @@ import Mock from 'mockjs'
 // 生成数据列表
 const dataList = []
 for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
- dataList.push(Mock.mock({
-   id: '@increment',
-   driverName: '@driverName',
-   drivingLicense: '@drivingLicense',
-   vehicleClass: '@vehicleClass',
-   issuingOrganizations: '@issuingOrganizations',
-   validPeriodFrom: '@validPeriodFrom',
-   validPeriodTo: '@validPeriodTo',
-   qualificationCertificate: '@qualificationCertificate',
-   telephone: '@telephone',
-   remark: '@remark'
+  dataList.push(Mock.mock({
+    id: '@increment',
+    driverName: '@driverName',
+    drivingLicense: '@drivingLicense',
+    vehicleClass: '@vehicleClass',
+    issuingOrganizations: '@issuingOrganizations',
+    validPeriodFrom: '@validPeriodFrom',
+    validPeriodTo: '@validPeriodTo',
+    qualificationCertificate: '@qualificationCertificate',
+    telephone: '@telephone',
+    remark: '@remark'
   }))
 }
 
@@ -24,14 +24,14 @@ export function list () {
     url: '/driver/internetdriver/list',
     type: 'get',
     data: {
-      'msg': 'success',
-      'code': 0,
-      'page': {
-        'totalCount': dataList.length,
-        'pageSize': 10,
-        'totalPage': 1,
-        'currPage': 1,
-        'list': dataList
+      msg: 'success',
+      code: 0,
+      page: {
+        totalCount: dataList.length,
+        pageSize: 10,
+        totalPage: 1,
+        currPage: 1,
+        list: dataList
       }
     }
   }
@@ -44,13 +44,12 @@ export function info () {
     url: '/driver/internetdriver/info',
     type: 'get',
     data: {
-      'msg': 'success',
-      'code': 0,
-      'driver': dataList[0]
+      msg: 'success',
+      code: 0,
+      driver: dataList[0]
     }
   }
 }
-
 
 // 添加驾驶员
 export function add () {
@@ -59,8 +58,8 @@ export function add () {
     url: '/driver/internetdriver/save',
     type: 'post',
     data: {
-      'msg': 'success',
-      'code': 0
+      msg: 'success',
+      code: 0
     }
   }
 }
@@ -72,8 +71,8 @@ export function update () {
     url: '/driver/internetdriver/update',
     type: 'post',
     data: {
-      'msg': 'success',
-      'code': 0
+      msg: 'success',
+      code: 0
     }
   }
 }
@@ -85,8 +84,8 @@ export function del () {
     url: '/driver/internetdriver/delete',
     type: 'post',
     data: {
-      'msg': 'success',
-      'code': 0
+      msg: 'success',
+      code: 0
     }
   }
 }

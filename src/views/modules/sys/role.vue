@@ -85,10 +85,10 @@
 
 <script>
 import AddOrUpdate from './role-add-or-update'
-import {getRolePage} from '@/api/api'
+import { getRolePage } from '@/api/api'
 
 export default {
-  data() {
+  data () {
     return {
       dataForm: {
         name: ''
@@ -105,25 +105,24 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated() {
+  activated () {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true
-      let params = {
-        'page': this.pageIndex,
-        'limit': this.pageSize,
-        'name': this.dataForm.name,
-        'organizationId': this.$store.state.user.organizationId
+      const params = {
+        page: this.pageIndex,
+        limit: this.pageSize,
+        name: this.dataForm.name,
+        organizationId: this.$store.state.user.organizationId
       }
-      getRolePage(params).then(({data}) => {
+      getRolePage(params).then(({ data }) => {
         if (data && data.code === 0) {
-          let {data: {content, totalElements}} = data
+          const { data: { content, totalElements } } = data
           this.totalPage = totalElements
           this.dataList = content
-
         } else {
           this.dataList = []
           this.totalPage = 0
@@ -132,33 +131,34 @@ export default {
       })
     },
     // 每页数
-    sizeChangeHandle(val) {
+    sizeChangeHandle (val) {
       this.pageSize = val
       this.pageIndex = 1
       this.getDataList()
     },
     // 当前页
-    currentChangeHandle(val) {
+    currentChangeHandle (val) {
       this.pageIndex = val
       this.getDataList()
     },
     // 多选
-    selectionChangeHandle(val) {
+    selectionChangeHandle (val) {
       this.dataListSelections = val
     },
     // 新增 / 修改
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle(id) {
-
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.id
-      })
+    deleteHandle (id) {
+      const ids = id
+        ? [id]
+        : this.dataListSelections.map(item => {
+          return item.id
+        })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -168,7 +168,7 @@ export default {
           url: this.$http.addUrl('/uaa/role'),
           method: 'delete',
           data: this.$http.addData(ids, false)
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

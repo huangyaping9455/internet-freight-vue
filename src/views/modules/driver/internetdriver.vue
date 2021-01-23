@@ -143,14 +143,14 @@
 
 <script>
 import AddOrUpdate from './internetdriver-add-or-update'
-import {getDriverPage} from '@/api/api'
+import { getDriverPage } from '@/api/api'
 
 export default {
   data () {
     return {
       dataForm: {
         driverName: ''//,
-        //telephone: ''
+        // telephone: ''
       },
       dataList: [],
       pageIndex: 0,
@@ -171,16 +171,16 @@ export default {
     // 获取数据列表
     getDataList () {
       this.dataListLoading = true
-      let params = {
-        'page': this.pageIndex,
-        'limit': this.pageSize,
-        'driverName': this.dataForm.driverName,
-        //'telephone': this.dataForm.telephone,
-        'organizationId': this.$store.state.user.organizationId
+      const params = {
+        page: this.pageIndex,
+        limit: this.pageSize,
+        driverName: this.dataForm.driverName,
+        // 'telephone': this.dataForm.telephone,
+        organizationId: this.$store.state.user.organizationId
       }
-      getDriverPage(params).then(({data}) => {
+      getDriverPage(params).then(({ data }) => {
         if (data && data.code === 0) {
-          let {data: {content, totalElements}} = data
+          const { data: { content, totalElements } } = data
           this.totalPage = totalElements
           this.dataList = content
         } else {
@@ -214,10 +214,12 @@ export default {
     },
     // 删除
     deleteHandle (id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-       return item.id
-        alert(ids)
-      })
+      var ids = id
+        ? [id]
+        : this.dataListSelections.map(item => {
+          return item.id
+          alert(ids)
+        })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -227,7 +229,7 @@ export default {
           url: this.$http.addUrl(`/internetfreight/internetDrivers/${ids}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

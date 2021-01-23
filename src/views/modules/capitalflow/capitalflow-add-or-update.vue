@@ -53,73 +53,73 @@
 </template>
 
 <script>
-import {addFinancial} from '@/api/api'
+import { addFinancial } from '@/api/api'
 export default {
-  data() {
+  data () {
     return {
       visible: false,
       roleList: [],
       dataForm: {
         id: 0,
-        'documentNumber': '',
-        'sendToProDateTime': '',
-        'carrier': '',
-        'actualCarrierId': '',
-        'vehicleNumber': '',
-        'vehiclePlateColorCode': '',
-        'remark': '',
+        documentNumber: '',
+        sendToProDateTime: '',
+        carrier: '',
+        actualCarrierId: '',
+        vehicleNumber: '',
+        vehiclePlateColorCode: '',
+        remark: '',
         delete: 1
       },
-      /*日期*/
+      /* 日期 */
       pickerOptions1: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
-        },
+        }
       },
-      sendToProDateTime: '',
+      sendToProDateTime: ''
 
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/financials/getOneById`),
+          url: this.$http.addUrl('/internetfreight/financials/getOneById'),
           method: 'get',
-          params: this.$http.addParams({id: this.dataForm.id})
-        }).then(({data}) => {
+          params: this.$http.addParams({ id: this.dataForm.id })
+        }).then(({ data }) => {
           alert(333333)
           if (data && data.code === 0) {
-              this.dataForm.documentNumber = data.data.documentNumber,
-              this.dataForm.sendToProDateTime = data.data.sendToProDateTime,
-              this.dataForm.carrier = data.data.carrier,
-              this.dataForm.actualCarrierId = data.data.actualCarrierId,
-              this.dataForm.vehicleNumber = data.data.vehicleNumber,
-              this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode,
-              this.dataForm.remark = data.data.remark
+            this.dataForm.documentNumber = data.data.documentNumber,
+            this.dataForm.sendToProDateTime = data.data.sendToProDateTime,
+            this.dataForm.carrier = data.data.carrier,
+            this.dataForm.actualCarrierId = data.data.actualCarrierId,
+            this.dataForm.vehicleNumber = data.data.vehicleNumber,
+            this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode,
+            this.dataForm.remark = data.data.remark
           }
         })
       }
       this.visible = true
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
-        let methods = `${!this.dataForm.id ? 'post' : 'put'}`;
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
+        const methods = `${!this.dataForm.id ? 'post' : 'put'}`
         if (valid) {
           alert(methods)
-          let dataForm = {
-            'id': this.dataForm.id || undefined,
-            'documentNumber': this.dataForm.documentNumber,
-            'sendToProDateTime': this.dataForm.sendToProDateTime,
-            'carrier': this.dataForm.carrier,
-            'actualCarrierId': this.dataForm.actualCarrierId,
-            'vehicleNumber': this.dataForm.vehicleNumber,
-            'vehiclePlateColorCode': this.dataForm.vehiclePlateColorCode,
-            'remark': this.dataForm.remark
+          const dataForm = {
+            id: this.dataForm.id || undefined,
+            documentNumber: this.dataForm.documentNumber,
+            sendToProDateTime: this.dataForm.sendToProDateTime,
+            carrier: this.dataForm.carrier,
+            actualCarrierId: this.dataForm.actualCarrierId,
+            vehicleNumber: this.dataForm.vehicleNumber,
+            vehiclePlateColorCode: this.dataForm.vehiclePlateColorCode,
+            remark: this.dataForm.remark
           }
-          addFinancial(dataForm, methods).then(({data}) => {
+          addFinancial(dataForm, methods).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

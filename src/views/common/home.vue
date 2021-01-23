@@ -7,12 +7,12 @@
 
 <script>
 import Echart from '../demo/echarts'
-  export default {
-    components:{
+export default {
+  components: {
     Echart
   }
 
-  }
+}
 </script>
 
 <style>
@@ -20,4 +20,3 @@ import Echart from '../demo/echarts'
     line-height: 1.5;
   }
 </style>
-

@@ -104,7 +104,7 @@
         label="财务列表">
       </el-table-column>
       <el-table-column
-        prop=paymentMeansCode"
+        prop="paymentMeansCode"
         header-align="center"
         align="center"
         width="180"
@@ -196,7 +196,7 @@
 
 <script>
 import AddOrUpdate from './capitalflow-add-or-update'
-import {getFinancialPage} from '@/api/api'
+import { getFinancialPage } from '@/api/api'
 
 export default {
   data () {
@@ -223,16 +223,16 @@ export default {
     // 获取数据列表
     getDataList () {
       this.dataListLoading = true
-      let params = {
-        'page': this.pageIndex,
-        'limit': this.pageSize,
-        'documentNumber': this.dataForm.documentNumber,
-        //'telephone': this.dataForm.telephone,
-        'organizationId': this.$store.state.user.organizationId
+      const params = {
+        page: this.pageIndex,
+        limit: this.pageSize,
+        documentNumber: this.dataForm.documentNumber,
+        // 'telephone': this.dataForm.telephone,
+        organizationId: this.$store.state.user.organizationId
       }
-      getFinancialPage(params).then(({data}) => {
+      getFinancialPage(params).then(({ data }) => {
         if (data && data.code === 0) {
-          let {data: {content, totalElements}} = data
+          const { data: { content, totalElements } } = data
           this.totalPage = totalElements
           this.dataList = content
         } else {
@@ -266,9 +266,11 @@ export default {
     },
     // 删除
     deleteHandle (id) {
-      var ids= id ? [id] : this.dataListSelections.map(item => {
-       return item.id
-      })
+      const ids = id
+        ? [id]
+        : this.dataListSelections.map(item => {
+          return item.id
+        })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -278,7 +280,7 @@ export default {
           url: this.$http.addUrl(`/internetfreight/financials/${ids}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',
@@ -288,7 +290,7 @@ export default {
                 this.getDataList()
               }
             })
-            alert(message)
+
             this.visible = true
           } else {
             this.$message.error(data.msg)

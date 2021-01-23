@@ -45,19 +45,19 @@
 </template>
 
 <script>
-import {isEmail, isMobile} from '@/utils/validate'
-import {getRoleList} from '@/api/api'
+import { isEmail, isMobile } from '@/utils/validate'
+import { getRoleList } from '@/api/api'
 
 export default {
-  data() {
-    var validatePassword = (rule, value, callback) => {
+  data () {
+    const validatePassword = (rule, value, callback) => {
       if (!this.dataForm.id && !/\S/.test(value)) {
         callback(new Error('密码不能为空'))
       } else {
         callback()
       }
     }
-    var validateComfirmPassword = (rule, value, callback) => {
+    const validateComfirmPassword = (rule, value, callback) => {
       if (!this.dataForm.id && !/\S/.test(value)) {
         callback(new Error('确认密码不能为空'))
       } else if (this.dataForm.password !== value) {
@@ -66,14 +66,14 @@ export default {
         callback()
       }
     }
-    var validateEmail = (rule, value, callback) => {
+    const validateEmail = (rule, value, callback) => {
       if (!isEmail(value)) {
         callback(new Error('邮箱格式错误'))
       } else {
         callback()
       }
     }
-    var validateMobile = (rule, value, callback) => {
+    const validateMobile = (rule, value, callback) => {
       if (!isMobile(value)) {
         callback(new Error('手机号格式错误'))
       } else {
@@ -86,7 +86,7 @@ export default {
       dataForm: {
         id: 0,
         userName: '',
-        name:'',
+        name: '',
         password: '',
         comfirmPassword: '',
         organizationId: '',
@@ -97,34 +97,34 @@ export default {
       },
       dataRule: {
         userName: [
-          {required: true, message: '用户名不能为空', trigger: 'blur'}
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
-          {validator: validatePassword, trigger: 'blur'}
+          { validator: validatePassword, trigger: 'blur' }
         ],
         comfirmPassword: [
-          {validator: validateComfirmPassword, trigger: 'blur'}
+          { validator: validateComfirmPassword, trigger: 'blur' }
         ],
         email: [
-          {required: true, message: '邮箱不能为空', trigger: 'blur'},
-          {validator: validateEmail, trigger: 'blur'}
+          { required: true, message: '邮箱不能为空', trigger: 'blur' },
+          { validator: validateEmail, trigger: 'blur' }
         ],
         mobile: [
-          {required: true, message: '手机号不能为空', trigger: 'blur'},
-          {validator: validateMobile, trigger: 'blur'}
+          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          { validator: validateMobile, trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
-      getRoleList().then(({data}) => {
-        this.roleList = data ? data : []
+      getRoleList().then(({ data }) => {
+        this.roleList = data || []
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
+          this.$refs.dataForm.resetFields()
         })
       }).then(() => {
         if (this.dataForm.id) {
@@ -132,7 +132,7 @@ export default {
             url: this.$http.addUrl(`/uaa/sys/admin/${this.dataForm.id}`),
             method: 'get',
             params: this.$http.addParams()
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.dataForm.userName = data.data.username
               this.dataForm.organizationId = data.data.organizationId
@@ -147,26 +147,26 @@ export default {
       })
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/uaa/sys/admin${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
             data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'username': this.dataForm.userName,
-              'name': this.dataForm.name,
-              'password': this.dataForm.password,
-              'salt': this.dataForm.salt,
-              'email': this.dataForm.email,
-              'mobile': this.dataForm.mobile,
-              'delete': this.dataForm.delete,
-              'roleIdList': this.dataForm.roleIdList,
-              'organizationId': this.$store.state.user.organizationId
+              id: this.dataForm.id || undefined,
+              username: this.dataForm.userName,
+              name: this.dataForm.name,
+              password: this.dataForm.password,
+              salt: this.dataForm.salt,
+              email: this.dataForm.email,
+              mobile: this.dataForm.mobile,
+              delete: this.dataForm.delete,
+              roleIdList: this.dataForm.roleIdList,
+              organizationId: this.$store.state.user.organizationId
 
             })
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

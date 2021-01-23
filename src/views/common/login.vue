@@ -72,10 +72,10 @@
 
 <script>
 
-import {getImageCode, getSmsCode, passwordLogin, mobileLogin} from '@/api/api'
+import { getImageCode, getSmsCode, passwordLogin, mobileLogin } from '@/api/api'
 
 export default {
-  data() {
+  data () {
     return {
       dataForm: {
         username: '',
@@ -86,38 +86,38 @@ export default {
       },
       dataRule: {
         username: [
-          {required: true, message: '帐号不能为空', trigger: 'blur'}
+          { required: true, message: '帐号不能为空', trigger: 'blur' }
         ],
         password: [
-          {required: true, message: '密码不能为空', trigger: 'blur'}
+          { required: true, message: '密码不能为空', trigger: 'blur' }
         ],
         imageCode: [
-          {required: true, message: '验证码不能为空', trigger: 'blur'}
+          { required: true, message: '验证码不能为空', trigger: 'blur' }
         ],
         mobile: [
-          {required: true, message: '电话号码不能为空', trigger: 'blur'}
+          { required: true, message: '电话号码不能为空', trigger: 'blur' }
         ],
         smsCode: [
-          {required: true, message: '验证码不能为空', trigger: 'blur'}
+          { required: true, message: '验证码不能为空', trigger: 'blur' }
         ]
       },
       verifyCode: '',
-      loginType: true,//true:电话好登陆
+      loginType: true, // true:电话好登陆
       computeTime: 0
     }
   },
-  created() {
+  created () {
     this.getVerifyCode()
   },
 
   computed: {
-    rightPhone() {
+    rightPhone () {
       return /^[1][3,4,5,7,8][0-9]{9}$/.test(this.dataForm.mobile)
     }
   },
   methods: {
-    //发送短信验证码
-    getCode() {
+    // 发送短信验证码
+    getCode () {
       // 如果当前没有计时才开始计时
       if (!this.computeTime) {
         // 启动倒计时
@@ -128,69 +128,62 @@ export default {
             clearInterval(endTime)
           }
         }, 1000)
-        //请求后端发送短信验证码
-        let params = {
-          'mobile': this.dataForm.mobile
+        // 请求后端发送短信验证码
+        const params = {
+          mobile: this.dataForm.mobile
         }
-        getSmsCode(params).then(({data}) => {
-          console.log("已发送。。。");
+        getSmsCode(params).then(({ data }) => {
+          console.log('已发送。。。')
         })
       }
     },
     // 提交表单
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           if (this.loginType) {
-            let params = {
-              'mobile': this.dataForm.mobile,
-              'smsCode': this.dataForm.smsCode
+            const params = {
+              mobile: this.dataForm.mobile,
+              smsCode: this.dataForm.smsCode
             }
-            mobileLogin(params).then(({data}) => {
+            mobileLogin(params).then(({ data }) => {
               if (data && data.code === 0) {
-                this.$cookie.set('Authorization', "bearer " + data.data.access_token)
-                this.$router.replace({name: 'home'})
+                this.$cookie.set('Authorization', 'bearer ' + data.data.access_token)
+                this.$router.replace({ name: 'home' })
               } else {
-                this.$message.error(data.msg || "用户名错误！")
-
+                this.$message.error(data.msg || '用户名错误！')
               }
             }).catch(error => {
-
               this.$message.error(error.response.data.msg)
             })
-
           } else {
-            let params = {
-              'username': this.dataForm.username,
-              'password': this.dataForm.password,
-              'imageCode': this.dataForm.imageCode
+            const params = {
+              username: this.dataForm.username,
+              password: this.dataForm.password,
+              imageCode: this.dataForm.imageCode
             }
-            passwordLogin(params).then(({data}) => {
+            passwordLogin(params).then(({ data }) => {
               if (data && data.code === 0) {
-                this.$cookie.set('Authorization', "bearer " + data.data.access_token)
-                this.$router.replace({name: 'home'})
+                this.$cookie.set('Authorization', 'bearer ' + data.data.access_token)
+                this.$router.replace({ name: 'home' })
               } else {
-                this.$message.error(data.msg || "用户名错误！")
+                this.$message.error(data.msg || '用户名错误！')
                 this.getVerifyCode()
               }
-
             }).catch(error => {
               this.getVerifyCode()
               this.$message.error(error.response.data.msg)
             })
           }
-
         }
       })
     },
 
     // 获取验证码
-    getVerifyCode() {
+    getVerifyCode () {
       getImageCode().then(res => {
         this.verifyCode = window.URL.createObjectURL(res.data)
-
       })
-
     }
   }
 }
@@ -325,11 +318,9 @@ export default {
 
       }
 
-
     }
 
   }
-
 
   .login-captcha {
     overflow: hidden;

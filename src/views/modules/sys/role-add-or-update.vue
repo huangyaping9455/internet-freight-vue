@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import {treeDataTranslate} from '@/utils'
-import {getResourceList} from '@/api/api'
+import { treeDataTranslate } from '@/utils'
+import { getResourceList } from '@/api/api'
 export default {
-  data() {
+  data () {
     return {
       visible: false,
       menuList: [],
@@ -49,7 +49,7 @@ export default {
       },
       dataRule: {
         name: [
-          {required: true, message: '角色名称不能为空', trigger: 'blur'}
+          { required: true, message: '角色名称不能为空', trigger: 'blur' }
         ]
       },
       tempKey: 99999 // 临时key, 用于解决tree半选中状态项不能传给后台接口问题. # 待优化
@@ -58,13 +58,12 @@ export default {
   methods: {
     init: function (id) {
       this.dataForm.id = id || 0
-    getResourceList().then(({data: {data}}) => {
-
+      getResourceList().then(({ data: { data } }) => {
         this.menuList = treeDataTranslate(data, 'menuId')
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
+          this.$refs.dataForm.resetFields()
           this.$refs.menuListTree.setCheckedKeys([])
         })
       }).then(() => {
@@ -73,23 +72,22 @@ export default {
             url: this.$http.addUrl(`/uaa/sys/role/${this.dataForm.id}/resource`),
             method: 'get',
             params: this.$http.addParams()
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.dataForm.name = data.data.name
               this.dataForm.remark = data.data.remark
-              let idx = data.data.resourceIds.indexOf(this.tempKey)
+              const idx = data.data.resourceIds.indexOf(this.tempKey)
               if (idx !== -1) {
                 data.data.resourceIds.splice(idx, data.data.resourceIds.length - idx)
               }
 
-              this.dataForm.ids = data.data.resourceIds;
-              this.dataForm.ids.forEach((i,n)=>{
-                let node = this.$refs.menuListTree.getNode(i)
+              this.dataForm.ids = data.data.resourceIds
+              this.dataForm.ids.forEach((i, n) => {
+                const node = this.$refs.menuListTree.getNode(i)
                 if (node.isLeaf) {
                   this.$refs.menuListTree.setChecked(node, true)
                 }
               })
-
             }
           })
         }
@@ -97,24 +95,24 @@ export default {
     },
 
     // 表单提交
-    dataFormSubmit() {
-      let _creat = '';
-      let _update = `${'/' + this.dataForm.id + '/resource'}`;
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      const _creat = ''
+      const _update = `${'/' + this.dataForm.id + '/resource'}`
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/uaa/sys/role${!this.dataForm.id ? _creat : _update}`),
             method: 'post',
             data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'name': this.dataForm.name,
-              'remark': this.dataForm.remark,
-              'organizationId': this.$store.state.user.organizationId,
-              'resourceIds': [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
+              id: this.dataForm.id || undefined,
+              name: this.dataForm.name,
+              remark: this.dataForm.remark,
+              organizationId: this.$store.state.user.organizationId,
+              resourceIds: [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
 
             })
-          }).then(({data}) => {
-            console.log(data);
+          }).then(({ data }) => {
+            console.log(data)
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

@@ -68,26 +68,26 @@
 </template>
 
 <script>
-import {addDriver, upload} from '@/api/api'
-import {telephone} from '../../../utils/validate'
+import { addDriver, upload } from '@/api/api'
+import { telephone } from '../../../utils/validate'
 
 export default {
-  data() {
+  data () {
     return {
       visible: false,
       roleList: [],
       dataForm: {
         id: 0,
-        'driverName': '',
-        'drivingLicense': '',
-        'vehicleClass': '',
-        'issuingOrganizations': '',
-        'validPeriodFrom': '',
-        'validPeriodTo': '',
-        'qualificationCertificate': '',
-        'telephone': '',
-        'remark': '',
-        'driverLicense':'',
+        driverName: '',
+        drivingLicense: '',
+        vehicleClass: '',
+        issuingOrganizations: '',
+        validPeriodFrom: '',
+        validPeriodTo: '',
+        qualificationCertificate: '',
+        telephone: '',
+        remark: '',
+        driverLicense: '',
         delete: 1
       },
       /*  dataRule: {
@@ -116,59 +116,59 @@ export default {
         {required: true, message: '手机号不能为空', trigger: 'blur'},
         {validator: telephone, trigger: 'blur'}
       ]
-    }*/
-      /*日期*/
+    } */
+      /* 日期 */
       pickerOptions1: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
-        },
+        }
       },
       validPeriodFrom: '',
-      validPeriodTo: '',
+      validPeriodTo: ''
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/financials/getOneById`),
+          url: this.$http.addUrl('/internetfreight/financials/getOneById'),
           method: 'get',
-          params: this.$http.addParams({id: this.dataForm.id})
-        }).then(({data}) => {
+          params: this.$http.addParams({ id: this.dataForm.id })
+        }).then(({ data }) => {
           alert(44444)
           if (data && data.code === 0) {
-              this.dataForm.documentNumber = data.data.driverName,
-              this.dataForm.sendToProDateTime = data.data.drivingLicense,
-              this.dataForm.carrier = data.data.vehicleClass,
-              this.dataForm.actualCarrierId = data.data.issuingOrganizations,
-              this.dataForm.vehicleNumber = data.data.validPeriodFrom,
-              this.dataForm.vehiclePlateColorCode = data.data.validPeriodTo,
-              this.dataForm.remark = data.data.qualificationCertificate
+            this.dataForm.documentNumber = data.data.driverName,
+            this.dataForm.sendToProDateTime = data.data.drivingLicense,
+            this.dataForm.carrier = data.data.vehicleClass,
+            this.dataForm.actualCarrierId = data.data.issuingOrganizations,
+            this.dataForm.vehicleNumber = data.data.validPeriodFrom,
+            this.dataForm.vehiclePlateColorCode = data.data.validPeriodTo,
+            this.dataForm.remark = data.data.qualificationCertificate
           }
         })
       }
       this.visible = true
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
-        let methods = `${!this.dataForm.id ? 'post' : 'put'}`;
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
+        const methods = `${!this.dataForm.id ? 'post' : 'put'}`
         if (valid) {
-          let dataForm = {
-            'id': this.dataForm.id || undefined,
-            'driverName': this.dataForm.driverName,
-            'drivingLicense': this.dataForm.drivingLicense,
-            'vehicleClass': this.dataForm.vehicleClass,
-            'issuingOrganizations': this.dataForm.issuingOrganizations,
-            'validPeriodFrom': this.dataForm.validPeriodFrom,
-            'validPeriodTo': this.dataForm.validPeriodTo,
-            'qualificationCertificate': this.dataForm.qualificationCertificate,
-            'telephone': this.dataForm.telephone,
-            'remark': this.dataForm.remark,
-            'driverLicense': this.dataForm.driverLicense
+          const dataForm = {
+            id: this.dataForm.id || undefined,
+            driverName: this.dataForm.driverName,
+            drivingLicense: this.dataForm.drivingLicense,
+            vehicleClass: this.dataForm.vehicleClass,
+            issuingOrganizations: this.dataForm.issuingOrganizations,
+            validPeriodFrom: this.dataForm.validPeriodFrom,
+            validPeriodTo: this.dataForm.validPeriodTo,
+            qualificationCertificate: this.dataForm.qualificationCertificate,
+            telephone: this.dataForm.telephone,
+            remark: this.dataForm.remark,
+            driverLicense: this.dataForm.driverLicense
           }
-          addDriver(dataForm, methods).then(({data}) => {
+          addDriver(dataForm, methods).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

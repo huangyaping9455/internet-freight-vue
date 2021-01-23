@@ -18,7 +18,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="车辆类型代码" prop="vehicleType">
@@ -32,7 +31,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="使用性质" prop="useCharacter">
@@ -45,7 +43,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
 
       <el-row>
         <el-col :span="12">
@@ -63,7 +60,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="发证日期">
@@ -80,7 +76,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="核定载质量" prop="vehicleTonnage">
@@ -94,7 +89,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="道路运输证号" prop="roadTransportCertificateNumber">
@@ -107,7 +101,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
 
       <el-row>
         <el-col :span="12">
@@ -148,7 +141,6 @@
         </el-col>
       </el-row>
 
-
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -158,20 +150,20 @@
 </template>
 
 <script>
-import {isEmail, isMobile} from '@/utils/validate'
-import {getRoleList, upload} from '@/api/api'
-import log from "../sys/log";
+import { isEmail, isMobile } from '@/utils/validate'
+import { getRoleList, upload } from '@/api/api'
+import log from '../sys/log'
 
 export default {
-  data() {
-    let validateVehicleNumber = (rule, value, callback) => {
+  data () {
+    const validateVehicleNumber = (rule, value, callback) => {
       if (!this.dataForm.vehicleNumber && !/\S/.test(value)) {
         callback(new Error('车牌号不能为空'))
       } else {
         callback()
       }
     }
-    let validateOwner = (rule, value, callback) => {
+    const validateOwner = (rule, value, callback) => {
       if (!this.dataForm.owner && !/\S/.test(value)) {
         callback(new Error('所有人不能为空'))
       } else {
@@ -180,7 +172,7 @@ export default {
     }
     return {
       visible: false,
-      //roleList: [],
+      // roleList: [],
       dataForm: {
         id: 0,
         vehicleNumber: '',
@@ -202,31 +194,29 @@ export default {
       },
       dataRule: {
         vehicleNumber: [
-          {validator: validateVehicleNumber, message: '车牌号不能为空', trigger: 'blur'}
+          { validator: validateVehicleNumber, message: '车牌号不能为空', trigger: 'blur' }
         ],
         owner: [
-          {validator: validateOwner, message: '所有人不能为空', trigger: 'blur'}
+          { validator: validateOwner, message: '所有人不能为空', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    uploadFile() {
+    uploadFile () {
       upload.then((res) => {
-        console.log(res);
+        console.log(res)
       })
-
     },
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
-
 
       if (this.dataForm.id) {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetCars/getOneById`),
+          url: this.$http.addUrl('/internetfreight/internetCars/getOneById'),
           method: 'get',
-          params: this.$http.addParams({id: this.dataForm.id})
-        }).then(({data}) => {
+          params: this.$http.addParams({ id: this.dataForm.id })
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.dataForm.vehicleNumber = data.data.vehicleNumber
             this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode
@@ -248,35 +238,34 @@ export default {
       }
 
       this.visible = true
-
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/internetfreight/internetCars${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
             data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'vehicleNumber': this.dataForm.vehicleNumber,
-              'vehiclePlateColorCode': this.dataForm.vehiclePlateColorCode,
-              'vehicleType': this.dataForm.vehicleType,
-              'owner': this.dataForm.owner,
-              'useCharacter': this.dataForm.useCharacter,
-              'vin': this.dataForm.vin,
-              'issuingOrganizations': this.dataForm.issuingOrganizations,
-              'registerDate': this.dataForm.registerDate,
-              'issueDate': this.dataForm.issueDate,
-              'vehicleEnergyType': this.dataForm.vehicleEnergyType,
-              'vehicleTonnage': this.dataForm.vehicleTonnage,
-              'grossMass': this.dataForm.grossMass,
-              'roadTransportCertificateNumber': this.dataForm.roadTransportCertificateNumber,
-              'trailerVehiclePlateNumber': this.dataForm.trailerVehiclePlateNumber,
-              'remark': this.dataForm.remark
+              id: this.dataForm.id || undefined,
+              vehicleNumber: this.dataForm.vehicleNumber,
+              vehiclePlateColorCode: this.dataForm.vehiclePlateColorCode,
+              vehicleType: this.dataForm.vehicleType,
+              owner: this.dataForm.owner,
+              useCharacter: this.dataForm.useCharacter,
+              vin: this.dataForm.vin,
+              issuingOrganizations: this.dataForm.issuingOrganizations,
+              registerDate: this.dataForm.registerDate,
+              issueDate: this.dataForm.issueDate,
+              vehicleEnergyType: this.dataForm.vehicleEnergyType,
+              vehicleTonnage: this.dataForm.vehicleTonnage,
+              grossMass: this.dataForm.grossMass,
+              roadTransportCertificateNumber: this.dataForm.roadTransportCertificateNumber,
+              trailerVehiclePlateNumber: this.dataForm.trailerVehiclePlateNumber,
+              remark: this.dataForm.remark
 
             })
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

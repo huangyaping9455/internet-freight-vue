@@ -181,13 +181,13 @@
 
 <script>
 import AddOrUpdate from './car-add-or-update'
-import {getCarPage} from '@/api/api'
+import { getCarPage } from '@/api/api'
 
 export default {
-  data() {
+  data () {
     return {
       dataForm: {
-        //userName: ''
+        // userName: ''
       },
       dataList: [],
       pageIndex: 0,
@@ -201,23 +201,23 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated() {
+  activated () {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true
-      let params = {
-        'page': this.pageIndex,
-        'vehicleNumber': this.dataForm.vehicleNumber,
-        'owner': this.dataForm.owner,
-        //'organizationId': this.$store.state.user.organizationId
-        'limit': this.pageSize
+      const params = {
+        page: this.pageIndex,
+        vehicleNumber: this.dataForm.vehicleNumber,
+        owner: this.dataForm.owner,
+        // 'organizationId': this.$store.state.user.organizationId
+        limit: this.pageSize
       }
-      getCarPage(params).then(({data}) => {
+      getCarPage(params).then(({ data }) => {
         if (data && data.code === 0) {
-          let {data: {content, totalElements}} = data
+          const { data: { content, totalElements } } = data
           this.totalPage = totalElements
           this.dataList = content
         } else {
@@ -228,32 +228,34 @@ export default {
       })
     },
     // 每页数
-    sizeChangeHandle(val) {
+    sizeChangeHandle (val) {
       this.pageSize = val
       this.pageIndex = 0
       this.getDataList()
     },
     // 当前页
-    currentChangeHandle(val) {
+    currentChangeHandle (val) {
       this.pageIndex = val
       this.getDataList()
     },
     // 多选
-    selectionChangeHandle(val) {
+    selectionChangeHandle (val) {
       this.dataListSelections = val
     },
     // 新增 / 修改
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
 
-    deleteHandleBach(id) {
-      let ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.id
-      })
+    deleteHandleBach (id) {
+      const ids = id
+        ? [id]
+        : this.dataListSelections.map(item => {
+          return item.id
+        })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -263,7 +265,7 @@ export default {
           url: this.$http.addUrl(`/internetfreight/internetCars/${ids}`),
           method: 'delete',
           data: this.$http.addParams()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',
@@ -282,7 +284,7 @@ export default {
     },
 
     // 删除
-    deleteHandle(id) {
+    deleteHandle (id) {
       this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -292,7 +294,7 @@ export default {
           url: this.$http.addUrl(`/internetfreight/internetCars/${id}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

@@ -83,12 +83,12 @@
 </template>
 
 <script>
-import {treeDataTranslate} from '@/utils'
+import { treeDataTranslate } from '@/utils'
 import Icon from '@/icons'
 
 export default {
-  data() {
-    var validateUrl = (rule, value, callback) => {
+  data () {
+    const validateUrl = (rule, value, callback) => {
       if (this.dataForm.type === 1 && !/\S/.test(value)) {
         callback(new Error('菜单URL不能为空'))
       } else {
@@ -112,13 +112,13 @@ export default {
       },
       dataRule: {
         name: [
-          {required: true, message: '菜单名称不能为空', trigger: 'blur'}
+          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
         ],
         parentName: [
-          {required: true, message: '上级菜单不能为空', trigger: 'change'}
+          { required: true, message: '上级菜单不能为空', trigger: 'change' }
         ],
         url: [
-          {validator: validateUrl, trigger: 'blur'}
+          { validator: validateUrl, trigger: 'blur' }
         ]
       },
       menuList: [],
@@ -128,25 +128,23 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.iconList = Icon.getNameList()
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
       this.$http({
         url: this.$http.addUrl('/uaa/sys/resource/selectRootList'),
         // url: '/src/router/test.json',
         method: 'get',
         params: this.$http.addParams()
-      }).then(({data: {data}}) => {
-
+      }).then(({ data: { data } }) => {
         this.menuList = treeDataTranslate(data, 'menuId')
-
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
+          this.$refs.dataForm.resetFields()
         })
       }).then(() => {
         if (!this.dataForm.id) {
@@ -158,7 +156,7 @@ export default {
             url: this.$http.addUrl(`/uaa/sys/resource/${this.dataForm.id}`),
             method: 'get',
             params: this.$http.addParams()
-          }).then(({data}) => {
+          }).then(({ data }) => {
             //  console.log(data);
             this.dataForm.id = data.menuId
             this.dataForm.type = data.type
@@ -174,37 +172,37 @@ export default {
       })
     },
     // 菜单树选中
-    menuListTreeCurrentChangeHandle(data, node) {
+    menuListTreeCurrentChangeHandle (data, node) {
       this.dataForm.parentId = data.menuId
       this.dataForm.parentName = data.name
     },
     // 菜单树设置当前选中节点
-    menuListTreeSetCurrentNode() {
+    menuListTreeSetCurrentNode () {
       this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
-      this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['name']
+      this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {}).name
     },
     // 图标选中
-    iconActiveHandle(iconName) {
+    iconActiveHandle (iconName) {
       this.dataForm.icon = iconName
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/uaa/sys/resource${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
             data: this.$http.addData({
-              'menuId': this.dataForm.id || undefined,
-              'type': this.dataForm.type,
-              'name': this.dataForm.name,
-              'parentId': this.dataForm.parentId,
-              'url': this.dataForm.url,
-              'perms': this.dataForm.perms,
-              'sort': this.dataForm.sort,
-              'icon': this.dataForm.icon
+              menuId: this.dataForm.id || undefined,
+              type: this.dataForm.type,
+              name: this.dataForm.name,
+              parentId: this.dataForm.parentId,
+              url: this.dataForm.url,
+              perms: this.dataForm.perms,
+              sort: this.dataForm.sort,
+              icon: this.dataForm.icon
             })
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

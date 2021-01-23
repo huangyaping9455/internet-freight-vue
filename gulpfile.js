@@ -9,7 +9,7 @@ var versionPath = ''; // 版本号路径
 var env         = ''; // 运行环境
 
 // 创建版本号(年月日时分)
-(function () {
+(function ()   {
   var d = new Date();
   var yy = d.getFullYear().toString().slice(2);
   var MM = d.getMonth() + 1 >= 10 ? (d.getMonth() + 1) : '0' + (d.getMonth() + 1);

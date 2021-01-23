@@ -47,12 +47,11 @@
 </template>
 
 <script>
-import {treeDataTranslate} from '@/utils'
+import { treeDataTranslate } from '@/utils'
 import Icon from '@/icons'
 
 export default {
-  data() {
-
+  data () {
     return {
       visible: false,
       roleList: [],
@@ -67,10 +66,10 @@ export default {
       },
       dataRule: {
         name: [
-          {required: true, message: '菜单名称不能为空', trigger: 'blur'}
+          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
         ],
         parentName: [
-          {required: true, message: '上级菜单不能为空', trigger: 'change'}
+          { required: true, message: '上级菜单不能为空', trigger: 'change' }
         ]
       },
       companyList: [],
@@ -82,21 +81,19 @@ export default {
   },
 
   methods: {
-    init(id) {
-
+    init (id) {
       this.dataForm.id = id || 0
       this.$http({
         url: this.$http.addUrl('/uaa/sys/organization/organizationRootList'),
         // url: '/src/router/test.json',
         method: 'get',
         params: this.$http.addParams()
-      }).then(({data: {data}}) => {
+      }).then(({ data: { data } }) => {
         this.companyList = treeDataTranslate(data, 'id')
-
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
+          this.$refs.dataForm.resetFields()
         })
       }).then(() => {
         if (!this.dataForm.id) {
@@ -108,45 +105,44 @@ export default {
             url: this.$http.addUrl(`/uaa/sys/organization/${this.dataForm.id}`),
             method: 'get',
             params: this.$http.addParams()
-          }).then(({data: data}) => {
+          }).then(({ data }) => {
             this.dataForm.id = data.data.id
             this.dataForm.type = data.data.type
             this.dataForm.name = data.data.name
             this.dataForm.parentId = data.data.parentId
             this.roleList = data.data.roleList,
-              this.dataForm.roleIdList = data.data.roleIds
+            this.dataForm.roleIdList = data.data.roleIds
             this.companyListTreeSetCurrentNode()
           })
         }
       })
     },
     // 菜单树选中
-    companyListTreeCurrentChangeHandle(data, node) {
+    companyListTreeCurrentChangeHandle (data, node) {
       this.dataForm.parentId = data.id
       this.dataForm.parentName = data.name
     },
     // 菜单树设置当前选中节点
-    companyListTreeSetCurrentNode() {
+    companyListTreeSetCurrentNode () {
       this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
-      this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['name']
-
+      this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {}).name
     },
 
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/uaa/sys/organization${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
             data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'type': this.dataForm.type,
-              'name': this.dataForm.name,
-              'parentId': this.dataForm.parentId,
+              id: this.dataForm.id || undefined,
+              type: this.dataForm.type,
+              name: this.dataForm.name,
+              parentId: this.dataForm.parentId
 
             })
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

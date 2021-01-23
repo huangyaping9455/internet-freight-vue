@@ -3,7 +3,7 @@ import axios from 'axios'
 import router from '@/router'
 import qs from 'qs'
 import merge from 'lodash/merge'
-import {clearLoginInfo} from '@/utils'
+import { clearLoginInfo } from '@/utils'
 
 const http = axios.create({
   timeout: 5000,
@@ -17,7 +17,7 @@ const http = axios.create({
  * 请求拦截
  */
 http.interceptors.request.use(config => {
-  config.headers['Authorization'] = Vue.cookie.get('Authorization') // 请求头带上token
+  config.headers.Authorization = Vue.cookie.get('Authorization') // 请求头带上token
   // config.headers['Authorization'] = " " // 请求头带上token
   return config
 }, error => {
@@ -30,7 +30,7 @@ http.interceptors.request.use(config => {
 http.interceptors.response.use(response => {
   if (response.data && response.data.code === 401) { // 401, token失效
     clearLoginInfo()
-    router.push({name: 'login'})
+    router.push({ name: 'login' })
   }
   return response
 }, error => {
@@ -42,7 +42,6 @@ http.interceptors.response.use(response => {
  * @param {*} actionName action方法名称
  */
 http.addUrl = (actionName) => {
-
   // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!
   return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi' : window.SITE_CONFIG.baseUrl) + actionName
 }
@@ -53,8 +52,8 @@ http.addUrl = (actionName) => {
  * @param {*} openDefultParams 是否开启默认参数?
  */
 http.addParams = (params = {}, openDefultParams = false) => {
-  var defaults = {
-    't': new Date().getTime()
+  const defaults = {
+    t: new Date().getTime()
   }
   return openDefultParams ? merge(defaults, params) : params
 }
@@ -68,12 +67,12 @@ http.addParams = (params = {}, openDefultParams = false) => {
  *  form: 'application/x-www-form-urlencoded; charset=utf-8'
  */
 http.addData = (data = {}, openDefultdata = false, contentType = 'json') => {
-  var defaults = {
-    't': new Date().getTime()
+  const defaults = {
+    t: new Date().getTime()
   }
   data = openDefultdata ? merge(defaults, data) : data
-  console.log(contentType);
-  if (contentType === 'multipart/form-data') return data; //如果是文件类型不需要序列化
+  console.log(contentType)
+  if (contentType === 'multipart/form-data') return data // 如果是文件类型不需要序列化
   return contentType === 'json' ? JSON.stringify(data) : qs.stringify(data)
 }
 
@@ -85,8 +84,8 @@ http.addData = (data = {}, openDefultdata = false, contentType = 'json') => {
  * @returns {string|*}
  */
 http.addHeaders = (data = {}, openDefultheader = false, contentType = 'json') => {
-  var defaults = {
-    't': new Date().getTime()
+  const defaults = {
+    t: new Date().getTime()
   }
   data = openDefultheader ? merge(defaults, data) : data
   return contentType === 'json' ? JSON.stringify(data) : qs.stringify(data)

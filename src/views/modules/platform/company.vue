@@ -76,10 +76,10 @@
 
 <script>
 import AddOrUpdate from './company-add-or-update'
-import {treeDataTranslate} from '@/utils'
-import {getOrganizationList} from '@/api/api'
+import { treeDataTranslate } from '@/utils'
+import { getOrganizationList } from '@/api/api'
 export default {
-  data() {
+  data () {
     return {
       dataForm: {},
       dataList: [],
@@ -90,27 +90,27 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated() {
+  activated () {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true
-      getOrganizationList().then(({data: {data}}) => {
+      getOrganizationList().then(({ data: { data } }) => {
         this.dataList = this.dataList = treeDataTranslate(data, 'id')
         this.dataListLoading = false
       })
     },
     // 新增 / 修改
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle(id) {
+    deleteHandle (id) {
       this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -120,7 +120,7 @@ export default {
           url: this.$http.addUrl(`/uaa/organization/${id}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

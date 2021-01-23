@@ -18,7 +18,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="分段分单号" prop="serialNumber">
@@ -32,7 +31,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="运输组织类型代码" prop="transportTypeCode">
@@ -45,7 +43,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
 
       <el-row>
         <el-col :span="12">
@@ -62,7 +59,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
 
       <el-row>
         <el-col :span="12">
@@ -83,7 +79,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="收货日期时间">
@@ -100,7 +95,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="业务类型代码" prop="businessTypeCode">
@@ -114,7 +108,6 @@
         </el-col>
       </el-row>
 
-
       <el-row>
         <el-col :span="12">
           <el-form-item label="备注" prop="remark">
@@ -122,7 +115,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
 
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -133,12 +125,12 @@
 </template>
 
 <script>
-import {isEmail, isMobile} from '@/utils/validate'
-import {getRoleList} from '@/api/api'
+import { isEmail, isMobile } from '@/utils/validate'
+import { getRoleList } from '@/api/api'
 
 export default {
-  data() {
-    let validateShippingNoteNumber = (rule, value, callback) => {
+  data () {
+    const validateShippingNoteNumber = (rule, value, callback) => {
       if (!this.dataForm.shippingNoteNumber && !/\S/.test(value)) {
         callback(new Error('订单编号不能为空'))
       } else {
@@ -147,7 +139,7 @@ export default {
     }
     return {
       visible: false,
-      //roleList: [],
+      // roleList: [],
       dataForm: {
         id: 0,
         originalDocumentNumber: '',
@@ -169,24 +161,21 @@ export default {
       },
       dataRule: {
         vehicleNumber: [
-          {validator: validateShippingNoteNumber, message: '订单编号不能为空', trigger: 'blur'}
+          { validator: validateShippingNoteNumber, message: '订单编号不能为空', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       this.dataForm.id = id || 0
-
-
-
 
       if (this.dataForm.id) {
         this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetOrders/getOneById`),
+          url: this.$http.addUrl('/internetfreight/internetOrders/getOneById'),
           method: 'get',
-          params: this.$http.addParams({id: this.dataForm.id})
-        }).then(({data}) => {
+          params: this.$http.addParams({ id: this.dataForm.id })
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.dataForm.originalDocumentNumber = data.data.originalDocumentNumber
             this.dataForm.shippingNoteNumber = data.data.shippingNoteNumber
@@ -208,35 +197,34 @@ export default {
       }
 
       this.visible = true
-
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs['dataForm'].validate((valid) => {
+    dataFormSubmit () {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/internetfreight/internetOrders${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
             data: this.$http.addData({
-              'id': this.dataForm.id || undefined,
-              'originalDocumentNumber': this.dataForm.originalDocumentNumber,
-              'shippingNoteNumber': this.dataForm.shippingNoteNumber,
-              'serialNumber': this.dataForm.serialNumber,
-              'vehicleAmount': this.dataForm.vehicleAmount,
-              'transportTypeCode': this.dataForm.transportTypeCode,
-              'sendToProDateTime': this.dataForm.sendToProDateTime,
-              'carrier': this.dataForm.carrier,
-              'unifiedSocialCreditIdentifier': this.dataForm.unifiedSocialCreditIdentifier,
-              'permitNumber': this.dataForm.permitNumber,
-              'consignmentDateTime': this.dataForm.consignmentDateTime,
-              'businessTypeCode': this.dataForm.businessTypeCode,
-              'despatchActualDateTime': this.dataForm.despatchActualDateTime,
-              'goodsReceiptDateTime': this.dataForm.goodsReceiptDateTime,
-              'totalMonetaryAmount': this.dataForm.totalMonetaryAmount,
-              'remark': this.dataForm.remark
+              id: this.dataForm.id || undefined,
+              originalDocumentNumber: this.dataForm.originalDocumentNumber,
+              shippingNoteNumber: this.dataForm.shippingNoteNumber,
+              serialNumber: this.dataForm.serialNumber,
+              vehicleAmount: this.dataForm.vehicleAmount,
+              transportTypeCode: this.dataForm.transportTypeCode,
+              sendToProDateTime: this.dataForm.sendToProDateTime,
+              carrier: this.dataForm.carrier,
+              unifiedSocialCreditIdentifier: this.dataForm.unifiedSocialCreditIdentifier,
+              permitNumber: this.dataForm.permitNumber,
+              consignmentDateTime: this.dataForm.consignmentDateTime,
+              businessTypeCode: this.dataForm.businessTypeCode,
+              despatchActualDateTime: this.dataForm.despatchActualDateTime,
+              goodsReceiptDateTime: this.dataForm.goodsReceiptDateTime,
+              totalMonetaryAmount: this.dataForm.totalMonetaryAmount,
+              remark: this.dataForm.remark
 
             })
-          }).then(({data}) => {
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

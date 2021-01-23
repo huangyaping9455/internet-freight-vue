@@ -46,7 +46,7 @@ import echarts from 'echarts'
 import '../../assets/map/china.js'
 
 export default {
-  data() {
+  data () {
     return {
       chartLine: null,
       chartBar: null,
@@ -55,14 +55,14 @@ export default {
       chartMap: null
     }
   },
-  mounted() {
+  mounted () {
     this.initChartLine()
     this.initChartBar()
     this.initChartPie()
     this.initChartScatter()
-    this.initChartMap("china", "中国")
+    this.initChartMap('china', '中国')
   },
-  activated() {
+  activated () {
     // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
     if (this.chartLine) {
       this.chartLine.resize()
@@ -82,9 +82,9 @@ export default {
   },
   methods: {
     // 折线图
-    initChartLine() {
-      let colors = ['#5793f3', '#d14a61', '#675bba'];
-      let option = {
+    initChartLine () {
+      const colors = ['#5793f3', '#d14a61', '#675bba']
+      const option = {
         color: colors,
 
         tooltip: {
@@ -115,8 +115,8 @@ export default {
             axisPointer: {
               label: {
                 formatter: function (params) {
-                  return '降水量  ' + params.value
-                    + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                  return '降水量  ' + params.value +
+                    (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                 }
               }
             },
@@ -136,8 +136,8 @@ export default {
             axisPointer: {
               label: {
                 formatter: function (params) {
-                  return '降水量  ' + params.value
-                    + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                  return '降水量  ' + params.value +
+                    (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                 }
               }
             },
@@ -164,7 +164,7 @@ export default {
             data: [3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7]
           }
         ]
-      };
+      }
 
       this.chartLine = echarts.init(document.getElementById('J_chartLineBox'))
       this.chartLine.setOption(option)
@@ -173,8 +173,8 @@ export default {
       })
     },
     // 柱状图
-    initChartBar() {
-      let option = {
+    initChartBar () {
+      const option = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -236,7 +236,7 @@ export default {
                 }
               },
               data: [
-                [{type: 'min'}, {type: 'max'}]
+                [{ type: 'min' }, { type: 'max' }]
               ]
             }
           },
@@ -274,8 +274,8 @@ export default {
       })
     },
     // 饼状图
-    initChartPie() {
-      let option = {
+    initChartPie () {
+      const option = {
         backgroundColor: '#2c343c',
         title: {
           text: 'Customized Pie',
@@ -304,11 +304,11 @@ export default {
             radius: '55%',
             center: ['50%', '50%'],
             data: [
-              {value: 335, name: '直接访问'},
-              {value: 310, name: '邮件营销'},
-              {value: 274, name: '联盟广告'},
-              {value: 235, name: '视频广告'},
-              {value: 400, name: '搜索引擎'}
+              { value: 335, name: '直接访问' },
+              { value: 310, name: '邮件营销' },
+              { value: 274, name: '联盟广告' },
+              { value: 235, name: '视频广告' },
+              { value: 400, name: '搜索引擎' }
             ].sort(function (a, b) {
               return a.value - b.value
             }),
@@ -352,11 +352,11 @@ export default {
       })
     },
     // 散点图
-    initChartScatter() {
-      let option = {
+    initChartScatter () {
+      const option = {
         backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [
-          {offset: 0, color: '#f7f8fa'},
-          {offset: 1, color: '#cdd0d5'}
+          { offset: 0, color: '#f7f8fa' },
+          { offset: 1, color: '#cdd0d5' }
         ]),
         title: {
           text: '1990 与 2015 年各国家人均寿命与 GDP'
@@ -423,8 +423,8 @@ export default {
                 shadowColor: 'rgba(120, 36, 50, 0.5)',
                 shadowOffsetY: 5,
                 color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-                  {offset: 0, color: 'rgb(251, 118, 123)'},
-                  {offset: 1, color: 'rgb(204, 46, 72)'}
+                  { offset: 0, color: 'rgb(251, 118, 123)' },
+                  { offset: 1, color: 'rgb(204, 46, 72)' }
                 ])
               }
             }
@@ -471,8 +471,8 @@ export default {
                 shadowColor: 'rgba(25, 100, 150, 0.5)',
                 shadowOffsetY: 5,
                 color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-                  {offset: 0, color: 'rgb(129, 227, 238)'},
-                  {offset: 1, color: 'rgb(25, 183, 207)'}
+                  { offset: 0, color: 'rgb(129, 227, 238)' },
+                  { offset: 1, color: 'rgb(25, 183, 207)' }
                 ])
               }
             }
@@ -485,13 +485,13 @@ export default {
         this.chartPie.resize()
       })
     },
-    //地图
-    initChartMap(pName, Chinese_) {
-      var provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen'];
+    // 地图
+    initChartMap (pName, Chinese_) {
+      const provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen']
 
-      var provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门'];
+      const provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门']
 
-      var seriesData = [{
+      const seriesData = [{
         name: '北京',
         value: 100
       }, {
@@ -593,11 +593,10 @@ export default {
       }, {
         name: '澳门',
         value: 0
-      }];
+      }]
 
-
-      var tmpSeriesData = pName === "china" ? seriesData : [];
-      var option = {
+      const tmpSeriesData = pName === 'china' ? seriesData : []
+      const option = {
         title: {
           text: Chinese_ || pName,
           left: 'center'
@@ -611,68 +610,65 @@ export default {
             name: Chinese_ || pName,
             type: 'map',
             mapType: pName,
-            roam: false,//是否开启鼠标缩放和平移漫游
+            roam: false, // 是否开启鼠标缩放和平移漫游
             data: tmpSeriesData,
-            top: "3%",//组件距离容器的距离
-            zoom:1.3,
-            selectedMode : 'single',
+            top: '3%', // 组件距离容器的距离
+            zoom: 1.3,
+            selectedMode: 'single',
 
             label: {
               normal: {
-                show: true,//显示省份标签
-                textStyle: {color: "#fbfdfe"}//省份标签字体颜色
+                show: true, // 显示省份标签
+                textStyle: { color: '#fbfdfe' }// 省份标签字体颜色
               },
-              emphasis: {//对应的鼠标悬浮效果
+              emphasis: { // 对应的鼠标悬浮效果
                 show: true,
-                textStyle: {color: "#323232"}
+                textStyle: { color: '#323232' }
               }
             },
             itemStyle: {
               normal: {
-                borderWidth: .9,//区域边框宽度
-                borderColor: '#0550c3',//区域边框颜色
-                areaColor: "#101922",//区域颜色
+                borderWidth: 0.9, // 区域边框宽度
+                borderColor: '#0550c3', // 区域边框颜色
+                areaColor: '#101922' // 区域颜色
 
               },
 
               emphasis: {
-                borderWidth: .1,
+                borderWidth: 0.1,
                 borderColor: '#23cf09',
-                areaColor: "#ea7126",
+                areaColor: '#ea7126'
               }
-            },
+            }
           }
         ]
 
-      };
+      }
 
       this.chartMap = echarts.init(document.getElementById('J_chartMapBox'))
       this.chartMap.setOption(option)
-      this.chartMap.off("click");
+      this.chartMap.off('click')
 
-      if (pName === "china") { // 全国时，添加click 进入省级
+      if (pName === 'china') { // 全国时，添加click 进入省级
         this.chartMap.on('click', (param) => {
-
           // 遍历取到provincesText 中的下标  去拿到对应的省js
-          for (var i = 0; i < provincesText.length; i++) {
+          for (let i = 0; i < provincesText.length; i++) {
             if (param.name === provincesText[i]) {
-
-              //显示对应省份的方法
-              this.showProvince(provinces[i], provincesText[i]);
-              break;
+              // 显示对应省份的方法
+              this.showProvince(provinces[i], provincesText[i])
+              break
             }
           }
           if (param.componentType === 'series') {
-            var provinceName = param.name;
+            const provinceName = param.name
             // $('#box').css('display', 'block');
             // $("#box-title").html(provinceName);
-
           }
-        });
+        })
       } else { // 省份，添加双击 回退到全国
-        this.chartMap.on("dblclick", () => {
-          this.initChartMap("china", "中国");
-        });
+        this.chartMap.on('dblclick', () => {
+          this.initChartMap('china', '中国')
+        })
       }
 
       window.addEventListener('resize', () => {
@@ -681,32 +677,32 @@ export default {
     },
 
     // 展示对应的省
-    showProvince(pName, Chinese_) {
-      //这写省份的js都是通过在线构建工具生成的，保存在本地，需要时加载使用即可，最好不要一开始全部直接引入。
+    showProvince (pName, Chinese_) {
+      // 这写省份的js都是通过在线构建工具生成的，保存在本地，需要时加载使用即可，最好不要一开始全部直接引入。
       this.loadBdScript('$' + pName + 'JS', 'src/assets/map/province/' + pName + '.js', () => {
-        this.initChartMap(Chinese_);
-      });
+        this.initChartMap(Chinese_)
+      })
     },
 
     // 加载对应的JS
-    loadBdScript(scriptId, url, callback) {
-      var script = document.createElement("script");
-      script.type = "text/javascript";
-      if (script.readyState) {  //IE
-        script.onreadystatechange =  () =>{
-          if (script.readyState === "loaded" || script.readyState === "complete") {
-            script.onreadystatechange = null;
-            callback();
+    loadBdScript (scriptId, url, callback) {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      if (script.readyState) { // IE
+        script.onreadystatechange = () => {
+          if (script.readyState === 'loaded' || script.readyState === 'complete') {
+            script.onreadystatechange = null
+            callback()
           }
-        };
-      } else {  // Others
-        script.onload =  ()=> {
-          callback();
-        };
+        }
+      } else { // Others
+        script.onload = () => {
+          callback()
+        }
       }
-      script.src = url;
-      script.id = scriptId;
-      document.getElementsByTagName("head")[0].appendChild(script);
+      script.src = url
+      script.id = scriptId
+      document.getElementsByTagName('head')[0].appendChild(script)
     }
 
   }

@@ -54,56 +54,56 @@
 </template>
 
 <script>
-  import UpdatePassword from './main-navbar-update-password'
-  import { clearLoginInfo } from '@/utils'
-  export default {
-    data () {
-      return {
-        updatePassowrdVisible: false
-      }
+import UpdatePassword from './main-navbar-update-password'
+import { clearLoginInfo } from '@/utils'
+export default {
+  data () {
+    return {
+      updatePassowrdVisible: false
+    }
+  },
+  components: {
+    UpdatePassword
+  },
+  computed: {
+    navbarLayoutType: {
+      get () { return this.$store.state.common.navbarLayoutType }
     },
-    components: {
-      UpdatePassword
+    sidebarFold: {
+      get () { return this.$store.state.common.sidebarFold },
+      set (val) { this.$store.commit('common/updateSidebarFold', val) }
     },
-    computed: {
-      navbarLayoutType: {
-        get () { return this.$store.state.common.navbarLayoutType }
-      },
-      sidebarFold: {
-        get () { return this.$store.state.common.sidebarFold },
-        set (val) { this.$store.commit('common/updateSidebarFold', val) }
-      },
-      mainTabs: {
-        get () { return this.$store.state.common.mainTabs },
-        set (val) { this.$store.commit('common/updateMainTabs', val) }
-      },
-      username: {
-        get () { return this.$store.state.user.name }
-      },
+    mainTabs: {
+      get () { return this.$store.state.common.mainTabs },
+      set (val) { this.$store.commit('common/updateMainTabs', val) }
+    },
+    username: {
+      get () { return this.$store.state.user.name }
+    },
 
-      organizationName: {
-        get () { return this.$store.state.user.organizationName }
-      }
+    organizationName: {
+      get () { return this.$store.state.user.organizationName }
+    }
+  },
+  methods: {
+    // 修改密码
+    updatePasswordHandle () {
+      this.updatePassowrdVisible = true
+      this.$nextTick(() => {
+        this.$refs.updatePassowrd.init()
+      })
     },
-    methods: {
-      // 修改密码
-      updatePasswordHandle () {
-        this.updatePassowrdVisible = true
-        this.$nextTick(() => {
-          this.$refs.updatePassowrd.init()
-        })
-      },
-      // 退出
-      logoutHandle () {
-        this.$confirm(`确定进行[退出]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          clearLoginInfo()
-          this.$router.push({ name: 'login' })
-        }).catch(() => {})
-      }
+    // 退出
+    logoutHandle () {
+      this.$confirm('确定进行[退出]操作?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        clearLoginInfo()
+        this.$router.push({ name: 'login' })
+      }).catch(() => {})
     }
   }
+}
 </script>

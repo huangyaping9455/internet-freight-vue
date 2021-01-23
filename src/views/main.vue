@@ -18,13 +18,13 @@
 import MainNavbar from './main-navbar'
 import MainSidebar from './main-sidebar'
 import MainContent from './main-content'
-import {clearLoginInfo} from '@/utils'
-import {getLoginUserInfo} from '@/api/api'
+import { clearLoginInfo } from '@/utils'
+import { getLoginUserInfo } from '@/api/api'
 export default {
-  provide() {
+  provide () {
     return {
       // 刷新
-      refresh() {
+      refresh () {
         this.$store.commit('common/updateContentIsNeedRefresh', true)
         this.$nextTick(() => {
           this.$store.commit('common/updateContentIsNeedRefresh', false)
@@ -32,7 +32,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       loading: true
     }
@@ -44,71 +44,71 @@ export default {
   },
   computed: {
     documentClientHeight: {
-      get() {
+      get () {
         return this.$store.state.common.documentClientHeight
       },
-      set(val) {
+      set (val) {
         this.$store.commit('common/updateDocumentClientHeight', val)
       }
     },
     sidebarFold: {
-      get() {
+      get () {
         return this.$store.state.common.sidebarFold
       }
     },
     userId: {
-      get() {
+      get () {
         return this.$store.state.user.id
       },
-      set(val) {
+      set (val) {
         this.$store.commit('user/updateId', val)
       }
     },
     userName: {
-      get() {
+      get () {
         return this.$store.state.user.name
       },
-      set(val) {
+      set (val) {
         this.$store.commit('user/updateName', val)
       }
     },
 
-    organizationId:{
-      get() {
+    organizationId: {
+      get () {
         return this.$store.state.user.organizationId
       },
-      set(val) {
+      set (val) {
         this.$store.commit('user/updateOrganizationId', val)
       }
     },
 
-    organizationName:{
-      get() {
+    organizationName: {
+      get () {
         return this.$store.state.user.organizationName
       },
-      set(val) {
+      set (val) {
         this.$store.commit('user/updateOrganizationName', val)
       }
     }
 
   },
-  created() {
+  created () {
     this.getUserInfo()
   },
-  mounted() {
+  mounted () {
     this.resetDocumentClientHeight()
   },
   methods: {
     // 重置窗口可视高度
-    resetDocumentClientHeight() {
-      this.documentClientHeight = document.documentElement['clientHeight']
+    resetDocumentClientHeight () {
+      this.documentClientHeight = document.documentElement.clientHeight
       window.onresize = () => {
-        this.documentClientHeight = document.documentElement['clientHeight']
+        this.documentClientHeight = document.documentElement.clientHeight
       }
     },
     // 获取当前管理员信息
-    getUserInfo() {
-     getLoginUserInfo().then(({data}) => {
+    getUserInfo () {
+      getLoginUserInfo().then(({ data }) => {
         if (data && data.code === 0) {
           this.loading = false
           this.userId = data.data.id
@@ -117,7 +117,6 @@ export default {
           this.organizationName = data.data.organizationName
         }
       })
-
     }
   }
 }

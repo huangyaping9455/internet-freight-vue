@@ -28,10 +28,10 @@
 import {uploadImage} from '@/api/api'
 
 export default {
-  data() {
+  data () {
     return {
 
-      //。。。我才刚知道token可以不放在header中，直接放在路径后面也行
+      // 。。。我才刚知道token可以不放在header中，直接放在路径后面也行
       limit: 1,
       fileList: [],
       uploadData: {}
@@ -43,23 +43,21 @@ export default {
     //   this.$refs.upload.submit()
     // },
 
-    uploadImage(param) {
-      let formData = new FormData();
+    uploadImage (param) {
+      let formData = new FormData()
       formData.append(param.filename, param.file)
-      console.log(param);
-      console.log(formData);
+      console.log(param)
+      console.log(formData)
       uploadImage(formData).then(({data}) => {
-        console.log(data);
+        console.log(data)
         if (data || data.code === 0) {
           this.$message.success('上传成功')
         }
       })
-
     },
 
-
-    handleRemove(file, fileList) {
-      alert("移除")
+    handleRemove (file, fileList) {
+      alert('移除')
       if (file.status === 'success') {
         this.$http({
           url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
@@ -70,7 +68,7 @@ export default {
         })
       }
     },
-    handlePreview(file) {
+    handlePreview (file) {
       if (file.status === 'success') {
         this.imageVisiable = true
         this.$nextTick(() => {
@@ -78,23 +76,23 @@ export default {
         })
       }
     },
-    onExceed(files, fileList) {
+    onExceed (files, fileList) {
       this.$message.error('提示：只能上传一张图片！')
     },
     // 图片上传
-    beforeAVatarUpload(file) {
+    beforeAVatarUpload (file) {
       if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
         this.$message.error('只支持jpg、png、gif格式的图片！')
         return false
       }
     },
-    uploadSuccess(response, file, fileList) {
+    uploadSuccess (response, file, fileList) {
       this.fileIds = response.fileIds
       console.log('上传图片成功')
     },
-    uploadError(response, file, fileList) {
+    uploadError (response, file, fileList) {
       this.$message.error('上传图片失败！')
-    },
+    }
   }
 }
 </script>

@@ -1,12 +1,11 @@
 import http from '@/utils/httpRequest'
 
-
 /**
  * post 请求
  * @param url 请求路径
  * @param data jsonData
  */
-export function postAction(url, data) {
+export function postAction (url, data) {
   return http({
     url: http.addUrl(url),
     method: 'post',
@@ -20,7 +19,7 @@ export function postAction(url, data) {
  * @param data
  * @param method
  */
-export function httpAction(url, data, method) {
+export function httpAction (url, data, method) {
   return http({
     url: http.addUrl(url),
     method: method,
@@ -33,7 +32,7 @@ export function httpAction(url, data, method) {
  * @param url
  * @param data
  */
-export function putAction(url, data) {
+export function putAction (url, data) {
   return http({
     url: http.addUrl(url),
     method: 'put',
@@ -46,7 +45,7 @@ export function putAction(url, data) {
  * @param url
  * @param params
  */
-export function getAction(url, params) {
+export function getAction (url, params) {
   return http({
     url: http.addUrl(url),
     method: 'get',
@@ -59,7 +58,7 @@ export function getAction(url, params) {
  * @param url
  * @param params
  */
-export function deleteAction(url, params) {
+export function deleteAction (url, params) {
   return http({
     url: http.addUrl(url),
     method: 'delete',
@@ -67,28 +66,27 @@ export function deleteAction(url, params) {
   })
 }
 
-/*=======================不通用==================================*/
+/* =======================不通用================================== */
 /**
  * 获取图片验证码
  * @param url
  * @param parameter
  */
-export function getActionImageCode(url, params) {
+export function getActionImageCode (url, params) {
   return http({
     url: http.addUrl(url),
     method: 'get',
-    headers: {deviceId: 'web'},
+    headers: { deviceId: 'web' },
     responseType: 'blob',
     params: http.addParams(params)
   })
 }
 
-
-export function getActionSmsCode(url, params) {
+export function getActionSmsCode (url, params) {
   return http({
     url: http.addUrl(url),
     method: 'get',
-    headers: {deviceId: 'web'},
+    headers: { deviceId: 'web' },
     params: http.addParams(params)
   })
 }
@@ -98,27 +96,19 @@ export function getActionSmsCode(url, params) {
  * @param url
  * @param params
  */
-export function loginAction(url, params) {
+export function loginAction (url, params) {
   return http({
     url: http.addUrl(url),
     method: 'post',
-    headers: {deviceId: 'web'},
+    headers: { deviceId: 'web' },
     params: http.addParams(params)
   })
 }
 
-export function uploadImageAction(url, data) {
+export function uploadImageAction (url, data) {
   return http({
     url: http.addUrl(url),
     method: 'post',
     data: http.addData(data, false, 'multipart/form-data')
   })
 }
-
-
-
-
-
-
-
-

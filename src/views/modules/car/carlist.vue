@@ -165,78 +165,78 @@
 
 <script>
 import AddOrUpdate from './car-add-or-update'
-import {treeDataTranslate} from '@/utils'
-import {getResourceList} from '@/api/api'
+import { treeDataTranslate } from '@/utils'
+import { getResourceList } from '@/api/api'
 export default {
-  data() {
+  data () {
     return {
       dataForm: {},
       dataList: [
         {
-            vehicleNumber: '云A98745',
-            vehiclePlateColorCode: '红色',
-            vehicleType: '汽车',
-            owner: '普美丽',
-            useCharacter: '货车',
-            VIN: 'FGHJYRE',
-            issuingOrganizations: '昆明市盘龙区公安局',
-            registerDate: '2016-05-02',
-            issueDate: '2016-05-02',
-            vehicleEnergyType: '汽油',
-            vehicleTonnage: '10吨',
-            grossMass: '12吨',
-            roadTransportCertificateNumber: '347625678999',
-            trailerVehiclePlateNumber: '688945555445',
-            remark: '然鹅并没有'
-          }, {
-            vehicleNumber: '云A98745',
-            vehiclePlateColorCode: '红色',
-            vehicleType: '汽车',
-            owner: '普美丽',
-            useCharacter: '货车',
-            VIN: 'FGHJYRE',
-            issuingOrganizations: '昆明市盘龙区公安局',
-            registerDate: '2016-05-02',
-            issueDate: '2016-05-02',
-            vehicleEnergyType: '汽油',
-            vehicleTonnage: '10吨',
-            grossMass: '12吨',
-            roadTransportCertificateNumber: '347625678999',
-            trailerVehiclePlateNumber: '688945555445',
-            remark: '然鹅并没有'
-          }, {
-            vehicleNumber: '云A98745',
-            vehiclePlateColorCode: '红色',
-            vehicleType: '汽车',
-            owner: '普美丽',
-            useCharacter: '货车',
-            VIN: 'FGHJYRE',
-            issuingOrganizations: '昆明市盘龙区公安局',
-            registerDate: '2016-05-02',
-            issueDate: '2016-05-02',
-            vehicleEnergyType: '汽油',
-            vehicleTonnage: '10吨',
-            grossMass: '12吨',
-            roadTransportCertificateNumber: '347625678999',
-            trailerVehiclePlateNumber: '688945555445',
-            remark: '然鹅并没有'
-          }, {
-            vehicleNumber: '云A98745',
-            vehiclePlateColorCode: '红色',
-            vehicleType: '汽车',
-            owner: '普美丽',
-            useCharacter: '货车',
-            VIN: 'FGHJYRE',
-            issuingOrganizations: '昆明市盘龙区公安局',
-            registerDate: '2016-05-02',
-            issueDate: '2016-05-02',
-            vehicleEnergyType: '汽油',
-            vehicleTonnage: '10吨',
-            grossMass: '12吨',
-            roadTransportCertificateNumber: '347625678999',
-            trailerVehiclePlateNumber: '688945555445',
-            remark: '然鹅并没有'
-          }
+          vehicleNumber: '云A98745',
+          vehiclePlateColorCode: '红色',
+          vehicleType: '汽车',
+          owner: '普美丽',
+          useCharacter: '货车',
+          VIN: 'FGHJYRE',
+          issuingOrganizations: '昆明市盘龙区公安局',
+          registerDate: '2016-05-02',
+          issueDate: '2016-05-02',
+          vehicleEnergyType: '汽油',
+          vehicleTonnage: '10吨',
+          grossMass: '12吨',
+          roadTransportCertificateNumber: '347625678999',
+          trailerVehiclePlateNumber: '688945555445',
+          remark: '然鹅并没有'
+        }, {
+          vehicleNumber: '云A98745',
+          vehiclePlateColorCode: '红色',
+          vehicleType: '汽车',
+          owner: '普美丽',
+          useCharacter: '货车',
+          VIN: 'FGHJYRE',
+          issuingOrganizations: '昆明市盘龙区公安局',
+          registerDate: '2016-05-02',
+          issueDate: '2016-05-02',
+          vehicleEnergyType: '汽油',
+          vehicleTonnage: '10吨',
+          grossMass: '12吨',
+          roadTransportCertificateNumber: '347625678999',
+          trailerVehiclePlateNumber: '688945555445',
+          remark: '然鹅并没有'
+        }, {
+          vehicleNumber: '云A98745',
+          vehiclePlateColorCode: '红色',
+          vehicleType: '汽车',
+          owner: '普美丽',
+          useCharacter: '货车',
+          VIN: 'FGHJYRE',
+          issuingOrganizations: '昆明市盘龙区公安局',
+          registerDate: '2016-05-02',
+          issueDate: '2016-05-02',
+          vehicleEnergyType: '汽油',
+          vehicleTonnage: '10吨',
+          grossMass: '12吨',
+          roadTransportCertificateNumber: '347625678999',
+          trailerVehiclePlateNumber: '688945555445',
+          remark: '然鹅并没有'
+        }, {
+          vehicleNumber: '云A98745',
+          vehiclePlateColorCode: '红色',
+          vehicleType: '汽车',
+          owner: '普美丽',
+          useCharacter: '货车',
+          VIN: 'FGHJYRE',
+          issuingOrganizations: '昆明市盘龙区公安局',
+          registerDate: '2016-05-02',
+          issueDate: '2016-05-02',
+          vehicleEnergyType: '汽油',
+          vehicleTonnage: '10吨',
+          grossMass: '12吨',
+          roadTransportCertificateNumber: '347625678999',
+          trailerVehiclePlateNumber: '688945555445',
+          remark: '然鹅并没有'
+        }
       ],
       dataListSelections: [],
       dataListLoading: false,
@@ -246,44 +246,44 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated() {
+  activated () {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true
-     getResourceList().then(({data:{data}}) => {
+      getResourceList().then(({ data: { data } }) => {
         this.dataList = this.dataList = treeDataTranslate(data, 'menuId')
         this.dataListLoading = false
       })
     },
 
     // 每页数
-    sizeChangeHandle(val) {
+    sizeChangeHandle (val) {
       this.pageSize = val
       this.pageIndex = 1
       this.getDataList()
     },
     // 当前页
-    currentChangeHandle(val) {
+    currentChangeHandle (val) {
       this.pageIndex = val
       this.getDataList()
     },
     // 多选
-    selectionChangeHandle(val) {
+    selectionChangeHandle (val) {
       this.dataListSelections = val
     },
 
     // 新增 / 修改
-    addOrUpdateHandle(id) {
+    addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
-           this.$refs.addOrUpdate.init(id)
+        this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle(id) {
+    deleteHandle (id) {
       this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -293,7 +293,7 @@ export default {
           url: this.$http.addUrl(`/uaa/resource/${id}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',
