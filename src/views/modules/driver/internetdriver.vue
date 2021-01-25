@@ -143,7 +143,7 @@
 
 <script>
 import AddOrUpdate from './internetdriver-add-or-update'
-import { getDriverPage } from '@/api/api'
+import { getDriverPage, uploadImage } from '@/api/api'
 
 export default {
   data () {
