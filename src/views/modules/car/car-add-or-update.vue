@@ -150,9 +150,6 @@
 </template>
 
 <script>
-import { isEmail, isMobile } from '@/utils/validate'
-import { getRoleList, upload } from '@/api/api'
-import log from '../sys/log'
 
 export default {
   data () {
