@@ -82,7 +82,9 @@
 <script>
 import { uploadImage } from '@/api/api'
 
+let pic
 export default {
+
   data () {
     return {
       /* 最大允许上传个数 */
@@ -251,8 +253,11 @@ export default {
       console.log(param)
       console.log(formData)
       uploadImage(formData).then(({ data }) => {
+        // eslint-disable-next-line no-unused-expressions,no-unused-vars
+        pic = 'http://139.155.138.18:8899/group1/M00/00/00/rBsQDmAPh-uABbioAADuDEQPd480.7.jpg'
         console.log(data)
         if (data || data.code === 0) {
+          data.driverLicense = pic
           this.$message.success('上传成功')
         }
       })

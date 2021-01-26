@@ -45,7 +45,6 @@ const getGoodsPage = (params) => getAction(`${internetFreightModel}/internetGood
 // 驾驶员管理
 const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) // 获取分页列表
 const addDriver = (params, methodN) => httpAction(`${internetFreightModel}/internetDrivers`, params, methodN) // 新增驾驶员
-const addDriverLicense = (params) => httpAction(`${internetFreightModel}/fileFastDFS/upload`, params) // 上传驾驶证
 
 // 资金流水管理
 const getFinancialPage = (params) => getAction(`${internetFreightModel}/financials/getPageByCondition`, params) // 获取分页列表
