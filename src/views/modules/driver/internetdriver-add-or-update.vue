@@ -48,15 +48,27 @@
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
 
-      <el-form-item label="驾驶证" prop="driverLicense">
+      <el-form-item label="驾驶证">
         <el-upload
+          name="file"
+          ref="upload"
+          :limit="limit"
           class="upload-demo"
-          drag
-          action="filesystem/fileFastDFS/upload"
-          multiple>
+          drag multiple
+          action=""
+          :data="uploadData"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :beforeUpload="beforeAVatarUpload"
+          :on-exceed="onExceed"
+          :onError="uploadError"
+          :onSuccess="uploadSuccess"
+          :auto-upload="true"
+          :http-request="uploadImage">
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text" v-model="dataForm.driverLicense">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+          <div class="el-upload__text" >将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传jpg/png/jpeg/gif文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -68,14 +80,15 @@
 </template>
 
 <script>
-import { addDriver, upload } from '@/api/api'
-import { telephone } from '../../../utils/validate'
+import { uploadImage } from '@/api/api'
 
 export default {
   data () {
     return {
+      limit: 1,
+      fileList: [],
+      uploadData: {},
       visible: false,
-      roleList: [],
       dataForm: {
         id: 0,
         driverName: '',
@@ -87,7 +100,6 @@ export default {
         qualificationCertificate: '',
         telephone: '',
         remark: '',
-        driverLicense: '',
         delete: 1
       },
       /*  dataRule: {
@@ -136,15 +148,17 @@ export default {
           method: 'get',
           params: this.$http.addParams({ id: this.dataForm.id })
         }).then(({ data }) => {
-          alert(44444)
           if (data && data.code === 0) {
-            this.dataForm.documentNumber = data.data.driverName,
-            this.dataForm.sendToProDateTime = data.data.drivingLicense,
-            this.dataForm.carrier = data.data.vehicleClass,
-            this.dataForm.actualCarrierId = data.data.issuingOrganizations,
-            this.dataForm.vehicleNumber = data.data.validPeriodFrom,
-            this.dataForm.vehiclePlateColorCode = data.data.validPeriodTo,
-            this.dataForm.remark = data.data.qualificationCertificate
+            // eslint-disable-next-line no-unused-expressions,no-sequences
+            this.dataForm.documentNumber = data.data.documentNumber,
+            this.dataForm.sendToProDateTime = data.data.sendToProDateTime,
+            this.dataForm.carrier = data.data.carrier,
+            this.dataForm.actualCarrierId = data.data.actualCarrierId,
+            this.dataForm.vehicleNumber = data.data.vehicleNumber,
+            this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode,
+            this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
+            this.dataForm.telephone = data.data.telephone,
+            this.dataForm.remark = data.data.remark
           }
         })
       }
@@ -153,6 +167,7 @@ export default {
     // 表单提交
     dataFormSubmit () {
       this.$refs.dataForm.validate((valid) => {
+        /* alert(valid)
         const methods = `${!this.dataForm.id ? 'post' : 'put'}`
         if (valid) {
           const dataForm = {
@@ -168,7 +183,42 @@ export default {
             remark: this.dataForm.remark,
             driverLicense: this.dataForm.driverLicense
           }
+          // eslint-disable-next-line no-template-curly-in-string
           addDriver(dataForm, methods).then(({ data }) => {
+            alert(methods)
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        } */
+        if (valid) {
+          this.$http({
+            url: this.$http.addUrl(`/internetfreight/internetDrivers${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
+            method: `${!this.dataForm.id ? 'post' : 'put'}`,
+            data: this.$http.addData({
+              id: this.dataForm.id || undefined,
+              driverName: this.dataForm.driverName,
+              drivingLicense: this.dataForm.drivingLicense,
+              vehicleClass: this.dataForm.vehicleClass,
+              issuingOrganizations: this.dataForm.issuingOrganizations,
+              validPeriodFrom: this.dataForm.validPeriodFrom,
+              validPeriodTo: this.dataForm.validPeriodTo,
+              qualificationCertificate: this.dataForm.qualificationCertificate,
+              telephone: this.dataForm.telephone,
+              remark: this.dataForm.remark,
+              driverLicense: this.dataForm.driverLicense
+            })
+          }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',
@@ -185,7 +235,63 @@ export default {
           })
         }
       })
+    },
+
+    // 当设置了取消自动上传的时候，调用此方法开始上传
+    // submitUpload () {
+    //   this.$refs.upload.submit()
+    // },
+    uploadImage (param) {
+      const formData = new FormData()
+      formData.append(param.filename, param.file)
+      console.log(param)
+      console.log(formData)
+      uploadImage(formData).then(({ data }) => {
+        console.log(data)
+        if (data || data.code === 0) {
+          this.$message.success('上传成功')
+        }
+      })
+    },
+
+    handleRemove (file, fileList) {
+      alert('移除')
+      if (file.status === 'success') {
+        this.$http({
+          url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
+          method: 'post',
+          data: this.$http.addData()
+        }).then(({ data }) => {
+          this.$message.success('删除图片成功！')
+        })
+      }
+    },
+    handlePreview (file) {
+      if (file.status === 'success') {
+        this.imageVisiable = true
+        this.$nextTick(() => {
+          this.$refs.showImage.init(file.url)
+        })
+      }
+    },
+    onExceed (files, fileList) {
+      this.$message.error('提示：只能上传一张图片！')
+    },
+    // 图片上传
+    beforeAVatarUpload (file) {
+      if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
+        this.$message.error('只支持jpg、png、gif格式的图片！')
+        return false
+      }
+    },
+    uploadSuccess (response, file, fileList) {
+      this.fileIds = response.fileIds
+      console.log('上传图片成功')
+    },
+    uploadError (response, file, fileList) {
+      this.$message.error('上传图片失败！')
     }
+
   }
 }
 </script>

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import {uploadImage} from '@/api/api'
+import { uploadImage } from '@/api/api'
 
 export default {
   data () {
@@ -44,11 +44,11 @@ export default {
     // },
 
     uploadImage (param) {
-      let formData = new FormData()
+      const formData = new FormData()
       formData.append(param.filename, param.file)
       console.log(param)
       console.log(formData)
-      uploadImage(formData).then(({data}) => {
+      uploadImage(formData).then(({ data }) => {
         console.log(data)
         if (data || data.code === 0) {
           this.$message.success('上传成功')
@@ -63,7 +63,7 @@ export default {
           url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
           method: 'post',
           data: this.$http.addData()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           this.$message.success('删除图片成功！')
         })
       }
@@ -96,4 +96,3 @@ export default {
   }
 }
 </script>
-
