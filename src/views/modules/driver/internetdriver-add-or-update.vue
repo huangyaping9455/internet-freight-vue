@@ -48,7 +48,7 @@
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
 
-      <el-form-item label="驾驶证">
+      <el-form-item label="驾驶证" prop="driverLicense">
         <el-upload
           name="file"
           ref="upload"
@@ -85,6 +85,7 @@ import { uploadImage } from '@/api/api'
 export default {
   data () {
     return {
+      /* 最大允许上传个数 */
       limit: 1,
       fileList: [],
       uploadData: {},
@@ -100,6 +101,7 @@ export default {
         qualificationCertificate: '',
         telephone: '',
         remark: '',
+        driverLicense: '',
         delete: 1
       },
       /*  dataRule: {
@@ -158,12 +160,14 @@ export default {
             this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode,
             this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
             this.dataForm.telephone = data.data.telephone,
-            this.dataForm.remark = data.data.remark
+            this.dataForm.remark = data.data.remark,
+            this.dataForm.driverLicense = data.data.driverLicense
           }
         })
       }
       this.visible = true
     },
+
     // 表单提交
     dataFormSubmit () {
       this.$refs.dataForm.validate((valid) => {
