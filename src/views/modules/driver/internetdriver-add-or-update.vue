@@ -47,8 +47,11 @@
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
+      <el-form-item class="demo-image" :style="!dataForm.id ? 'display:none;' : 'display:block;'">
+        <img :src="imageURL"  style="width: 100px; height: 100px">
+      </el-form-item>
 
-      <el-form-item label="驾驶证" prop="driverLicense">
+      <el-form-item label="驾驶证">
         <el-upload
           name="file"
           ref="upload"
@@ -67,7 +70,7 @@
           :auto-upload="true"
           :http-request="uploadImage">
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text" >将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__text" >上传驾驶证</div>
           <div class="el-upload__tip" slot="tip">只能上传jpg/png/jpeg/gif文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
@@ -82,7 +85,6 @@
 <script>
 import { uploadImage } from '@/api/api'
 
-let pic
 export default {
 
   data () {
@@ -91,6 +93,7 @@ export default {
       limit: 1,
       fileList: [],
       uploadData: {},
+      driverLicense: '',
       visible: false,
       dataForm: {
         id: 0,
@@ -103,7 +106,6 @@ export default {
         qualificationCertificate: '',
         telephone: '',
         remark: '',
-        driverLicense: '',
         delete: 1
       },
       /*  dataRule: {
@@ -163,7 +165,8 @@ export default {
             this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
             this.dataForm.telephone = data.data.telephone,
             this.dataForm.remark = data.data.remark,
-            this.dataForm.driverLicense = data.data.driverLicense
+            this.imageURL = 'http://139.155.138.18:8899/' + data.data.driverLicense,
+            this.driverLicense = data.data.driverLicense
           }
         })
       }
@@ -222,7 +225,7 @@ export default {
               qualificationCertificate: this.dataForm.qualificationCertificate,
               telephone: this.dataForm.telephone,
               remark: this.dataForm.remark,
-              driverLicense: this.dataForm.driverLicense
+              driverLicense: this.driverLicense
             })
           }).then(({ data }) => {
             if (data && data.code === 0) {
@@ -253,11 +256,10 @@ export default {
       console.log(param)
       console.log(formData)
       uploadImage(formData).then(({ data }) => {
-        // eslint-disable-next-line no-unused-expressions,no-unused-vars
-        pic = 'http://139.155.138.18:8899/group1/M00/00/00/rBsQDmAPh-uABbioAADuDEQPd480.7.jpg'
         console.log(data)
         if (data || data.code === 0) {
-          data.driverLicense = pic
+          this.driverLicense = data.data
+          console.log(data.data)
           this.$message.success('上传成功')
         }
       })
@@ -268,9 +270,10 @@ export default {
       if (file.status === 'success') {
         this.$http({
           url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
-          method: 'post',
+          method: 'delete',
           data: this.$http.addData()
         }).then(({ data }) => {
+          this.driverLicense = ' '
           this.$message.success('删除图片成功！')
         })
       }
