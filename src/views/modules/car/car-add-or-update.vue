@@ -109,37 +109,67 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <div class="demo-image" :style="!dataForm.id ? 'display:none;' : 'display:block;'">
+          <img :src="imageURL"  style="width: 100px; height: 100px">
+<!--          <div class="block" v-for="fit in fits" :key="fit">
+            <span class="demonstration">{{ fit }}</span>
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="drivingPermit"
+              :fit="fit"></el-image>
+          </div>-->
+        </div>
+      </el-row>
 
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="行车证" prop="drivingPermit">
-            <el-upload
-              class="upload-demo"
-              drag
-              action="http://gateway.api.com/fileUpload/fileFastDFS/upload"
-              multiple>
-              <i class="el-icon-upload"></i>
-              <div class="el-upload__text">上传行车证</div>
-              <!--            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>-->
-            </el-upload>
-          </el-form-item>
-        </el-col>
+        <div :style="!dataForm.id ? 'display:block;' : 'display:none;'">
+          <el-upload drag multiple
+                     name="file"
+                     ref="upload"
+                     :limit="limit"
+                     action=""
+                     :data="uploadData"
+                     :on-preview="handlePreview"
+                     :on-remove="handleRemove"
+                     :file-list="fileList"
+                     :beforeUpload="beforeAVatarUpload"
+                     :on-exceed="onExceed"
+                     :onError="uploadError"
+                     :onSuccess="uploadSuccess"
+                     :auto-upload="true"
+                     :http-request="uploadImage">
+
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">请上传行车证</div>
+            <div class="el-upload__tip" slot="tip">只能上传'jpg/png/jpeg/gif'</div>
+          </el-upload>
+        </div>
       </el-row>
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="驾驶证" prop="driverLicense">
-            <el-upload
-              class="upload-demo"
-              drag
-              action="/filesystem/fileFastDFS/upload"
-              multiple>
-              <i class="el-icon-upload"></i>
-              <div class="el-upload__text">上传驾驶证</div>
-              <!--              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>-->
-            </el-upload>
-          </el-form-item>
-        </el-col>
-      </el-row>
+<!--      <el-row>
+        <div>
+          <el-upload drag multiple
+                     name="file"
+                     ref="upload"
+                     :limit="limit"
+                     action=""
+                     :data="uploadData"
+                     :on-preview="handlePreview"
+                     :on-remove="handleRemove"
+                     :file-list="fileList"
+                     :beforeUpload="beforeAVatarUpload"
+                     :on-exceed="onExceed"
+                     :onError="uploadError"
+                     :onSuccess="uploadSuccess"
+                     :auto-upload="true"
+                     :http-request="uploadImage">
+
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">请上传驾驶证</div>
+            <div class="el-upload__tip" slot="tip">只能上传'jpg/png/jpeg/gif'</div>
+          </el-upload>
+        </div>
+      </el-row>-->
 
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -150,6 +180,7 @@
 </template>
 
 <script>
+import { uploadImage } from '@/api/api'
 
 export default {
   data () {
@@ -168,6 +199,12 @@ export default {
       }
     }
     return {
+      fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+      drivingPermit: '',
+      driverLicense: '',
+      limit: 1,
+      fileList: [],
+      uploadData: {},
       visible: false,
       // roleList: [],
       dataForm: {
@@ -199,11 +236,65 @@ export default {
       }
     }
   },
+
   methods: {
-    uploadFile () {
-      upload.then((res) => {
-        console.log(res)
+    // 当设置了取消自动上传的时候，调用此方法开始上传
+    // submitUpload () {
+    //   this.$refs.upload.submit()
+    // },
+
+    uploadImage (param) {
+      const formData = new FormData()
+      formData.append(param.filename, param.file)
+      console.log(param)
+      console.log(formData)
+      uploadImage(formData).then(({ data }) => {
+        console.log('==---' + data)
+        if (data || data.code === 0) {
+          console.log(data.data)
+          this.drivingPermit = data.data
+
+          this.$message.success('上传成功')
+        }
       })
+    },
+
+    handleRemove (file, fileList) {
+      alert('移除')
+      if (file.status === 'success') {
+        this.$http({
+          url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
+          method: 'post',
+          data: this.$http.addData()
+        }).then(({ data }) => {
+          this.$message.success('删除图片成功！')
+        })
+      }
+    },
+    handlePreview (file) {
+      if (file.status === 'success') {
+        this.imageVisiable = true
+        this.$nextTick(() => {
+          this.$refs.showImage.init(file.url)
+        })
+      }
+    },
+    onExceed (files, fileList) {
+      this.$message.error('提示：只能上传一张图片！')
+    },
+    // 图片上传
+    beforeAVatarUpload (file) {
+      if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
+        this.$message.error('只支持jpg、png、gif格式的图片！')
+        return false
+      }
+    },
+    uploadSuccess (response, file, fileList) {
+      this.fileIds = response.fileIds
+      console.log('上传图片成功')
+    },
+    uploadError (response, file, fileList) {
+      this.$message.error('上传图片失败！')
     },
     init (id) {
       this.dataForm.id = id || 0
@@ -229,6 +320,9 @@ export default {
             this.dataForm.grossMass = data.data.grossMass
             this.dataForm.roadTransportCertificateNumber = data.data.roadTransportCertificateNumber
             this.dataForm.trailerVehiclePlateNumber = data.data.trailerVehiclePlateNumber
+            this.imageURL = 'http://139.155.138.18:8899/' + data.data.drivingPermit
+            this.drivingPermit = data.data.drivingPermit
+            this.driverLicense = data.data.driverLicense
             this.dataForm.remark = data.data.remark
           }
         })
@@ -259,8 +353,9 @@ export default {
               grossMass: this.dataForm.grossMass,
               roadTransportCertificateNumber: this.dataForm.roadTransportCertificateNumber,
               trailerVehiclePlateNumber: this.dataForm.trailerVehiclePlateNumber,
+              drivingPermit: this.drivingPermit,
+              driverLicense: this.driverLicense,
               remark: this.dataForm.remark
-
             })
           }).then(({ data }) => {
             if (data && data.code === 0) {
