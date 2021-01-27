@@ -214,11 +214,10 @@ export default {
     },
     // 删除
     deleteHandle (id) {
-      var ids = id
+      const ids = id
         ? [id]
         : this.dataListSelections.map(item => {
           return item.id
-          alert(ids)
         })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
@@ -230,6 +229,7 @@ export default {
           method: 'delete',
           data: this.$http.addData()
         }).then(({ data }) => {
+          alert(ids)
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',
@@ -239,7 +239,6 @@ export default {
                 this.getDataList()
               }
             })
-            alert(message)
             this.visible = true
           } else {
             this.$message.error(data.msg)

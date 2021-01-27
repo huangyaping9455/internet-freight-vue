@@ -1,20 +1,20 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es2021": true
+  env: {
+    browser: true,
+    es2021: true
   },
-  "extends": [
-    "plugin:vue/essential",
-    "standard"
+  extends: [
+    'plugin:vue/essential',
+    'standard'
   ],
-  "parserOptions": {
-    "ecmaVersion": 12,
-    "sourceType": "module"
+  parserOptions: {
+    ecmaVersion: 12,
+    sourceType: 'module'
   },
-  "plugins": [
-    "vue"
+  plugins: [
+    'vue'
   ],
-  "rules": {
+  rules: {
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
@@ -22,4 +22,4 @@ module.exports = {
 
 
   }
-};
+}

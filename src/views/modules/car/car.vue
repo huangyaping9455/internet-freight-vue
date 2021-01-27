@@ -27,13 +27,13 @@
         align="center"
         width="50">
       </el-table-column>
-      <!--      <el-table-column
-              prop="id"
-              header-align="center"
-              align="center"
-              min-width="150"
-              label="ID">
-            </el-table-column>-->
+<!--      <el-table-column
+        prop="id"
+        header-align="center"
+        align="center"
+        min-width="150"
+        label="ID">
+      </el-table-column>-->
       <el-table-column
         prop="vehicleNumber"
         header-align="center"
@@ -191,7 +191,7 @@ export default {
       },
       dataList: [],
       pageIndex: 1,
-      pageSize: 10,
+      pageSize: 20,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
