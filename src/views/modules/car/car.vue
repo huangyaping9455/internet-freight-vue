@@ -27,13 +27,13 @@
         align="center"
         width="50">
       </el-table-column>
-<!--      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        min-width="150"
-        label="ID">
-      </el-table-column>-->
+      <!--      <el-table-column
+              prop="id"
+              header-align="center"
+              align="center"
+              min-width="150"
+              label="ID">
+            </el-table-column>-->
       <el-table-column
         prop="vehicleNumber"
         header-align="center"
@@ -190,8 +190,8 @@ export default {
         // userName: ''
       },
       dataList: [],
-      pageIndex: 0,
-      pageSize: 20,
+      pageIndex: 1,
+      pageSize: 10,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
@@ -213,7 +213,7 @@ export default {
         vehicleNumber: this.dataForm.vehicleNumber,
         owner: this.dataForm.owner,
         // 'organizationId': this.$store.state.user.organizationId
-        limit: this.pageSize
+        size: this.pageSize
       }
       getCarPage(params).then(({ data }) => {
         if (data && data.code === 0) {

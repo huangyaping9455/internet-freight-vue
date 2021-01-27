@@ -114,7 +114,7 @@ export default {
       this.dataListLoading = true
       const params = {
         page: this.pageIndex,
-        limit: this.pageSize,
+        size: this.pageSize,
         name: this.dataForm.name,
         organizationId: this.$store.state.user.organizationId
       }
