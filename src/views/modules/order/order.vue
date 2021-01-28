@@ -187,7 +187,7 @@ export default {
         // userName: ''
       },
       dataList: [],
-      pageIndex: 0,
+      pageIndex: 1,
       pageSize: 20,
       totalPage: 0,
       dataListLoading: false,
@@ -209,7 +209,7 @@ export default {
         page: this.pageIndex,
         shippingNoteNumber: this.dataForm.shippingNoteNumber,
         // 'organizationId': this.$store.state.user.organizationId
-        limit: this.pageSize
+        size: this.pageSize
       }
       getOrderPage(params).then(({ data }) => {
         if (data && data.code === 0) {
