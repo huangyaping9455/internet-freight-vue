@@ -200,6 +200,7 @@ export default {
     }
     return {
       fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+      imageURL: '',
       drivingPermit: '',
       driverLicense: '',
       limit: 1,
@@ -260,12 +261,13 @@ export default {
     },
 
     handleRemove (file, fileList) {
-      alert('移除')
-      if (file.status === 'success') {
+      alert(this.drivingPermit)
+      if (file.status === 'ready') {
+        file = this.drivingPermit
         this.$http({
           url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
           method: 'post',
-          data: this.$http.addData()
+          data: this.$http.addData(file)
         }).then(({ data }) => {
           this.$message.success('删除图片成功！')
         })
