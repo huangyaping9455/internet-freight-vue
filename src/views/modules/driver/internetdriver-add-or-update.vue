@@ -271,7 +271,7 @@ export default {
         this.$http({
           url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
           method: 'delete',
-          data: this.$http.addData()
+          data: this.$http.addData(file)
         }).then(({ data }) => {
           this.driverLicense = ' '
           this.$message.success('删除图片成功！')
