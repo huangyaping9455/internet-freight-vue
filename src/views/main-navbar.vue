@@ -82,7 +82,7 @@ export default {
     },
 
     organizationName: {
-      get () { return this.$store.state.user.organizationName }
+      get () { return this.$store.state.user.organization.name }
     }
   },
   methods: {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{this.$store.state.user.organization.id}}
     <Echart/>
   </div>
 

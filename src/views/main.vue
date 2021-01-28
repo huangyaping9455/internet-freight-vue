@@ -73,21 +73,12 @@ export default {
       }
     },
 
-    organizationId: {
+    organization: {
       get () {
-        return this.$store.state.user.organizationId
+        return this.$store.state.user.organization
       },
       set (val) {
-        this.$store.commit('user/updateOrganizationId', val)
-      }
-    },
-
-    organizationName: {
-      get () {
-        return this.$store.state.user.organizationName
-      },
-      set (val) {
-        this.$store.commit('user/updateOrganizationName', val)
+        this.$store.commit('user/updateOrganization', val)
       }
     }
 
@@ -110,11 +101,12 @@ export default {
     getUserInfo () {
       getLoginUserInfo().then(({ data }) => {
         if (data && data.code === 0) {
+          console.log(data)
           this.loading = false
           this.userId = data.data.id
           this.userName = data.data.name
-          this.organizationId = data.data.organizationId
-          this.organizationName = data.data.organizationName
+
+          this.organization = data.data.organization
         }
       })
     }

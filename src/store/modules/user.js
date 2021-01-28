@@ -3,8 +3,8 @@ export default {
   state: {
     id: 0,
     name: '',
-    organizationId: '',
-    organizationName: ''
+
+    organization: {}
   },
   mutations: {
     updateId (state, id) {
@@ -13,11 +13,9 @@ export default {
     updateName (state, name) {
       state.name = name
     },
-    updateOrganizationId (state, organizationId) {
-      state.organizationId = organizationId
-    },
-    updateOrganizationName (state, organizationName) {
-      state.organizationName = organizationName
+
+    updateOrganization (state, organization) {
+      state.organization = organization
     }
 
   }
