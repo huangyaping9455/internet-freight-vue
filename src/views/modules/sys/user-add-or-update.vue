@@ -163,7 +163,7 @@ export default {
               mobile: this.dataForm.mobile,
               delete: this.dataForm.delete,
               roleIdList: this.dataForm.roleIdList,
-              organizationId: this.$store.state.user.organizationId
+              organizationId: this.$store.state.user.organization.id
 
             })
           }).then(({ data }) => {

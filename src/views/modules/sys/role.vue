@@ -114,9 +114,9 @@ export default {
       this.dataListLoading = true
       const params = {
         page: this.pageIndex,
-        limit: this.pageSize,
+        size: this.pageSize,
         name: this.dataForm.name,
-        organizationId: this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organization.id
       }
       getRolePage(params).then(({ data }) => {
         if (data && data.code === 0) {

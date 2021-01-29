@@ -142,7 +142,7 @@ export default {
         page: this.pageIndex,
         limit: this.pageSize,
         username: this.dataForm.userName,
-        organizationId: this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organization.id
       }
       getAdminList(params).then(({ data }) => {
         if (data && data.code === 0) {
