@@ -228,7 +228,7 @@ export default {
         size: this.pageSize,
         documentNumber: this.dataForm.documentNumber,
         // 'telephone': this.dataForm.telephone,
-        organizationId: this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organization.id
       }
       getFinancialPage(params).then(({ data }) => {
         if (data && data.code === 0) {

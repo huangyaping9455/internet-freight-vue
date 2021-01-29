@@ -107,7 +107,7 @@ export default {
               id: this.dataForm.id || undefined,
               name: this.dataForm.name,
               remark: this.dataForm.remark,
-              organizationId: this.$store.state.user.organizationId,
+              organizationId: this.$store.state.user.organization.id,
               resourceIds: [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
 
             })

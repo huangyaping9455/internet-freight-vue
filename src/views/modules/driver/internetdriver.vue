@@ -176,7 +176,7 @@ export default {
         size: this.pageSize,
         driverName: this.dataForm.driverName,
         // 'telephone': this.dataForm.telephone,
-        organizationId: this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organization.id
       }
       getDriverPage(params).then(({ data }) => {
         if (data && data.code === 0) {
