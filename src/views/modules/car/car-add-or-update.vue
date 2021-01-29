@@ -261,13 +261,19 @@ export default {
     },
 
     handleRemove (file, fileList) {
-      alert(this.drivingPermit)
+      alert(this.drivingPermit.substring(0, 6))
+      alert(this.drivingPermit.substring(7))
       if (file.status === 'ready') {
         file = this.drivingPermit
         this.$http({
           url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
-          method: 'post',
-          data: this.$http.addData(file)
+          method: 'delete',
+          data: this.$http.addData(
+            {
+              groupName: file.substring(0, 6),
+              fileName: file.substring(7)
+            }
+          )
         }).then(({ data }) => {
           this.$message.success('删除图片成功！')
         })
