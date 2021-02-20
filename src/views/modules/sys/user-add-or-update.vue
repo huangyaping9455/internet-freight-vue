@@ -46,7 +46,7 @@
 
 <script>
 import { isEmail, isMobile } from '@/utils/validate'
-import { getRoleList } from '@/api/api'
+import { getRoleList, getUserInfo } from '@/api/api'
 
 export default {
   data () {
@@ -128,11 +128,7 @@ export default {
         })
       }).then(() => {
         if (this.dataForm.id) {
-          this.$http({
-            url: this.$http.addUrl(`/uaa/sys/admin/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.addParams()
-          }).then(({ data }) => {
+          getUserInfo(this.dataForm.id).then(({ data }) => {
             if (data && data.code === 0) {
               this.dataForm.userName = data.data.username
               this.dataForm.organizationId = data.data.organizationId

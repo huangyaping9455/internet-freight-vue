@@ -3,7 +3,7 @@ import {
   getActionSmsCode,
   loginAction,
   getAction,
-  // eslint-disable-next-line no-unused-vars
+  deleteAction,
   postAction,
   httpAction,
   // eslint-disable-next-line no-unused-vars
@@ -26,6 +26,7 @@ const getResourceList = (params) => getAction(`${uaaModel}/sys/resource/resource
 // 用户管理
 const getLoginUserInfo = (params) => getAction(`${uaaModel}/sys/admin/me`, params)
 const getAdminList = (params) => getAction(`${uaaModel}/sys/admin`, params)
+const getUserInfo = (id) => getAction(`/uaa/sys/admin/${id}`)
 // 角色管理
 const getRoleList = (params) => getAction(`${uaaModel}/sys/role`, params)
 const getRolePage = (params) => getAction(`${uaaModel}/sys/role/page`, params)
@@ -76,6 +77,7 @@ export {
   addDriverLicense,
   getFinancialPage,
   uploadImage,
-  addFinancial
+  addFinancial,
+  getUserInfo
 
 }

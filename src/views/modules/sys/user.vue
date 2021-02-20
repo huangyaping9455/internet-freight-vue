@@ -191,7 +191,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/uaa/admin'),
+          url: this.$http.addUrl('/uaa/sys/admin'),
           method: 'delete',
           data: this.$http.addParams(adminIds, false)
         }).then(({ data }) => {

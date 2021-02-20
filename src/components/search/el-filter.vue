@@ -112,119 +112,120 @@
  * @copyright 🤝2020 尽人事, 行王道
  */
 export default {
-    name: 'ElFilter',
-    props: {
-      /**字段默认数据 */
-      data: {
-        type: Object,
-        default: () => {},
-        required: true
-      },
-      /**字段配置项 */
-      fieldList: {
-        type: Array,
-        default: () => [],
-        required: true
-      },
-      /**相关的列表 */
-      listTypeInfo: {
-        type: Object,
-        default: () => {}
-      },
-      /**按钮区域是否隐藏 */
-      btnHidden: {
-        type: Boolean,
-        default: false
-      },
-      /**组件尺寸 */
-      size: {
-        type: String,
-        default: 'mini'
-      },
-      /**默认搜索数 */
-      count: {
-        type: Number,
-        default: 4
-      },
-      /**组件及label宽度 */
-      width: {
-        type: Object,
-        default: () => ({
-          labelWidth: 90,
-          itemWidth: 220
-        })
-      },
-      /**按钮配置 */
-      btnStyle: {
-        type: Array,
-        default: () => [
-          { icon: null, text: '搜索', disabled: false, type: 'primary', plain: false, round: false },
-          { icon: null, text: '重置', disabled: false, type: null, plain: false, round: false }
-        ]
-      }
+  name: 'ElFilter',
+  props: {
+    /** 字段默认数据 */
+    data: {
+      type: Object,
+      default: () => {},
+      required: true
     },
-    data: () => ({
-      defaultData: {},
-      icon: 'close'
-    }),
+    /** 字段配置项 */
+    fieldList: {
+      type: Array,
+      default: () => [],
+      required: true
+    },
+    /** 相关的列表 */
+    listTypeInfo: {
+      type: Object,
+      default: () => {}
 
-    mounted () {
-      /**
+    },
+    /** 按钮区域是否隐藏 */
+    btnHidden: {
+      type: Boolean,
+      default: false
+    },
+    /** 组件尺寸 */
+    size: {
+      type: String,
+      default: 'mini'
+    },
+    /** 默认搜索数 */
+    count: {
+      type: Number,
+      default: 4
+    },
+    /** 组件及label宽度 */
+    width: {
+      type: Object,
+      default: () => ({
+        labelWidth: 90,
+        itemWidth: 220
+      })
+    },
+    /** 按钮配置 */
+    btnStyle: {
+      type: Array,
+      default: () => [
+        { icon: null, text: '搜索', disabled: false, type: 'primary', plain: false, round: false },
+        { icon: null, text: '重置', disabled: false, type: null, plain: false, round: false }
+      ]
+    }
+  },
+  data: () => ({
+    defaultData: {},
+    icon: 'close'
+  }),
+
+  mounted () {
+    /**
        * 子组件无法直接修改父组件传递过来的值
        * 于是将父组件传递的值首先赋值给 defaultData
        * 在搜索条件中同样使用 defaultData
        * 永远保持 props 传递的 data 纯洁度
        */
-      this.defaultData = {...this.data}
-    },
+    this.defaultData = { ...this.data }
+  },
 
-    methods: {
-        /**
+  methods: {
+    /**
          * @func 占位符显示
          * @param {Object} row
          * @desc 📝
          */
-        getPlaceholder (row) {
-          let placeholder
-          if (row.type === 'input') {
-            placeholder = '请输入' + row.label
-          } else if (row.type === 'select' || row.type === 'time' || row.type === 'date') {
-            placeholder = '请选择' + row.label
-          } else {
-            placeholder = row.label
-          }
-          return placeholder
-        },
+    getPlaceholder (row) {
+      let placeholder
+      if (row.type === 'input') {
+        placeholder = '请输入' + row.label
+      } else if (row.type === 'select' || row.type === 'time' || row.type === 'date') {
+        placeholder = '请选择' + row.label
+      } else {
+        placeholder = row.label
+      }
+      return placeholder
+    },
 
-        /**
+    /**
          * @func 事件处理
          * @desc 📝
          */
-        handleEvent (event, val, change) {
-          let obj = {
-            value: change === 'change' ? event : event.target.value,
-            label: val
-          }
-          this.$emit('handleEvent', obj)
-        },
+    handleEvent (event, val, change) {
+      const obj = {
+        value: change === 'change' ? event : event.target.value,
+        label: val
+      }
+      this.$emit('handleEvent', obj)
+    },
 
-        /**
+    /**
          * @func 搜索
          * @desc 📝
          */
-        handleFilter () {
-          this.$emit('handleFilter', this.defaultData)
-        },
+    handleFilter () {
+      this.$emit('handleFilter', this.defaultData)
+    },
 
-        /**
+    /**
          * @func 重置
          * @desc 📝
          */
-        handleReset () {
-          this.defaultData = {...this.data}
-          this.$emit('handleReset', this.defaultData)
-        }
+    handleReset () {
+      this.defaultData = { ...this.data }
+      this.$emit('handleReset', this.defaultData)
     }
+  }
 }
 </script>
 <style lang="css" scoped>
@@ -254,4 +255,3 @@ export default {
   margin: 6px 0 6px auto;
 }
 </style>
-

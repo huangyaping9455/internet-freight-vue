@@ -165,7 +165,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl('/uaa/role'),
+          url: this.$http.addUrl('/uaa/sys/role'),
           method: 'delete',
           data: this.$http.addData(ids, false)
         }).then(({ data }) => {

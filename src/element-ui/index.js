@@ -76,8 +76,10 @@ import {
   MessageBox,
   Message,
   Notification,
-  Divider
+  Divider,
+  Drawer
 } from 'element-ui'
+Vue.use(Drawer)
 Vue.use(Divider)
 Vue.use(Pagination)
 Vue.use(Dialog)

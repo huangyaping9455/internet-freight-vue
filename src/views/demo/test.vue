@@ -1,97 +1,110 @@
 <template>
   <div>
-    <el-upload drag multiple
-               name="file"
-               ref="upload"
-               :limit="limit"
-               action=""
-               :data="uploadData"
-               :on-preview="handlePreview"
-               :on-remove="handleRemove"
-               :file-list="fileList"
-               :beforeUpload="beforeAVatarUpload"
-               :on-exceed="onExceed"
-               :onError="uploadError"
-               :onSuccess="uploadSuccess"
-               :auto-upload="true"
-               :http-request="uploadImage">
+    <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button>
+    <el-button type="text" @click="dialog = true">打开嵌套 Form 的 Drawer</el-button>
+    <el-drawer
+      title="我嵌套了表格!"
+      :visible.sync="table"
+      direction="rtl"
+      size="50%">
+      <el-table :data="gridData">
+        <el-table-column property="date" label="日期" width="150"></el-table-column>
+        <el-table-column property="name" label="姓名" width="200"></el-table-column>
+        <el-table-column property="address" label="地址"></el-table-column>
+      </el-table>
+    </el-drawer>
 
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
-      <div class="el-upload__tip" slot="tip">只能上传'jpg/png/jpeg/gif'</div>
-    </el-upload>
+    <el-drawer
+      title="我嵌套了 Form !"
+      :before-close="handleClose"
+      :visible.sync="dialog"
+      :destroy-on-close="true"
+      direction="ltr"
+      custom-class="demo-drawer"
+      ref="drawer"
+    >
+      <div class="demo-drawer__content">
+        <el-form :model="form">
+          <el-form-item label="活动名称" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="活动区域" :label-width="formLabelWidth">
+            <el-select v-model="form.region" placeholder="请选择活动区域">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div class="demo-drawer__footer">
+          <el-button @click="cancelForm">取 消</el-button>
+          <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+        </div>
+      </div>
+    </el-drawer>
+
   </div>
-
 </template>
 
 <script>
-import { uploadImage } from '@/api/api'
-
 export default {
   data () {
     return {
-
-      // 。。。我才刚知道token可以不放在header中，直接放在路径后面也行
-      limit: 1,
-      fileList: [],
-      uploadData: {}
+      table: false,
+      dialog: false,
+      loading: false,
+      gridData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '80px',
+      timer: null
     }
   },
   methods: {
-    // 当设置了取消自动上传的时候，调用此方法开始上传
-    // submitUpload () {
-    //   this.$refs.upload.submit()
-    // },
-
-    uploadImage (param) {
-      const formData = new FormData()
-      formData.append(param.filename, param.file)
-      console.log(param)
-      console.log(formData)
-      uploadImage(formData).then(({ data }) => {
-        console.log(data)
-        if (data || data.code === 0) {
-          this.$message.success('上传成功')
-        }
-      })
-    },
-
-    handleRemove (file, fileList) {
-      alert('移除')
-      if (file.status === 'success') {
-        this.$http({
-          url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
-          method: 'post',
-          data: this.$http.addData()
-        }).then(({ data }) => {
-          this.$message.success('删除图片成功！')
+    handleClose (done) {
+      if (this.loading) {
+        return
+      }
+      this.$confirm('确定要提交表单吗？')
+        .then(_ => {
+          this.loading = true
+          this.timer = setTimeout(() => {
+            done()
+            // 动画关闭需要一定的时间
+            setTimeout(() => {
+              this.loading = false
+            }, 400)
+          }, 2000)
         })
-      }
+        .catch(_ => {})
     },
-    handlePreview (file) {
-      if (file.status === 'success') {
-        this.imageVisiable = true
-        this.$nextTick(() => {
-          this.$refs.showImage.init(file.url)
-        })
-      }
-    },
-    onExceed (files, fileList) {
-      this.$message.error('提示：只能上传一张图片！')
-    },
-    // 图片上传
-    beforeAVatarUpload (file) {
-      if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
-        this.$message.error('只支持jpg、png、gif格式的图片！')
-        return false
-      }
-    },
-    uploadSuccess (response, file, fileList) {
-      this.fileIds = response.fileIds
-      console.log('上传图片成功')
-    },
-    uploadError (response, file, fileList) {
-      this.$message.error('上传图片失败！')
+    cancelForm () {
+      this.loading = false
+      this.dialog = false
+      clearTimeout(this.timer)
     }
   }
 }
