@@ -17,8 +17,6 @@
     </el-form>
     <el-table
       :data="dataList"
-      :row-style="{height:'20px'}"
-      :cell-style="{padding:'0px'}"
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
