@@ -5,6 +5,12 @@
         <el-input v-model="dataForm.documentNumber" placeholder="单证号" clearable></el-input>
       </el-form-item>
       <el-form-item>
+        <el-input v-model="dataForm.carrier" placeholder="实际承运人名称" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.vehicleNumber" placeholder="车辆牌照号" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('driver:internetdriver:delete')" type="danger" @click="deleteHandle()"
@@ -227,7 +233,10 @@ export default {
         page: this.pageIndex,
         size: this.pageSize,
         documentNumber: this.dataForm.documentNumber,
-        organizationId: this.$store.state.user.organization.id
+        carrier: this.dataForm.carrier,
+        vehicleNumber: this.dataForm.vehicleNumber,
+        organizationId: this.$store.state.user.organization.id,
+        isdelete: ''
       }
       getFinancialPage(params).then(({ data }) => {
         if (data && data.code === 0) {

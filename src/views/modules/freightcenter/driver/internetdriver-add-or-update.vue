@@ -93,9 +93,51 @@ export default {
         callback()
       }
     }
+    const validatedrivingLicense = (rule, value, callback) => {
+      if (!this.dataForm.drivingLicense && !/\S/.test(value)) {
+        callback(new Error('驾驶证编号不能为空'))
+      } else {
+        callback()
+      }
+    }
     const validatevehicleClass = (rule, value, callback) => {
       if (!this.dataForm.vehicleClass && !/\S/.test(value)) {
         callback(new Error('准驾车型不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const validateissuingOrganizations = (rule, value, callback) => {
+      if (!this.dataForm.issuingOrganizations && !/\S/.test(value)) {
+        callback(new Error('驾驶证发证机关不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const   validatevalidPeriodFrom = (rule, value, callback) => {
+      if (!this.dataForm.validPeriodFrom && !/\S/.test(value)) {
+        callback(new Error('驾驶证有效期自不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const validatevalidPeriodTo = (rule, value, callback) => {
+      if (!this.dataForm.validPeriodTo && !/\S/.test(value)) {
+        callback(new Error('驾驶证有效期至不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const validatequalificationCertificate = (rule, value, callback) => {
+      if (!this.dataForm.qualificationCertificate && !/\S/.test(value)) {
+        callback(new Error('从业资格证号不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const validatetelephone = (rule, value, callback) => {
+      if (!this.dataForm.telephone && !/\S/.test(value)) {
+        callback(new Error('手机号码不能为空'))
       } else {
         callback()
       }
@@ -108,6 +150,7 @@ export default {
           driverLicense: '',
           visible: false,
           imageURL: '',
+          driverLicenseUrl:'',
           dataForm: {
             id: 0,
             driverName: '',
@@ -133,9 +176,27 @@ export default {
             driverName: [
               {validator: validatedriverName, message: '驾驶员姓名不能为空', trigger: 'blur'}
             ],
+            drivingLicense: [
+              {validator: validatedrivingLicense, message: '驾驶证编号不能为空', trigger: 'blur'}
+            ],
             vehicleClass: [
               {validator: validatevehicleClass, message: '车架类型不能为空', trigger: 'blur'}
-            ]
+            ],
+            issuingOrganizations: [
+              {validator: validateissuingOrganizations, message: '驾驶证发证机关不能为空', trigger: 'blur'}
+            ],
+            validPeriodFrom: [
+              {validator: validatevalidPeriodFrom, message: '驾驶证有效期自不能为空', trigger: 'blur'}
+            ],
+            validPeriodTo: [
+              {validator: validatevalidPeriodTo, message: '驾驶证有效期至不能为空', trigger: 'blur'}
+            ],
+            qualificationCertificate: [
+              {validator: validatequalificationCertificate, message: '从业资格证号不能为空', trigger: 'blur'}
+            ],
+            telephone: [
+              {validator: validatetelephone, message: '手机号码不能为空', trigger: 'blur'}
+            ],
           }
         }
       },
@@ -173,6 +234,7 @@ export default {
         dataFormSubmit()
         {
           this.$refs.dataForm.validate((valid) => {
+            console.log(this.driverLicenseUrl);
             /* alert(valid)
             const methods = `${!this.dataForm.id ? 'post' : 'put'}`
             if (valid) {
@@ -226,6 +288,8 @@ export default {
                   organizationId: this.$store.state.user.organization.id
                 })
               }).then(({data}) => {
+                console.log(data.driverLicenseUrl);
+
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',
@@ -258,8 +322,6 @@ export default {
           uploadImage(formData).then(({data}) => {
             console.log(data)
             if (data || data.code === 0) {
-              this.driverLicenseUrl = data.data
-              console.log(data.data)
               this.$message.success('上传成功')
             }
           })
