@@ -3,8 +3,7 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-<!--   :rules="dataRule"-->
-    <el-form :model="dataForm"  ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="160px">
       <el-form-item label="姓名" prop="driverName" :class="{ 'is-required': !dataForm.driverName }">
         <el-input v-model="dataForm.driverName" placeholder="姓名"></el-input>
@@ -48,7 +47,7 @@
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
       <el-form-item class="demo-image" :style="!dataForm.id ? 'display:none;' : 'display:block;'">
-        <img :src="imageURL"  style="width: 100px; height: 100px">
+        <img :src="imageURL" style="width: 100px; height: 100px">
       </el-form-item>
 
       <el-form-item label="驾驶证">
@@ -70,7 +69,7 @@
           :auto-upload="true"
           :http-request="uploadImage">
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text" >上传驾驶证</div>
+          <div class="el-upload__text">上传驾驶证</div>
           <div class="el-upload__tip" slot="tip">只能上传jpg/png/jpeg/gif文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
@@ -83,227 +82,240 @@
 </template>
 
 <script>
-import { uploadImage } from '@/api/api'
+import {uploadImage} from '@/api/api'
 
 export default {
-
-  data () {
-    return {
-      /* 最大允许上传个数 */
-      limit: 1,
-      fileList: [],
-      uploadData: {},
-      driverLicense: '',
-      visible: false,
-      dataForm: {
-        id: 0,
-        driverName: '',
-        drivingLicense: '',
-        vehicleClass: '',
-        issuingOrganizations: '',
-        validPeriodFrom: '',
-        validPeriodTo: '',
-        qualificationCertificate: '',
-        telephone: '',
-        remark: '',
-        delete: 1
-      },
-      /*  dataRule: {
-    driverName: [
-         {required: true, message: '驾驶员姓名不能为空', trigger: 'blur'}
-       ],
-       drivingLicense: [
-         {required: true, message: '身份证号不能为空', trigger: 'blur'}
-       ],
-       vehicleClass: [
-         {required: true, message: '准驾车型不能为空', trigger: 'blur'}
-       ],
-       issuingOrganizations: [
-         {required: true, message: '驾驶证发证机关不能为空', trigger: 'blur'}
-       ],
-       validPeriodFrom: [
-         {required: true, message: '驾驶证有效期自不能为空', trigger: 'blur'}
-       ],
-       validPeriodTo: [
-         {required: true, message: '驾驶证有效期至不能为空', trigger: 'blur'}
-       ],
-       qualificationCertificate: [
-         {required: true, message: '从业资格证号不能为空', trigger: 'blur'}
-       ],
-      telephone: [
-        {required: true, message: '手机号不能为空', trigger: 'blur'},
-        {validator: telephone, trigger: 'blur'}
-      ]
-    } */
-      /* 日期 */
-      pickerOptions1: {
-        disabledDate (time) {
-          return time.getTime() > Date.now()
+  data() {
+    const validatedriverName = (rule, value, callback) => {
+      if (!this.dataForm.driverName && !/\S/.test(value)) {
+        callback(new Error('驾驶员姓名不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const validatevehicleClass = (rule, value, callback) => {
+      if (!this.dataForm.vehicleClass && !/\S/.test(value)) {
+        callback(new Error('准驾车型不能为空'))
+      } else {
+        callback()
+      }
+    }
+        return {
+          /* 最大允许上传个数 */
+          limit: 1,
+          fileList: [],
+          uploadData: {},
+          driverLicense: '',
+          visible: false,
+          imageURL: '',
+          dataForm: {
+            id: 0,
+            driverName: '',
+            drivingLicense: '',
+            vehicleClass: '',
+            issuingOrganizations: '',
+            validPeriodFrom: '',
+            validPeriodTo: '',
+            qualificationCertificate: '',
+            telephone: '',
+            remark: '',
+            delete: 1
+          },
+          /* 日期 */
+          pickerOptions1: {
+            disabledDate(time) {
+              return time.getTime() > Date.now()
+            }
+          },
+          validPeriodFrom: '',
+          validPeriodTo: '',
+          dataRule: {
+            driverName: [
+              {validator: validatedriverName, message: '驾驶员姓名不能为空', trigger: 'blur'}
+            ],
+            vehicleClass: [
+              {validator: validatevehicleClass, message: '车架类型不能为空', trigger: 'blur'}
+            ]
+          }
         }
       },
-      validPeriodFrom: '',
-      validPeriodTo: ''
-    }
-  },
-  methods: {
-    init (id) {
-      this.dataForm.id = id || 0
-      if (this.dataForm.id) {
-        this.$http({
-          url: this.$http.addUrl('/internetfreight/financials/getOneById'),
-          method: 'get',
-          params: this.$http.addParams({ id: this.dataForm.id })
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            // eslint-disable-next-line no-unused-expressions,no-sequences
-            this.dataForm.documentNumber = data.data.documentNumber,
-            this.dataForm.sendToProDateTime = data.data.sendToProDateTime,
-            this.dataForm.carrier = data.data.carrier,
-            this.dataForm.actualCarrierId = data.data.actualCarrierId,
-            this.dataForm.vehicleNumber = data.data.vehicleNumber,
-            this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode,
-            this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
-            this.dataForm.telephone = data.data.telephone,
-            this.dataForm.remark = data.data.remark,
-            this.imageURL = 'http://139.155.138.18:8899/' + data.data.driverLicense,
-            this.driverLicense = data.data.driverLicense
-          }
-        })
-      }
-      this.visible = true
-    },
-
-    // 表单提交
-    dataFormSubmit () {
-      this.$refs.dataForm.validate((valid) => {
-        /* alert(valid)
-        const methods = `${!this.dataForm.id ? 'post' : 'put'}`
-        if (valid) {
-          const dataForm = {
-            id: this.dataForm.id || undefined,
-            driverName: this.dataForm.driverName,
-            drivingLicense: this.dataForm.drivingLicense,
-            vehicleClass: this.dataForm.vehicleClass,
-            issuingOrganizations: this.dataForm.issuingOrganizations,
-            validPeriodFrom: this.dataForm.validPeriodFrom,
-            validPeriodTo: this.dataForm.validPeriodTo,
-            qualificationCertificate: this.dataForm.qualificationCertificate,
-            telephone: this.dataForm.telephone,
-            remark: this.dataForm.remark,
-            driverLicense: this.dataForm.driverLicense
-          }
-          // eslint-disable-next-line no-template-curly-in-string
-          addDriver(dataForm, methods).then(({ data }) => {
-            alert(methods)
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        } */
-        if (valid) {
-          this.$http({
-            url: this.$http.addUrl(`/internetfreight/internetDrivers${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
-            method: `${!this.dataForm.id ? 'post' : 'put'}`,
-            data: this.$http.addData({
-              id: this.dataForm.id || undefined,
-              driverName: this.dataForm.driverName,
-              drivingLicense: this.dataForm.drivingLicense,
-              vehicleClass: this.dataForm.vehicleClass,
-              issuingOrganizations: this.dataForm.issuingOrganizations,
-              validPeriodFrom: this.dataForm.validPeriodFrom,
-              validPeriodTo: this.dataForm.validPeriodTo,
-              qualificationCertificate: this.dataForm.qualificationCertificate,
-              telephone: this.dataForm.telephone,
-              remark: this.dataForm.remark,
-              driverLicense: this.driverLicense
+      methods: {
+        init(id)
+        {
+          this.dataForm.id = id || 0
+          if (this.dataForm.id) {
+            alert(88)
+            this.$http({
+              url: this.$http.addUrl('/internetfreight/internetOrders/getOneById'),
+              method: 'get',
+              params: this.$http.addParams({id: this.dataForm.id})
+            }).then(({data}) => {
+              alert(data)
+              if (data && data.code === 0) {
+                this.dataForm.driverName = data.data.driverName,
+                  this.dataForm.drivingLicense = data.data.drivingLicense,
+                  this.dataForm.vehicleClass = data.data.vehicleClass,
+                  this.dataForm.issuingOrganizations = data.data.issuingOrganizations,
+                  this.dataForm.validPeriodFrom = data.data.validPeriodFrom,
+                  this.dataForm.validPeriodTo = data.data.validPeriodTo,
+                  this.dataForm.qualificationCertificate = data.data.qualificationCertificate,
+                  this.dataForm.telephone = data.data.telephone,
+                  this.dataForm.remark = data.data.remark,
+                  this.imageURL = 'http://139.155.138.18:8899/' + data.data.driverLicenseUrl,
+                  this.driverLicenseUrl = data.data.driverLicenseUrl,
+                  this.dataForm.delete = data.data.delete
+              }
             })
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
+          }
+          this.visible = true
+        },
+        // 表单提交
+        dataFormSubmit()
+        {
+          this.$refs.dataForm.validate((valid) => {
+            /* alert(valid)
+            const methods = `${!this.dataForm.id ? 'post' : 'put'}`
+            if (valid) {
+              const dataForm = {
+                id: this.dataForm.id || undefined,
+                driverName: this.dataForm.driverName,
+                drivingLicense: this.dataForm.drivingLicense,
+                vehicleClass: this.dataForm.vehicleClass,
+                issuingOrganizations: this.dataForm.issuingOrganizations,
+                validPeriodFrom: this.dataForm.validPeriodFrom,
+                validPeriodTo: this.dataForm.validPeriodTo,
+                qualificationCertificate: this.dataForm.qualificationCertificate,
+                telephone: this.dataForm.telephone,
+                remark: this.dataForm.remark,
+                driverLicense: this.dataForm.driverLicense
+              }
+              // eslint-disable-next-line no-template-curly-in-string
+              addDriver(dataForm, methods).then(({ data }) => {
+                alert(methods)
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
                 }
               })
-            } else {
-              this.$message.error(data.msg)
+            } */
+            if (valid) {
+              this.$http({
+                url: this.$http.addUrl(`/internetfreight/internetDrivers${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
+                method: `${!this.dataForm.id ? 'post' : 'put'}`,
+                data: this.$http.addData({
+                  id: this.dataForm.id || undefined,
+                  driverName: this.dataForm.driverName,
+                  drivingLicense: this.dataForm.drivingLicense,
+                  vehicleClass: this.dataForm.vehicleClass,
+                  issuingOrganizations: this.dataForm.issuingOrganizations,
+                  validPeriodFrom: this.dataForm.validPeriodFrom,
+                  validPeriodTo: this.dataForm.validPeriodTo,
+                  qualificationCertificate: this.dataForm.qualificationCertificate,
+                  telephone: this.dataForm.telephone,
+                  remark: this.dataForm.remark,
+                  driverLicenseUrl: this.driverLicenseUrl,
+                  organizationId: this.$store.state.user.organization.id
+                })
+              }).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              })
             }
           })
         }
-      })
-    },
+      ,
 
-    // 当设置了取消自动上传的时候，调用此方法开始上传
-    // submitUpload () {
-    //   this.$refs.upload.submit()
-    // },
-    uploadImage (param) {
-      const formData = new FormData()
-      formData.append(param.filename, param.file)
-      console.log(param)
-      console.log(formData)
-      uploadImage(formData).then(({ data }) => {
-        console.log(data)
-        if (data || data.code === 0) {
-          this.driverLicense = data.data
-          console.log(data.data)
-          this.$message.success('上传成功')
+        // 当设置了取消自动上传的时候，调用此方法开始上传
+        // submitUpload () {
+        //   this.$refs.upload.submit()
+        // },
+        uploadImage(param)
+        {
+          const formData = new FormData()
+          formData.append(param.filename, param.file)
+          console.log(param)
+          console.log(formData)
+          uploadImage(formData).then(({data}) => {
+            console.log(data)
+            if (data || data.code === 0) {
+              this.driverLicenseUrl = data.data
+              console.log(data.data)
+              this.$message.success('上传成功')
+            }
+          })
         }
-      })
-    },
+      ,
 
-    handleRemove (file, fileList) {
-      alert('移除')
-      if (file.status === 'success') {
-        this.$http({
-          url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
-          method: 'delete',
-          data: this.$http.addData(file)
-        }).then(({ data }) => {
-          this.driverLicense = ' '
-          this.$message.success('删除图片成功！')
-        })
+        handleRemove(file, fileList)
+        {
+          alert('移除')
+          if (file.status === 'success') {
+            this.$http({
+              url: this.$http.addUrl('/filesystem/fileFastDFS/delete'),
+              method: 'delete',
+              data: this.$http.addData(file)
+            }).then(({data}) => {
+              this.driverLicense = ' '
+              this.$message.success('删除图片成功！')
+            })
+          }
+        }
+      ,
+        handlePreview(file)
+        {
+          if (file.status === 'success') {
+            this.imageVisiable = true
+            this.$nextTick(() => {
+              this.$refs.showImage.init(file.url)
+            })
+          }
+        }
+      ,
+        onExceed(files, fileList)
+        {
+          this.$message.error('提示：只能上传一张图片！')
+        }
+      ,
+        // 图片上传
+        beforeAVatarUpload(file)
+        {
+          if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
+            this.$message.error('只支持jpg、png、gif格式的图片！')
+            return false
+          }
+        }
+      ,
+        uploadSuccess(response, file, fileList)
+        {
+          this.fileIds = response.fileIds
+          console.log('上传图片成功')
+        }
+      ,
+        uploadError(response, file, fileList)
+        {
+          this.$message.error('上传图片失败！')
+        }
+
       }
-    },
-    handlePreview (file) {
-      if (file.status === 'success') {
-        this.imageVisiable = true
-        this.$nextTick(() => {
-          this.$refs.showImage.init(file.url)
-        })
-      }
-    },
-    onExceed (files, fileList) {
-      this.$message.error('提示：只能上传一张图片！')
-    },
-    // 图片上传
-    beforeAVatarUpload (file) {
-      if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
-        this.$message.error('只支持jpg、png、gif格式的图片！')
-        return false
-      }
-    },
-    uploadSuccess (response, file, fileList) {
-      this.fileIds = response.fileIds
-      console.log('上传图片成功')
-    },
-    uploadError (response, file, fileList) {
-      this.$message.error('上传图片失败！')
     }
-
-  }
-}
 </script>

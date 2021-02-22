@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.driverName" placeholder="驾驶员姓名" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.telephone" placeholder="电话号码" clearable></el-input>
+        <el-input v-model="dataForm.telephone" placeholder="手机号码" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -148,7 +148,9 @@ export default {
     return {
       dataForm: {
         driverName: '',
-        telephone: ''
+        telephone: '',
+        organizationId: '',
+        isdelete: ''
       },
       dataList: [],
       pageIndex: 1,
@@ -174,7 +176,8 @@ export default {
         size: this.pageSize,
         driverName: this.dataForm.driverName,
         telephone: this.dataForm.telephone,
-        organizationId: this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organizationId,
+        isdelete: this.dataForm.isdelete
       }
       getDriverPage(params).then(({ data }) => {
         if (data && data.code === 0) {
@@ -227,7 +230,6 @@ export default {
           method: 'delete',
           data: this.$http.addData()
         }).then(({ data }) => {
-          alert(ids)
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',
