@@ -4,9 +4,9 @@
       <el-form-item>
         <el-input v-model="dataForm.driverName" placeholder="驾驶员姓名" clearable></el-input>
       </el-form-item>
-<!--      <el-form-item>
+      <el-form-item>
         <el-input v-model="dataForm.telephone" placeholder="电话号码" clearable></el-input>
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -147,8 +147,8 @@ export default {
   data () {
     return {
       dataForm: {
-        driverName: ''//,
-        // telephone: ''
+        driverName: '',
+        telephone: ''
       },
       dataList: [],
       pageIndex: 1,
@@ -173,8 +173,8 @@ export default {
         page: this.pageIndex,
         size: this.pageSize,
         driverName: this.dataForm.driverName,
-        // 'telephone': this.dataForm.telephone,
-        organizationId: this.$store.state.user.organization.id
+        telephone: this.dataForm.telephone,
+        organizationId: this.$store.state.user.organizationId
       }
       getDriverPage(params).then(({ data }) => {
         if (data && data.code === 0) {
