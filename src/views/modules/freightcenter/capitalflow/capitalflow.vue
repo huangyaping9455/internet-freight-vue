@@ -202,13 +202,17 @@
 
 <script>
 import AddOrUpdate from './capitalflow-add-or-update'
-import { getFinancialPage } from '@/api/api'
+import {getFinancialPage} from '@/api/api'
 
 export default {
-  data () {
+  data() {
     return {
       dataForm: {
-        documentNumber: ''
+        documentNumber: '',
+        carrier: '',
+        vehicleNumber: '',
+        organizationId: '',
+        isdelete: ''
       },
       dataList: [],
       pageIndex: 1,
@@ -222,12 +226,12 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated () {
+  activated() {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
-    getDataList () {
+    getDataList() {
       this.dataListLoading = true
       const params = {
         page: this.pageIndex,
@@ -236,11 +240,12 @@ export default {
         carrier: this.dataForm.carrier,
         vehicleNumber: this.dataForm.vehicleNumber,
         organizationId: this.$store.state.user.organization.id,
-        isdelete: ''
+        isdelete: this.dataForm.isdelete
       }
-      getFinancialPage(params).then(({ data }) => {
+      getFinancialPage(params).then(({data}) => {
+        alert(data.dataForm.documentNumber)
         if (data && data.code === 0) {
-          const { data: { content, totalElements } } = data
+          const {data: {content, totalElements}} = data
           this.totalPage = totalElements
           this.dataList = content
         } else {
@@ -251,29 +256,29 @@ export default {
       })
     },
     // 每页数
-    sizeChangeHandle (val) {
+    sizeChangeHandle(val) {
       this.pageSize = val
       this.pageIndex = 1
       this.getDataList()
     },
     // 当前页
-    currentChangeHandle (val) {
+    currentChangeHandle(val) {
       this.pageIndex = val
       this.getDataList()
     },
     // 多选
-    selectionChangeHandle (val) {
+    selectionChangeHandle(val) {
       this.dataListSelections = val
     },
     // 新增 / 修改
-    addOrUpdateHandle (id) {
+    addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle (id) {
+    deleteHandle(id) {
       const ids = id
         ? [id]
         : this.dataListSelections.map(item => {
@@ -288,7 +293,7 @@ export default {
           url: this.$http.addUrl(`/internetfreight/financials/${ids}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({ data }) => {
+        }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

@@ -72,7 +72,6 @@ export {
   getGoodsPage,
   getDriverPage,
   addDriver,
-  addDriverLicense,
   getFinancialPage,
   uploadImage,
   addFinancial

@@ -205,13 +205,11 @@ export default {
         {
           this.dataForm.id = id || 0
           if (this.dataForm.id) {
-            alert(88)
             this.$http({
               url: this.$http.addUrl('/internetfreight/internetOrders/getOneById'),
               method: 'get',
               params: this.$http.addParams({id: this.dataForm.id})
             }).then(({data}) => {
-              alert(data)
               if (data && data.code === 0) {
                 this.dataForm.driverName = data.data.driverName,
                   this.dataForm.drivingLicense = data.data.drivingLicense,
@@ -288,8 +286,6 @@ export default {
                   organizationId: this.$store.state.user.organization.id
                 })
               }).then(({data}) => {
-                console.log(data.driverLicenseUrl);
-
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',
