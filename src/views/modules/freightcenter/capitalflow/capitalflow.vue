@@ -243,7 +243,7 @@ export default {
         isdelete: this.dataForm.isdelete
       }
       getFinancialPage(params).then(({data}) => {
-        alert(data.dataForm.documentNumber)
+        alert(this.dataForm.documentNumber)
         if (data && data.code === 0) {
           const {data: {content, totalElements}} = data
           this.totalPage = totalElements

@@ -91,7 +91,7 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        prop="driverLicense"
+        prop="driverLicenseUrl"
         header-align="center"
         align="center"
         width="180"

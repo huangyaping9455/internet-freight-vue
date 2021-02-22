@@ -205,6 +205,7 @@ export default {
         {
           this.dataForm.id = id || 0
           if (this.dataForm.id) {
+           console.log(this.dataForm.id)
             this.$http({
               url: this.$http.addUrl('/internetfreight/internetOrders/getOneById'),
               method: 'get',
@@ -224,6 +225,7 @@ export default {
                   this.driverLicenseUrl = data.data.driverLicenseUrl,
                   this.dataForm.delete = data.data.delete
               }
+              console.log(id);
             })
           }
           this.visible = true
@@ -318,6 +320,7 @@ export default {
           uploadImage(formData).then(({data}) => {
             console.log(data)
             if (data || data.code === 0) {
+              this.driverLicenseUrl = data.data
               this.$message.success('上传成功')
             }
           })
