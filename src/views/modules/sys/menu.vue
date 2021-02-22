@@ -129,7 +129,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.addUrl(`/uaa/resource/${id}`),
+          url: this.$http.addUrl(`/uaa/sys/resource/${id}`),
           method: 'delete',
           data: this.$http.addData()
         }).then(({ data }) => {

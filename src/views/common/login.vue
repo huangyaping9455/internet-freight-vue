@@ -102,7 +102,7 @@ export default {
         ]
       },
       verifyCode: '',
-      loginType: true, // true:电话好登陆
+      loginType: false, // true:电话好登陆
       computeTime: 0
     }
   },

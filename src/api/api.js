@@ -29,6 +29,7 @@ const getAdminList = (params) => getAction(`${uaaModel}/sys/admin`, params)
 const getUserInfo = (id) => getAction(`/uaa/sys/admin/${id}`)
 // 角色管理
 const getRoleList = (params) => getAction(`${uaaModel}/sys/role`, params)
+const getRoleListByCondition = (params) => getAction(`${uaaModel}/sys/role/getByCondition`, params)
 const getRolePage = (params) => getAction(`${uaaModel}/sys/role/page`, params)
 
 // 组织机构管理
@@ -78,6 +79,7 @@ export {
   getFinancialPage,
   uploadImage,
   addFinancial,
-  getUserInfo
+  getUserInfo,
+  getRoleListByCondition
 
 }

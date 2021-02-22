@@ -1,15 +1,17 @@
 <template>
-  <el-dialog
+  <el-drawer
     :title="!dataForm.id ? '新增' : '修改'"
-    :close-on-click-modal="false"
+    :destroy-on-close="true"
+    size="50%"
+    :before-close="handleClose"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="80px">
       <el-form-item label="登陆名" prop="userName">
-        <el-input disabled="disabled" v-model="dataForm.userName" placeholder="登录帐号"></el-input>
+        <el-input :disabled="!dataForm.id?false:true" v-model="dataForm.userName" placeholder="登录帐号"></el-input>
       </el-form-item>
 
-      <el-form-item label="用户名" prop="userName">
+      <el-form-item label="用户名" prop="name">
         <el-input v-model="dataForm.name" placeholder="用户名"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" :class="{ 'is-required': !dataForm.id }">
@@ -24,12 +26,17 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
       </el-form-item>
+      <el-divider content-position="left"></el-divider>
       <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
-          <el-checkbox v-for="role in roleList" :key="role.id" :label="role.id">{{ role.name }}</el-checkbox>
+          <el-checkbox
+            v-for="role in roleList"
+            :key="role.id"
+            :label="role.id">{{ role.name }}
+          </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-
+      <el-divider content-position="left"></el-divider>
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.delete">
           <el-radio :label=true>禁用</el-radio>
@@ -37,16 +44,17 @@
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+    <el-divider content-position="left"></el-divider>
+<!--    <span slot="footer" class="dialog-footer">-->
+      <el-button @click="cancel (dataForm)">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
-    </span>
-  </el-dialog>
+<!--    </span>-->
+  </el-drawer>
 </template>
 
 <script>
 import { isEmail, isMobile } from '@/utils/validate'
-import { getRoleList, getUserInfo } from '@/api/api'
+import { getRoleListByCondition, getUserInfo } from '@/api/api'
 
 export default {
   data () {
@@ -117,9 +125,29 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * 取消
+     * @param dataForm
+     */
+    cancel (dataForm) {
+      this.$refs.dataForm.resetFields()
+      this.visible = false
+    },
+    /**
+     * 关闭弹出抽屉
+     * @param done
+     */
+    handleClose (done) {
+      this.$refs.dataForm.resetFields()
+      done()
+    },
     init (id) {
       this.dataForm.id = id || 0
-      getRoleList().then(({ data }) => {
+      const params = {
+        organizationId: this.$store.state.user.organization.id
+      }
+      getRoleListByCondition(params).then(({ data }) => {
         this.roleList = data || []
       }).then(() => {
         this.visible = true

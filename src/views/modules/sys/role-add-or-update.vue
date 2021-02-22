@@ -11,6 +11,13 @@
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
+
+      <el-radio-group  v-model="dataForm.status">
+        <el-radio v-if="this.$store.state.user.name==='System'"  :label="1">平台分配</el-radio>
+        <el-radio :label="0">内部分配</el-radio>
+
+      </el-radio-group>
+      <el-divider content-position="left"></el-divider>
       <el-form-item size="mini" label="授权">
         <el-tree
           :data="menuList"
@@ -45,6 +52,7 @@ export default {
         id: 0,
         name: '',
         remark: '',
+        status: 0,
         ids: []
       },
       dataRule: {
@@ -107,6 +115,7 @@ export default {
               id: this.dataForm.id || undefined,
               name: this.dataForm.name,
               remark: this.dataForm.remark,
+              status: this.dataForm.status,
               organizationId: this.$store.state.user.organization.id,
               resourceIds: [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
 

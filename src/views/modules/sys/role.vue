@@ -38,6 +38,16 @@
         label="角色名称">
       </el-table-column>
       <el-table-column
+        prop="status"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status" size="small" type="danger">平台分配</el-tag>
+          <el-tag v-else size="small">内部分配</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="remark"
         header-align="center"
         align="center"
@@ -60,11 +70,11 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('put/uaa/role/**/**')" type="text" size="small"
+          <el-button v-if="isAuth('put/uaa/sys/role/**/**')" type="text" size="small"
                      @click="addOrUpdateHandle(scope.row.id)">
             修改
           </el-button>
-          <el-button v-if="isAuth('delete/uaa/role/**')" type="text" size="small" @click="deleteHandle(scope.row.id)">删除
+          <el-button v-if="isAuth('delete/uaa/sys/role/**')" type="text" size="small" @click="deleteHandle(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
