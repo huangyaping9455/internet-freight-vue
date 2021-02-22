@@ -175,6 +175,8 @@ export default {
               actualCarrierId: this.dataForm.actualCarrierId,
               vehicleNumber: this.dataForm.vehicleNumber,
               vehiclePlateColorCode: this.dataForm.vehiclePlateColorCode,
+              shippingNoteNumber: this.dataForm.shippingNoteNumber,
+              serialNumber:this.dataForm.serialNumber,
               remark: this.dataForm.remark,
               organizationId: this.$store.state.user.organization.id
             })
