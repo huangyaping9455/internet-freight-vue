@@ -18,7 +18,7 @@
 import MainNavbar from './main-navbar'
 import MainSidebar from './main-sidebar'
 import MainContent from './main-content'
-import { clearLoginInfo } from '@/utils'
+
 import { getLoginUserInfo } from '@/api/api'
 export default {
   provide () {
@@ -98,10 +98,9 @@ export default {
       }
     },
     // 获取当前管理员信息
-    getUserInfo () {
-      getLoginUserInfo().then(({ data }) => {
+    async getUserInfo () {
+      await getLoginUserInfo().then(({ data }) => {
         if (data && data.code === 0) {
-          console.log(data)
           this.loading = false
           this.userId = data.data.id
           this.userName = data.data.name

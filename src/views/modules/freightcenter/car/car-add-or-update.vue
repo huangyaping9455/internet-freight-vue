@@ -345,26 +345,7 @@ export default {
           this.$http({
             url: this.$http.addUrl(`/internetfreight/internetCars${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
-            data: this.$http.addData({
-              id: this.dataForm.id || undefined,
-              vehicleNumber: this.dataForm.vehicleNumber,
-              vehiclePlateColorCode: this.dataForm.vehiclePlateColorCode,
-              vehicleType: this.dataForm.vehicleType,
-              owner: this.dataForm.owner,
-              useCharacter: this.dataForm.useCharacter,
-              vin: this.dataForm.vin,
-              issuingOrganizations: this.dataForm.issuingOrganizations,
-              registerDate: this.dataForm.registerDate,
-              issueDate: this.dataForm.issueDate,
-              vehicleEnergyType: this.dataForm.vehicleEnergyType,
-              vehicleTonnage: this.dataForm.vehicleTonnage,
-              grossMass: this.dataForm.grossMass,
-              roadTransportCertificateNumber: this.dataForm.roadTransportCertificateNumber,
-              trailerVehiclePlateNumber: this.dataForm.trailerVehiclePlateNumber,
-              drivingPermit: this.drivingPermit,
-              driverLicense: this.driverLicense,
-              remark: this.dataForm.remark
-            })
+            data: this.dataForm
           }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({

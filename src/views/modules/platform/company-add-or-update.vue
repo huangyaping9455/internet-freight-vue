@@ -85,7 +85,7 @@ export default {
       this.dataForm.id = id || 0
       this.$http({
         url: this.$http.addUrl('/uaa/sys/organization/organizationRootList'),
-        // url: '/src/router/test.json',
+
         method: 'get',
         params: this.$http.addParams()
       }).then(({ data: { data } }) => {

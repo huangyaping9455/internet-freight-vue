@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import '../../../constants/index'
 export default {
   data () {
     return {

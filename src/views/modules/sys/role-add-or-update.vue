@@ -1,11 +1,13 @@
 <template>
-  <el-dialog
+  <el-drawer
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
+    :before-close="handleClose"
+    size="60%"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="80px">
-      <el-form-item label="角色名称" prop="roleName">
+      <el-form-item label="角色名称" prop="name">
         <el-input v-model="dataForm.name" placeholder="角色名称"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
@@ -29,11 +31,12 @@
         </el-tree>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+    <el-divider content-position="left"></el-divider>
+<!--    <span slot="footer" class="dialog-footer">-->
+      <el-button @click="cancel (dataForm)">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
-    </span>
-  </el-dialog>
+<!--    </span>-->
+  </el-drawer>
 </template>
 
 <script>
@@ -138,6 +141,22 @@ export default {
           })
         }
       })
+    },
+    /**
+     * 关闭弹出抽屉
+     * @param done
+     */
+    handleClose (done) {
+      this.$refs.dataForm.resetFields()
+      done()
+    },
+    /**
+     * 取消
+     * @param dataForm
+     */
+    cancel (dataForm) {
+      this.$refs.dataForm.resetFields()
+      this.visible = false
     }
   }
 }

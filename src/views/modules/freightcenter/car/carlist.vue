@@ -27,14 +27,9 @@
         align="center"
         width="50">
       </el-table-column>
-      <!--      <el-table-column
-              prop="id"
-              header-align="center"
-              align="center"
-              min-width="150"
-              label="ID">
-            </el-table-column>-->
+
       <el-table-column
+        fixed
         prop="vehicleNumber"
         header-align="center"
         align="center"
@@ -206,7 +201,7 @@ export default {
   },
   methods: {
     // 获取数据列表
-    getDataList () {
+    async getDataList () {
       this.dataListLoading = true
       const params = {
         page: this.pageIndex,
@@ -215,7 +210,7 @@ export default {
         // 'organizationId': this.$store.state.user.organizationId
         size: this.pageSize
       }
-      getCarPage(params).then(({ data }) => {
+      await getCarPage(params).then(({ data }) => {
         if (data && data.code === 0) {
           const { data: { content, totalElements } } = data
           this.totalPage = totalElements

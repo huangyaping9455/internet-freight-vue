@@ -136,7 +136,6 @@ export default {
       this.dataForm.id = id || 0
       this.$http({
         url: this.$http.addUrl('/uaa/sys/resource/selectRootList'),
-        // url: '/src/router/test.json',
         method: 'get',
         params: this.$http.addParams()
       }).then(({ data: { data } }) => {

@@ -24,9 +24,10 @@
             </el-badge>
           </template>
         </el-menu-item>
+
         <el-menu-item index="2">
           <el-badge value="hot">
-            <a href="" target="_blank">官方社区</a>
+            <a @click="$router.push({name:'test-elcar'})" target="_blank">企业信息</a>
           </el-badge>
         </el-menu-item>
         <el-submenu index="3">
