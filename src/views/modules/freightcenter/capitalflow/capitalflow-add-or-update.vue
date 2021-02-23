@@ -95,6 +95,8 @@ export default {
         vehicleNumber: '',
         vehiclePlateColorCode: '',
         remark: '',
+        serialNumber: '',
+        shippingNoteNumber: '',
         delete: 1
       },
       /* 日期 */

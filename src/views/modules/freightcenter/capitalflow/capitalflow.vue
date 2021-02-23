@@ -254,29 +254,6 @@ export default {
         this.dataListLoading = false
       })
     },
-   /* getDataList() {
-      this.dataListLoading = true
-      const params = {
-        page: this.pageIndex,
-        size: this.pageSize,
-        documentNumber: this.dataForm.documentNumber,
-        carrier: this.dataForm.carrier,
-        vehicleNumber: this.dataForm.vehicleNumber,
-        organizationId: this.$store.state.user.organization.id,
-        isdelete: this.dataForm.isdelete
-      }
-      getFinancialPage(params).then(({data}) => {
-        if (data && data.code === 0) {
-          const {data: {content, totalElements}} = data
-          this.totalPage = totalElements
-          this.dataList = content
-        } else {
-          this.dataList = []
-          this.totalPage = 0
-        }
-        this.dataListLoading = false
-      })
-    },*/
     // 每页数
     sizeChangeHandle(val) {
       this.pageSize = val
