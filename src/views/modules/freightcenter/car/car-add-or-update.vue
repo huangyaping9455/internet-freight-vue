@@ -3,7 +3,7 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :destroy-on-close="true"
     :before-close="handleClose"
-    size="60%"
+    size="40%"
     :visible.sync="visible">
     <div class="demo-drawer__content">
       <el-form :model="dataForm"
@@ -11,108 +11,152 @@
                ref="dataForm" @keyup.enter.native="dataFormSubmit()"
                label-width="120px">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="车辆牌照" prop="vehicleNumber">
               <el-input v-model="dataForm.vehicleNumber" placeholder="车辆牌照号"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="车牌颜色" prop="vehiclePlateColorCode">
-              <el-input v-model="dataForm.vehiclePlateColorCode" placeholder="车牌颜色"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
 
-        <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="车辆类型" prop="vehicleType">
-              <el-input v-model="dataForm.vehicleType" placeholder="车辆类型"></el-input>
+              <el-select v-model="dataForm.vehicleType" filterable clearable placeholder="车辆类型" style="width: 100%">
+                <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehicleType')"
+                            :label="item.desc"
+                            :key="index"
+                            :value="item.value">
+                </el-option>
+
+              </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="所有人" prop="owner">
-              <el-input v-model="dataForm.owner" placeholder="所有人"></el-input>
-            </el-form-item>
-          </el-col>
+
         </el-row>
 
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="使用性质" prop="useCharacter">
-              <el-input v-model="dataForm.useCharacter" placeholder="使用性质"></el-input>
+
+          <el-col :span="24">
+            <el-form-item label="挂车牌照" prop="trailerVehiclePlateNumber">
+              <el-input v-model="dataForm.trailerVehiclePlateNumber" placeholder="挂车牌照号"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="车辆识别代号" prop="vin">
-              <el-input v-model="dataForm.vin" placeholder="车辆识别代号"></el-input>
+
+          <el-col :span="24">
+            <el-form-item label="车牌颜色" prop="vehiclePlateColorCode">
+              <el-select v-model="dataForm.vehiclePlateColorCode" filterable clearable placeholder="请选车牌颜色" style="width: 100%">
+                <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehiclePlateColorCode')"
+                            :label="item.desc"
+                            :key="index"
+                            :value="item.value">
+                </el-option>
+
+              </el-select>
             </el-form-item>
           </el-col>
+
         </el-row>
 
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
+            <el-form-item label="识别代码" prop="vin">
+              <el-input v-model="dataForm.vin" placeholder="车辆识别代码"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="24">
+            <el-form-item label="能源类型" prop="vehicleEnergyType">
+              <!--              <el-input v-model="dataForm.vehicleEnergyType" placeholder="车辆能源类型"></el-input>-->
+              <el-select v-model="dataForm.vehicleEnergyType" filterable clearable placeholder="车辆能源类型" style="width: 100%">
+                <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehicleEnergyType')"
+                            :label="item.desc"
+                            :key="index"
+                            :value="item.value">
+                </el-option>
+
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="发证机关" prop="issuingOrganizations">
               <el-input v-model="dataForm.issuingOrganizations" placeholder="发证机关"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="注册日期" prop="registerDate">
-              <el-col :span="35">
-                <el-date-picker type="date" placeholder="注册日期" v-model="dataForm.registerDate"
-                                style="width: 100%;"></el-date-picker>
-              </el-col>
+          <el-col :span="24">
+            <el-form-item label="道路运输证" prop="roadTransportCertificateNumber">
+              <el-input v-model="dataForm.roadTransportCertificateNumber" placeholder="道路运输证号"></el-input>
             </el-form-item>
           </el-col>
+
         </el-row>
 
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="发证日期" prop="issueDate">
-              <el-col :span="35">
-                <el-date-picker type="date" placeholder="发证日期" v-model="dataForm.issueDate"
-                                style="width: 100%;"></el-date-picker>
-              </el-col>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="车辆能源类型" prop="vehicleEnergyType">
-              <el-input v-model="dataForm.vehicleEnergyType" placeholder="车辆能源类型"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
 
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="核定载质量" prop="vehicleTonnage">
-              <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="总质量" prop="grossMass">
               <el-input v-model="dataForm.grossMass" placeholder="总质量"></el-input>
             </el-form-item>
           </el-col>
+
+          <el-col :span="24">
+            <el-form-item label="核定载质量" prop="vehicleTonnage">
+              <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量"></el-input>
+            </el-form-item>
+          </el-col>
+
         </el-row>
 
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="道路运输证号" prop="roadTransportCertificateNumber">
-              <el-input v-model="dataForm.roadTransportCertificateNumber" placeholder="道路运输证号"></el-input>
+
+          <el-col :span="24">
+            <el-form-item label="注册日期" prop="registerDate">
+              <el-date-picker type="date" placeholder="注册日期" v-model="dataForm.registerDate"
+                              style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="挂车牌照号" prop="trailerVehiclePlateNumber">
-              <el-input v-model="dataForm.trailerVehiclePlateNumber" placeholder="挂车牌照号"></el-input>
+
+          <el-col :span="24">
+            <el-form-item label="发证日期" prop="issueDate">
+
+              <el-date-picker type="date" placeholder="发证日期" v-model="dataForm.issueDate"
+                              style="width: 100%;"></el-date-picker>
+
             </el-form-item>
           </el-col>
+
+        </el-row>
+        <el-row>
+
+          <el-col :span="24">
+            <el-form-item label="车辆所有" prop="owner">
+              <!--              <el-input v-model="dataForm.owner" placeholder="所有人"></el-input>-->
+              <el-radio-group v-model="dataForm.owner" size="medium" style="width:100%" >
+                <el-radio label="公司" border>公司</el-radio>
+                <el-radio label="挂靠" border>挂靠</el-radio>
+                <el-radio label="其他" border>其他</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="使用性质" prop="useCharacter">
+              <el-radio-group v-model="dataForm.useCharacter" size="medium">
+                <el-radio label="营运"  border>营运</el-radio>
+                <el-radio label="非营运"  border>非营运</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+
         </el-row>
 
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+              <el-input  type="textarea" v-model="dataForm.remark" placeholder="备注"></el-input>
             </el-form-item>
           </el-col>
+
         </el-row>
         <!--文件上传-->
         <el-divider content-position="left" style="font-weight: bold; font-size: 22px">证件上传</el-divider>
@@ -142,20 +186,6 @@ import { uploadImage } from '@/api/api'
 
 export default {
   data () {
-    const validateVehicleNumber = (rule, value, callback) => {
-      if (!this.dataForm.vehicleNumber && !/\S/.test(value)) {
-        callback(new Error('车牌号不能为空'))
-      } else {
-        callback()
-      }
-    }
-    const validateOwner = (rule, value, callback) => {
-      if (!this.dataForm.owner && !/\S/.test(value)) {
-        callback(new Error('所有人不能为空'))
-      } else {
-        callback()
-      }
-    }
     return {
       fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
       imageURL: '',
@@ -187,10 +217,10 @@ export default {
       },
       dataRule: {
         vehicleNumber: [
-          { validator: validateVehicleNumber, message: '车牌号不能为空', trigger: 'blur' }
+          { required: true, message: '车牌号不能为空', trigger: 'blur' }
         ],
         owner: [
-          { validator: validateOwner, message: '所有人不能为空', trigger: 'blur' }
+          { required: true, message: '所有人不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -247,32 +277,13 @@ export default {
       this.visible = true
     },
     // 表单提交
-    dataFormSubmit () {
-      this.$refs.dataForm.validate((valid) => {
+    dataFormSubmit (dataForm) {
+      this.$refs[dataForm].validate((valid) => {
         if (valid) {
           this.$http({
             url: this.$http.addUrl(`/internetfreight/internetCars${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
             method: `${!this.dataForm.id ? 'post' : 'put'}`,
-            data: this.$http.addData({
-              id: this.dataForm.id || undefined,
-              vehicleNumber: this.dataForm.vehicleNumber,
-              vehiclePlateColorCode: this.dataForm.vehiclePlateColorCode,
-              vehicleType: this.dataForm.vehicleType,
-              owner: this.dataForm.owner,
-              useCharacter: this.dataForm.useCharacter,
-              vin: this.dataForm.vin,
-              issuingOrganizations: this.dataForm.issuingOrganizations,
-              registerDate: this.dataForm.registerDate,
-              issueDate: this.dataForm.issueDate,
-              vehicleEnergyType: this.dataForm.vehicleEnergyType,
-              vehicleTonnage: this.dataForm.vehicleTonnage,
-              grossMass: this.dataForm.grossMass,
-              roadTransportCertificateNumber: this.dataForm.roadTransportCertificateNumber,
-              trailerVehiclePlateNumber: this.dataForm.trailerVehiclePlateNumber,
-              drivingPermit: this.drivingPermit,
-              driverLicense: this.driverLicense,
-              remark: this.dataForm.remark
-            })
+            data: this.dataForm
           }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({

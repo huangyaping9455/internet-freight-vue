@@ -89,9 +89,6 @@ export default {
         ],
         resource: [
           { required: true, message: '请选择活动资源', trigger: 'change' }
-        ],
-        desc: [
-          { required: true, message: '请填写活动形式', trigger: 'blur' }
         ]
       }
     }
