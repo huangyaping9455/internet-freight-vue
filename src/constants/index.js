@@ -6,7 +6,7 @@ import Enum from 'vue-enum'
  *
  * 枚举常量
  */
-const enumConstants = {
+const enumInfo = {
 
   /**
    * 车牌颜色代码
@@ -25,4 +25,4 @@ const enumConstants = {
   }
 }
 
-Vue.use(Enum, { enumConstants })
+Vue.use(Enum, { enumInfo })

@@ -16,7 +16,8 @@ module.exports = {
     proxyTable: devEnv.OPEN_PROXY === false ? {} : {
       '/proxyApi': {
         target: 'http://gateway.api.com',
-        // secure: false,  // 如果是https接口，需要配置这个参数
+        logLevel: "debug",//开发时使用日志级别
+        //secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true,
         pathRewrite: {
           '^/proxyApi': ''

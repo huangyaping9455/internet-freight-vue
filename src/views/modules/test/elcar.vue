@@ -5,11 +5,10 @@
     </el-form-item>
     <el-form-item label="活动区域" prop="region">
       <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-        <el-option  v-for="(item,index) in ruleForm.vehiclePlateColorCodeList"
+        <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehiclePlateColorCode')"
                     :label="item.desc"
                     :key="index"
                     :value="item.value">
-
         </el-option>
 
       </el-select>
@@ -56,7 +55,7 @@
 </template>
 
 <script>
-import '../../../constants/index'
+import '@/constants/index'
 export default {
   data () {
     return {
@@ -97,9 +96,13 @@ export default {
       }
     }
   },
+  created () {
+    console.log(this.$enum.getValueDescList('vehiclePlateColorCode'))
+  },
   methods: {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
+        console.log(this.ruleForm)
         if (valid) {
           alert('submit!')
           console.log(formName)
