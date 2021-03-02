@@ -176,7 +176,7 @@
 
 <script>
 import AddOrUpdate from './car-add-or-update'
-import { getCarPage } from '@/api/api'
+import { getCarPage, deleteCar } from '@/api/api'
 
 export default {
   data () {
@@ -207,7 +207,7 @@ export default {
         page: this.pageIndex,
         vehicleNumber: this.dataForm.vehicleNumber,
         owner: this.dataForm.owner,
-        // 'organizationId': this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organization.id,
         size: this.pageSize
       }
       await getCarPage(params).then(({ data }) => {
@@ -285,11 +285,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetCars/${id}`),
-          method: 'delete',
-          data: this.$http.addData()
-        }).then(({ data }) => {
+        deleteCar(id).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

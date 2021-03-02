@@ -20,10 +20,10 @@
           <el-col :span="12">
             <el-form-item label="车辆类型" prop="vehicleType">
               <el-select v-model="dataForm.vehicleType" filterable clearable placeholder="车辆类型" style="width: 100%">
-                <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehicleType')"
-                            :label="item.desc"
-                            :key="index"
-                            :value="item.value">
+                <el-option v-for="(item,index) in this.$enum.getValueDescList('vehicleType')"
+                           :label="item.desc"
+                           :key="index"
+                           :value="item.value">
                 </el-option>
 
               </el-select>
@@ -42,11 +42,12 @@
 
           <el-col :span="12">
             <el-form-item label="车牌颜色" prop="vehiclePlateColorCode">
-              <el-select v-model="dataForm.vehiclePlateColorCode" filterable clearable placeholder="请选车牌颜色" style="width: 100%">
-                <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehiclePlateColorCode')"
-                            :label="item.desc"
-                            :key="index"
-                            :value="item.value">
+              <el-select v-model="dataForm.vehiclePlateColorCode" filterable clearable placeholder="请选车牌颜色"
+                         style="width: 100%">
+                <el-option v-for="(item,index) in this.$enum.getValueDescList('vehiclePlateColorCode')"
+                           :label="item.desc"
+                           :key="index"
+                           :value="item.value">
                 </el-option>
 
               </el-select>
@@ -64,12 +65,12 @@
 
           <el-col :span="12">
             <el-form-item label="能源类型" prop="vehicleEnergyType">
-              <!--              <el-input v-model="dataForm.vehicleEnergyType" placeholder="车辆能源类型"></el-input>-->
-              <el-select v-model="dataForm.vehicleEnergyType" filterable clearable placeholder="车辆能源类型" style="width: 100%">
-                <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehicleEnergyType')"
-                            :label="item.desc"
-                            :key="index"
-                            :value="item.value">
+              <el-select v-model="dataForm.vehicleEnergyType" filterable clearable placeholder="车辆能源类型"
+                         style="width: 100%">
+                <el-option v-for="(item,index) in this.$enum.getValueDescList('vehicleEnergyType')"
+                           :label="item.desc"
+                           :key="index"
+                           :value="item.value">
                 </el-option>
 
               </el-select>
@@ -132,7 +133,7 @@
           <el-col :span="24">
             <el-form-item label="车辆所有" prop="owner">
               <!--              <el-input v-model="dataForm.owner" placeholder="所有人"></el-input>-->
-              <el-radio-group v-model="dataForm.owner" size="medium" style="width:100%" >
+              <el-radio-group v-model="dataForm.owner" size="medium" style="width:100%">
                 <el-radio label="公司" border>公司</el-radio>
                 <el-radio label="挂靠" border>挂靠</el-radio>
                 <el-radio label="其他" border>其他</el-radio>
@@ -142,8 +143,8 @@
           <el-col :span="24">
             <el-form-item label="使用性质" prop="useCharacter">
               <el-radio-group v-model="dataForm.useCharacter" size="medium">
-                <el-radio label="营运"  border>营运</el-radio>
-                <el-radio label="非营运"  border>非营运</el-radio>
+                <el-radio label="营运" border>营运</el-radio>
+                <el-radio label="非营运" border>非营运</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -153,7 +154,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="备注" prop="remark">
-              <el-input  type="textarea" v-model="dataForm.remark" placeholder="备注"></el-input>
+              <el-input type="textarea" v-model="dataForm.remark" placeholder="备注"></el-input>
             </el-form-item>
           </el-col>
 
@@ -162,12 +163,15 @@
         <el-divider content-position="left" style="font-weight: bold; font-size: 22px">证件上传</el-divider>
 
         <el-upload
-          class="upload-demo"
-          action="http://file.zhwlt.cn/fileFastDFS/upload"
-
+          action=""
+          name="file"
+          ref="upload"
+          :on-remove="handleRemove"
+          :http-request="uploadImage"
           :file-list="fileList"
           list-type="picture-card">
           <i slot="default" class="el-icon-plus"></i>
+
         </el-upload>
 
       </el-form>
@@ -182,15 +186,12 @@
   </el-drawer>
 </template>
 <script>
-import { uploadImage } from '@/api/api'
+import { uploadImage, getCar } from '@/api/api'
 
 export default {
   data () {
     return {
       fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
-      imageURL: '',
-      drivingPermit: '',
-      driverLicense: '',
       limit: 1,
       fileList: [],
       uploadData: {},
@@ -198,12 +199,13 @@ export default {
       // roleList: [],
       dataForm: {
         id: 0,
+        organizationId: this.$store.state.user.organization.id,
         vehicleNumber: '',
         vehiclePlateColorCode: '',
         vehicleType: '',
         owner: '',
         useCharacter: '',
-        VIN: '',
+        vin: '',
         issuingOrganizations: '',
         registerDate: '',
         issueDate: '',
@@ -213,7 +215,8 @@ export default {
         roadTransportCertificateNumber: '',
         trailerVehiclePlateNumber: '',
         remark: '',
-        delete: 1
+        delete: 1,
+        carAttachmentURLs: []
       },
       dataRule: {
         vehicleNumber: [
@@ -231,33 +234,33 @@ export default {
     uploadImage (param) {
       const formData = new FormData()
       formData.append(param.filename, param.file)
-
       uploadImage(formData).then(({ data }) => {
         console.log('==---' + data)
         if (data || data.code === 0) {
-          console.log(data.data)
-          this.drivingPermit = data.data
-
-          this.$message.success('上传成功')
+          this.dataForm.carAttachmentURLs.push(data.data)
+          this.$message.success('添加成功')
         }
       })
     },
+    handlePictureCardPreview (file) {
+      this.drivingPermit = file.url
+      this.visible = true
+    },
+    handleRemove (file) {
+      alert(JSON.stringify(file))
+    },
 
-    init (id) {
+    async  init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
-        this.$http({
-          url: this.$http.addUrl('/internetfreight/internetCars/getOneById'),
-          method: 'get',
-          params: this.$http.addParams({ id: this.dataForm.id })
-        }).then(({ data }) => {
+        await getCar(this.dataForm.id).then(({ data }) => {
           if (data && data.code === 0) {
             this.dataForm.vehicleNumber = data.data.vehicleNumber
             this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode
             this.dataForm.vehicleType = data.data.vehicleType
             this.dataForm.owner = data.data.owner
             this.dataForm.useCharacter = data.data.useCharacter
-            this.dataForm.VIN = data.data.VIN
+            this.dataForm.vin = data.data.vin
             this.dataForm.issuingOrganizations = data.data.issuingOrganizations
             this.dataForm.registerDate = data.data.registerDate
             this.dataForm.issueDate = data.data.issueDate
@@ -266,7 +269,7 @@ export default {
             this.dataForm.grossMass = data.data.grossMass
             this.dataForm.roadTransportCertificateNumber = data.data.roadTransportCertificateNumber
             this.dataForm.trailerVehiclePlateNumber = data.data.trailerVehiclePlateNumber
-            this.imageURL = 'http://139.155.138.18:8899/' + data.data.drivingPermit
+            this.dataForm.carAttachmentURLs = data.data.carAttachmentURLs
             this.drivingPermit = data.data.drivingPermit
             this.driverLicense = data.data.driverLicense
             this.dataForm.remark = data.data.remark

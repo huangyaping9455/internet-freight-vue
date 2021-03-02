@@ -10,6 +10,7 @@ import {
   putAction,
   uploadImageAction
 } from '@/api/manage'
+import id from 'element-ui/src/locale/lang/id'
 
 /* ==================uaa系统模块========================== */
 const uaaModel = '/uaa'
@@ -39,6 +40,8 @@ const getOrganizationList = (params) => getAction(`${uaaModel}/sys/organization/
 const internetFreightModel = '/internetfreight'
 // 车辆管理
 const getCarPage = (params) => getAction(`${internetFreightModel}/internetCars/getPageByCondition`, params)
+const getCar = (id) => getAction(`${internetFreightModel}/internetCars/${id}`)
+const deleteCar = (id) => deleteAction(`${internetFreightModel}/internetCars/${id}`)
 // 订单管理
 const getOrderPage = (params) => getAction(`${internetFreightModel}/internetOrders/getPageByCondition`, params)
 // 货物管理
@@ -71,6 +74,8 @@ export {
   getSmsCode,
   mobileLogin,
   getCarPage,
+  getCar,
+  deleteCar,
   getOrderPage,
   getGoodsPage,
   getDriverPage,

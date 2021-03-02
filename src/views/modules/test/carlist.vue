@@ -206,16 +206,16 @@ export default {
   },
   methods: {
     // 获取数据列表
-    getDataList () {
+    async getDataList () {
       this.dataListLoading = true
       const params = {
         page: this.pageIndex,
         vehicleNumber: this.dataForm.vehicleNumber,
         owner: this.dataForm.owner,
-        // 'organizationId': this.$store.state.user.organizationId
+        organizationId: this.$store.state.user.organization.id,
         size: this.pageSize
       }
-      getCarPage(params).then(({ data }) => {
+      await getCarPage(params).then(({ data }) => {
         if (data && data.code === 0) {
           const { data: { content, totalElements } } = data
           this.totalPage = totalElements
