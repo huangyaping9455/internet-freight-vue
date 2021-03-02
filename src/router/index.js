@@ -86,7 +86,10 @@ router.beforeEach((to, from, next) => {
         sessionStorage.setItem('permissions', JSON.stringify(data.data.permissions || '[]'))
         next({ ...to, replace: true })
       } else {
-        clearLoginInfo()
+        if (data.error === 'unauthorized') {
+          clearLoginInfo()
+          router.push({ name: 'login' })
+        }
         sessionStorage.setItem('menuList', '[]')
         sessionStorage.setItem('permissions', '[]')
         next()

@@ -3,7 +3,7 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :destroy-on-close="true"
     :before-close="handleClose"
-    size="40%"
+    size="50%"
     :visible.sync="visible">
     <div class="demo-drawer__content">
       <el-form :model="dataForm"
@@ -11,13 +11,13 @@
                ref="dataForm" @keyup.enter.native="dataFormSubmit()"
                label-width="120px">
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="车辆牌照" prop="vehicleNumber">
               <el-input v-model="dataForm.vehicleNumber" placeholder="车辆牌照号"></el-input>
             </el-form-item>
           </el-col>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="车辆类型" prop="vehicleType">
               <el-select v-model="dataForm.vehicleType" filterable clearable placeholder="车辆类型" style="width: 100%">
                 <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehicleType')"
@@ -34,13 +34,13 @@
 
         <el-row>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="挂车牌照" prop="trailerVehiclePlateNumber">
               <el-input v-model="dataForm.trailerVehiclePlateNumber" placeholder="挂车牌照号"></el-input>
             </el-form-item>
           </el-col>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="车牌颜色" prop="vehiclePlateColorCode">
               <el-select v-model="dataForm.vehiclePlateColorCode" filterable clearable placeholder="请选车牌颜色" style="width: 100%">
                 <el-option  v-for="(item,index) in this.$enum.getValueDescList('vehiclePlateColorCode')"
@@ -56,13 +56,13 @@
         </el-row>
 
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="识别代码" prop="vin">
               <el-input v-model="dataForm.vin" placeholder="车辆识别代码"></el-input>
             </el-form-item>
           </el-col>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="能源类型" prop="vehicleEnergyType">
               <!--              <el-input v-model="dataForm.vehicleEnergyType" placeholder="车辆能源类型"></el-input>-->
               <el-select v-model="dataForm.vehicleEnergyType" filterable clearable placeholder="车辆能源类型" style="width: 100%">
@@ -79,12 +79,12 @@
         </el-row>
 
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="发证机关" prop="issuingOrganizations">
               <el-input v-model="dataForm.issuingOrganizations" placeholder="发证机关"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="道路运输证" prop="roadTransportCertificateNumber">
               <el-input v-model="dataForm.roadTransportCertificateNumber" placeholder="道路运输证号"></el-input>
             </el-form-item>
@@ -94,13 +94,13 @@
 
         <el-row>
 
-          <el-col :span="24">
-            <el-form-item label="总质量" prop="grossMass">
+          <el-col :span="12">
+            <el-form-item label="总质量(吨)" prop="grossMass">
               <el-input v-model="dataForm.grossMass" placeholder="总质量"></el-input>
             </el-form-item>
           </el-col>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="核定载质量" prop="vehicleTonnage">
               <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量"></el-input>
             </el-form-item>
@@ -110,14 +110,14 @@
 
         <el-row>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="注册日期" prop="registerDate">
               <el-date-picker type="date" placeholder="注册日期" v-model="dataForm.registerDate"
                               style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
 
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="发证日期" prop="issueDate">
 
               <el-date-picker type="date" placeholder="发证日期" v-model="dataForm.issueDate"
@@ -163,7 +163,7 @@
 
         <el-upload
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://file.zhwlt.cn/fileFastDFS/upload"
 
           :file-list="fileList"
           list-type="picture-card">
