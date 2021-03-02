@@ -34,21 +34,39 @@
         header-align="center"
         align="center"
         min-width="150"
-        label="车辆牌照号">
+        label="车辆牌照">
+
       </el-table-column>
       <el-table-column
         prop="vehiclePlateColorCode"
         header-align="center"
         align="center"
-        width="150"
-        label="车牌颜色代码">
+        width="120"
+        label="车牌颜色">
+        <template slot-scope="scope">
+          <el-tag type="danger" round>{{ $enum.getDescByValue("vehiclePlateColorCode",scope.row.vehiclePlateColorCode )}}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="vehicleType"
         header-align="center"
         align="center"
+        width="130"
+        label="车辆类型">
+        <template slot-scope="scope">
+          <el-tag type="danger" round>{{ $enum.getDescByValue("vehicleType",scope.row.vehicleType )}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="vehicleEnergyType"
+        header-align="center"
+        align="center"
         width="150"
-        label="车辆类型代码">
+        :show-overflow-tooltip="true"
+        label="车辆能源类型">
+        <template slot-scope="scope">
+          <el-tag type="danger" round>{{ $enum.getDescByValue("vehicleEnergyType",scope.row.vehicleEnergyType )}}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="owner"
@@ -96,14 +114,7 @@
         :show-overflow-tooltip="true"
         label="发证日期">
       </el-table-column>
-      <el-table-column
-        prop="vehicleEnergyType"
-        header-align="center"
-        align="center"
-        width="150"
-        :show-overflow-tooltip="true"
-        label="车辆能源类型">
-      </el-table-column>
+
       <el-table-column
         prop="vehicleTonnage"
         header-align="center"

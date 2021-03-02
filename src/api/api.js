@@ -60,6 +60,7 @@ const addFinancial = (params, methodN) => httpAction(`${internetFreightModel}/fi
 const fileUploadModel = '/filesystem'
 // 文件上传
 const uploadImage = (data) => uploadImageAction(`${fileUploadModel}/fileFastDFS/upload`, data)
+const deleteImage = (data) => deleteAction(`${fileUploadModel}/fileFastDFS/delete`, data)
 
 export {
   getMenuList,
@@ -83,6 +84,7 @@ export {
   addDriverLicense,
   getFinancialPage,
   uploadImage,
+  deleteImage,
   addFinancial,
   getUserInfo,
   getRoleListByCondition

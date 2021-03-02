@@ -166,6 +166,7 @@
           action=""
           name="file"
           ref="upload"
+          :on-preview="handlePictureCardPreview"  点击文件列表中已上传的文件时的钩子
           :on-remove="handleRemove"
           :http-request="uploadImage"
           :file-list="fileList"
@@ -173,7 +174,9 @@
           <i slot="default" class="el-icon-plus"></i>
 
         </el-upload>
-
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
       </el-form>
     </div>
     <el-divider content-position="left"></el-divider>
@@ -186,7 +189,7 @@
   </el-drawer>
 </template>
 <script>
-import { uploadImage, getCar } from '@/api/api'
+import { uploadImage, deleteImage, getCar } from '@/api/api'
 
 export default {
   data () {
@@ -196,7 +199,8 @@ export default {
       fileList: [],
       uploadData: {},
       visible: false,
-      // roleList: [],
+      dialogImageUrl: '',
+      dialogVisible: false,
       dataForm: {
         id: 0,
         organizationId: this.$store.state.user.organization.id,
@@ -228,29 +232,34 @@ export default {
       }
     }
   },
-
   methods: {
 
     uploadImage (param) {
       const formData = new FormData()
       formData.append(param.filename, param.file)
       uploadImage(formData).then(({ data }) => {
-        console.log('==---' + data)
         if (data || data.code === 0) {
           this.dataForm.carAttachmentURLs.push(data.data)
-          this.$message.success('添加成功')
+          this.$message.success('添加成功,请保存更新')
         }
       })
     },
+
     handlePictureCardPreview (file) {
-      this.drivingPermit = file.url
-      this.visible = true
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
     handleRemove (file) {
-      alert(JSON.stringify(file))
+      const data = { groupName: file.name, fileName: file.url.split('group1/')[1] }
+      deleteImage(data).then(({ data }) => {
+        if (data || data === 0) {
+          this.$message.success('移除成功,请保存更新')
+          this.dataForm.carAttachmentURLs = this.dataForm.carAttachmentURLs.filter(item => !item.includes(file.url.split('group1/')[1]))
+        }
+      })
     },
 
-    async  init (id) {
+    async init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
         await getCar(this.dataForm.id).then(({ data }) => {
@@ -269,7 +278,7 @@ export default {
             this.dataForm.grossMass = data.data.grossMass
             this.dataForm.roadTransportCertificateNumber = data.data.roadTransportCertificateNumber
             this.dataForm.trailerVehiclePlateNumber = data.data.trailerVehiclePlateNumber
-            this.dataForm.carAttachmentURLs = data.data.carAttachmentURLs
+            this.fileList = data.data.carAttachmentURLs.map(item => { return { name: item.split('/')[0], url: window.SITE_CONFIG.baseUploadUrl + item } })
             this.drivingPermit = data.data.drivingPermit
             this.driverLicense = data.data.driverLicense
             this.dataForm.remark = data.data.remark

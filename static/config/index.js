@@ -2,11 +2,12 @@
  * 开发环境
  */
 
-;(function () {
+(function () {
   window.SITE_CONFIG = {}
 
   // api接口请求地址
   window.SITE_CONFIG.baseUrl = 'http://gateway.api.com'
+  window.SITE_CONFIG.baseUploadUrl = 'http://file.zhwlt.cn/'
 
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG.domain = './' // 域名
