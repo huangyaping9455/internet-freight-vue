@@ -87,7 +87,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="道路运输证" prop="roadTransportCertificateNumber">
-              <el-input v-model="dataForm.roadTransportCertificateNumber" placeholder="道路运输证号"></el-input>
+              <el-input type="number" v-model="dataForm.roadTransportCertificateNumber" placeholder="道路运输证号"></el-input>
             </el-form-item>
           </el-col>
 
@@ -97,13 +97,13 @@
 
           <el-col :span="12">
             <el-form-item label="总质量(吨)" prop="grossMass">
-              <el-input v-model="dataForm.grossMass" placeholder="总质量单位(吨)"></el-input>
+              <el-input type="number" v-model="dataForm.grossMass" placeholder="总质量单位(吨)"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="核定载质量(吨)" prop="vehicleTonnage">
-              <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量单位(吨)"></el-input>
+              <el-input type="number" v-model="dataForm.vehicleTonnage" placeholder="核定载质量单位(吨)"></el-input>
             </el-form-item>
           </el-col>
 
