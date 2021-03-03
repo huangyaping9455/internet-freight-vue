@@ -16,8 +16,8 @@ import id from 'element-ui/src/locale/lang/id'
 const uaaModel = '/uaa'
 // 登陆
 const getImageCode = (params) => getActionImageCode(`${uaaModel}/code/image`, params)// 获取图片验证码
-const getSmsCode = (params) => getActionSmsCode(`${uaaModel}/code/sms`, params)// 获取图片验证码
-const passwordLogin = (params) => loginAction(`${uaaModel}/authentication/form`, params)// 登陆
+const getSmsCode = (params) => getActionSmsCode(`${uaaModel}/code/sms`, params)// 获取短信验证码
+const passwordLogin = (params) => loginAction(`${uaaModel}/authentication/form`, params)// 密码登陆
 const mobileLogin = (params) => loginAction(`${uaaModel}/authentication/mobile`, params)// 手机号登陆
 
 // 菜单管理
@@ -42,6 +42,9 @@ const internetFreightModel = '/internetfreight'
 const getCarPage = (params) => getAction(`${internetFreightModel}/internetCars/getPageByCondition`, params)
 const getCar = (id) => getAction(`${internetFreightModel}/internetCars/${id}`)
 const deleteCar = (id) => deleteAction(`${internetFreightModel}/internetCars/${id}`)
+const deleteCars = (ids) => deleteAction(`${internetFreightModel}/internetCars/${ids}`)
+const updateCar = (id, data) => putAction(`${internetFreightModel}/internetCars/${id}`, data)
+const addCar = (data) => postAction(`${internetFreightModel}/internetCars`, data)
 // 订单管理
 const getOrderPage = (params) => getAction(`${internetFreightModel}/internetOrders/getPageByCondition`, params)
 // 货物管理
@@ -75,8 +78,11 @@ export {
   getSmsCode,
   mobileLogin,
   getCarPage,
+  updateCar,
+  addCar,
   getCar,
   deleteCar,
+  deleteCars,
   getOrderPage,
   getGoodsPage,
   getDriverPage,

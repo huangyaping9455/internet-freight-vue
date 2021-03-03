@@ -44,7 +44,7 @@
         width="120"
         label="车牌颜色">
         <template slot-scope="scope">
-          <el-tag type="danger" round>{{ $enum.getDescByValue("vehiclePlateColorCode",scope.row.vehiclePlateColorCode )}}</el-tag>
+      {{ $enum.getDescByValue("vehiclePlateColorCode",scope.row.vehiclePlateColorCode )}}
         </template>
       </el-table-column>
       <el-table-column
@@ -54,7 +54,7 @@
         width="130"
         label="车辆类型">
         <template slot-scope="scope">
-          <el-tag type="danger" round>{{ $enum.getDescByValue("vehicleType",scope.row.vehicleType )}}</el-tag>
+         {{ $enum.getDescByValue("vehicleType",scope.row.vehicleType )}}
         </template>
       </el-table-column>
       <el-table-column
@@ -65,7 +65,7 @@
         :show-overflow-tooltip="true"
         label="车辆能源类型">
         <template slot-scope="scope">
-          <el-tag type="danger" round>{{ $enum.getDescByValue("vehicleEnergyType",scope.row.vehicleEnergyType )}}</el-tag>
+         {{ $enum.getDescByValue("vehicleEnergyType",scope.row.vehicleEnergyType )}}
         </template>
       </el-table-column>
       <el-table-column
@@ -187,7 +187,7 @@
 
 <script>
 import AddOrUpdate from './car-add-or-update'
-import { getCarPage, deleteCar } from '@/api/api'
+import { getCarPage, deleteCar, deleteCars } from '@/api/api'
 
 export default {
   data () {
@@ -262,16 +262,14 @@ export default {
         : this.dataListSelections.map(item => {
           return item.id
         })
-      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[车牌为:${this.dataListSelections.map(item => {
+        return item.vehicleNumber
+      })}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http({
-          url: this.$http.addUrl(`/internetfreight/internetCars/${ids}`),
-          method: 'delete',
-          data: this.$http.addParams()
-        }).then(({ data }) => {
+        deleteCars(ids).then(({ data }) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',

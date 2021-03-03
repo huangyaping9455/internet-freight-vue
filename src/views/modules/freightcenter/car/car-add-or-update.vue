@@ -97,13 +97,13 @@
 
           <el-col :span="12">
             <el-form-item label="总质量(吨)" prop="grossMass">
-              <el-input v-model="dataForm.grossMass" placeholder="总质量"></el-input>
+              <el-input v-model="dataForm.grossMass" placeholder="总质量单位(吨)"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="核定载质量" prop="vehicleTonnage">
-              <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量"></el-input>
+            <el-form-item label="核定载质量(吨)" prop="vehicleTonnage">
+              <el-input v-model="dataForm.vehicleTonnage" placeholder="核定载质量单位(吨)"></el-input>
             </el-form-item>
           </el-col>
 
@@ -166,16 +166,15 @@
           action=""
           name="file"
           ref="upload"
-          :on-preview="handlePictureCardPreview"  点击文件列表中已上传的文件时的钩子
+          :on-preview="handlePictureCardPreview" 点击文件列表中已上传的文件时的钩子
           :on-remove="handleRemove"
           :http-request="uploadImage"
-          :file-list="fileList"
+          :file-list="dataForm.fileList"
           list-type="picture-card">
           <i slot="default" class="el-icon-plus"></i>
-
         </el-upload>
         <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogImageUrl" alt="">
+          <img width="100%" :src="dialogImageUrl">
         </el-dialog>
       </el-form>
     </div>
@@ -189,14 +188,14 @@
   </el-drawer>
 </template>
 <script>
-import { uploadImage, deleteImage, getCar } from '@/api/api'
+import { uploadImage, deleteImage, getCar, addCar, updateCar } from '@/api/api'
 
 export default {
   data () {
     return {
       fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
       limit: 1,
-      fileList: [],
+
       uploadData: {},
       visible: false,
       dialogImageUrl: '',
@@ -220,7 +219,8 @@ export default {
         trailerVehiclePlateNumber: '',
         remark: '',
         delete: 1,
-        carAttachmentURLs: []
+        carAttachmentURLs: [],
+        fileList: []
       },
       dataRule: {
         vehicleNumber: [
@@ -233,7 +233,6 @@ export default {
     }
   },
   methods: {
-
     uploadImage (param) {
       const formData = new FormData()
       formData.append(param.filename, param.file)
@@ -259,10 +258,10 @@ export default {
       })
     },
 
-    async init (id) {
+    init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
-        await getCar(this.dataForm.id).then(({ data }) => {
+        getCar(this.dataForm.id).then(({ data }) => {
           if (data && data.code === 0) {
             this.dataForm.vehicleNumber = data.data.vehicleNumber
             this.dataForm.vehiclePlateColorCode = data.data.vehiclePlateColorCode
@@ -278,7 +277,9 @@ export default {
             this.dataForm.grossMass = data.data.grossMass
             this.dataForm.roadTransportCertificateNumber = data.data.roadTransportCertificateNumber
             this.dataForm.trailerVehiclePlateNumber = data.data.trailerVehiclePlateNumber
-            this.fileList = data.data.carAttachmentURLs.map(item => { return { name: item.split('/')[0], url: window.SITE_CONFIG.baseUploadUrl + item } })
+            this.dataForm.fileList = data.data.carAttachmentURLs.map(item => {
+              return { name: item.split('/')[0], url: window.SITE_CONFIG.baseUploadUrl + item }
+            })
             this.drivingPermit = data.data.drivingPermit
             this.driverLicense = data.data.driverLicense
             this.dataForm.remark = data.data.remark
@@ -292,27 +293,27 @@ export default {
     dataFormSubmit (dataForm) {
       this.$refs[dataForm].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: this.$http.addUrl(`/internetfreight/internetCars${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
-            method: `${!this.dataForm.id ? 'post' : 'put'}`,
-            data: this.dataForm
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          }).finally(() => {
-
-          })
+          (!this.dataForm.id
+            ? addCar(this.dataForm)
+            : updateCar(this.dataForm.id, this.dataForm))
+            .then(({ data }) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.visible = false
+                    this.dataForm.fileList = []
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            }).finally(() => {
+              this.$refs.dataForm.resetFields()
+            })
         }
       })
     },
@@ -322,6 +323,7 @@ export default {
      */
     handleClose (done) {
       this.$refs.dataForm.resetFields()
+      this.dataForm.fileList = []
       done()
     },
     /**
@@ -330,6 +332,7 @@ export default {
      */
     cancel (dataForm) {
       this.$refs.dataForm.resetFields()
+      this.dataForm.fileList = []
       this.visible = false
     }
 
