@@ -121,7 +121,7 @@
         align="center"
         width="150"
         :show-overflow-tooltip="true"
-        label="核定载质量">
+        label="核定载质量(吨)">
       </el-table-column>
       <el-table-column
         prop="grossMass"
@@ -129,7 +129,7 @@
         align="center"
         width="150"
         :show-overflow-tooltip="true"
-        label="总质量">
+        label="总质量(吨)">
       </el-table-column>
       <el-table-column
         prop="roadTransportCertificateNumber"

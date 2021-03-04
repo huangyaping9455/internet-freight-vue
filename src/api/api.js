@@ -51,9 +51,9 @@ const getOrderPage = (params) => getAction(`${internetFreightModel}/internetOrde
 const getGoodsPage = (params) => getAction(`${internetFreightModel}/internetGoods/getPageByCondition`, params)
 
 // 驾驶员管理
+const getDriver = (id) => getAction(`${internetFreightModel}/internetDrivers/${id}`)
 const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) // 获取分页列表
 const addDriver = (params, methodN) => httpAction(`${internetFreightModel}/internetDrivers`, params, methodN) // 新增驾驶员
-const addDriverLicense = (params) => httpAction(`${internetFreightModel}/fileFastDFS/upload`, params) // 上传驾驶证
 
 // 资金流水管理
 const getFinancialPage = (params) => getAction(`${internetFreightModel}/financials/getPageByCondition`, params) // 获取分页列表
@@ -87,7 +87,7 @@ export {
   getGoodsPage,
   getDriverPage,
   addDriver,
-  addDriverLicense,
+  getDriver,
   getFinancialPage,
   uploadImage,
   deleteImage,

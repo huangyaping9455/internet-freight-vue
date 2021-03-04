@@ -195,8 +195,6 @@ export default {
     return {
       fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
       limit: 1,
-
-      uploadData: {},
       visible: false,
       dialogImageUrl: '',
       dialogVisible: false,
@@ -280,9 +278,8 @@ export default {
             this.dataForm.fileList = data.data.carAttachmentURLs.map(item => {
               return { name: item.split('/')[0], url: window.SITE_CONFIG.baseUploadUrl + item }
             })
-            this.drivingPermit = data.data.drivingPermit
-            this.driverLicense = data.data.driverLicense
             this.dataForm.remark = data.data.remark
+            this.dataForm.carAttachmentURLs = data.data.carAttachmentURLs
           }
         })
       }

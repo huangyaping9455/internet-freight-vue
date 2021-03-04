@@ -28,11 +28,26 @@
         width="50">
       </el-table-column>
       <el-table-column
+        fixed
         prop="driverName"
         header-align="center"
         align="center"
-        width="180"
+        width="120"
         label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="validPeriodFrom"
+        header-align="center"
+        align="center"
+        width="150"
+        label="驾驶证有效期自">
+      </el-table-column>
+      <el-table-column
+        prop="validPeriodTo"
+        header-align="center"
+        align="center"
+        width="150"
+        label="驾驶证有效期至">
       </el-table-column>
       <el-table-column
         prop="drivingLicense"
@@ -45,7 +60,7 @@
         prop="vehicleClass"
         header-align="center"
         align="center"
-        width="180"
+        width="110"
         label="准驾车型">
       </el-table-column>
       <el-table-column
@@ -55,20 +70,7 @@
         width="180"
         label="驾驶证发证机关">
       </el-table-column>
-      <el-table-column
-        prop="validPeriodFrom"
-        header-align="center"
-        align="center"
-        width="180"
-        label="驾驶证有效期自">
-      </el-table-column>
-      <el-table-column
-        prop="validPeriodTo"
-        header-align="center"
-        align="center"
-        width="180"
-        label="驾驶证有效期至">
-      </el-table-column>
+
       <el-table-column
         prop="qualificationCertificate"
         header-align="center"
@@ -80,7 +82,7 @@
         prop="telephone"
         header-align="center"
         align="center"
-        width="180"
+        width="130"
         label="手机号码">
       </el-table-column>
       <el-table-column
@@ -91,13 +93,7 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        prop="driverLicense"
-        header-align="center"
-        align="center"
-        width="180"
-        label="驾驶证">
-      </el-table-column>
-      <el-table-column
+        fixed="right"
         prop="updateTime"
         header-align="center"
         align="center"
@@ -140,7 +136,7 @@
 </template>
 
 <script>
-import AddOrUpdate from './internetdriver-add-or-update'
+import AddOrUpdate from './driver-add-or-update'
 import { getDriverPage } from '@/api/api'
 
 export default {
@@ -173,7 +169,6 @@ export default {
         page: this.pageIndex,
         size: this.pageSize,
         driverName: this.dataForm.driverName,
-        // 'telephone': this.dataForm.telephone,
         organizationId: this.$store.state.user.organization.id
       }
       getDriverPage(params).then(({ data }) => {
