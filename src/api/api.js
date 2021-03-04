@@ -53,7 +53,8 @@ const getGoodsPage = (params) => getAction(`${internetFreightModel}/internetGood
 // 驾驶员管理
 const getDriver = (id) => getAction(`${internetFreightModel}/internetDrivers/${id}`)
 const getDriverPage = (params) => getAction(`${internetFreightModel}/internetDrivers/getPageByCondition`, params) // 获取分页列表
-const addDriver = (params, methodN) => httpAction(`${internetFreightModel}/internetDrivers`, params, methodN) // 新增驾驶员
+const addDriver = (data) => postAction(`${internetFreightModel}/internetDrivers`, data) // 新增驾驶员
+const updateDriver = (id, data) => putAction(`${internetFreightModel}/internetDrivers/${id}`, data) // 新增驾驶员
 
 // 资金流水管理
 const getFinancialPage = (params) => getAction(`${internetFreightModel}/financials/getPageByCondition`, params) // 获取分页列表
@@ -88,6 +89,7 @@ export {
   getDriverPage,
   addDriver,
   getDriver,
+  updateDriver,
   getFinancialPage,
   uploadImage,
   deleteImage,

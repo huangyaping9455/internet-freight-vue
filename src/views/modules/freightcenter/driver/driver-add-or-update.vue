@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { uploadImage, deleteImage, getDriver } from '@/api/api'
+import { uploadImage, deleteImage, getDriver, addDriver, updateDriver } from '@/api/api'
 
 export default {
   data () {
@@ -148,7 +148,6 @@ export default {
             this.dataForm.telephone = data.data.telephone
             this.dataForm.remark = data.data.remark
             this.dataForm.driverAttachmentURLs = data.data.driverAttachmentURLs
-
             this.dataForm.fileList = data.data.driverAttachmentURLs.map(item => {
               return { name: item.split('/')[0], url: window.SITE_CONFIG.baseUploadUrl + item }
             })
@@ -162,27 +161,24 @@ export default {
     dataFormSubmit (dataForm) {
       this.$refs[dataForm].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: this.$http.addUrl(`/internetfreight/internetDrivers${!this.dataForm.id ? '' : '/' + this.dataForm.id}`),
-            method: `${!this.dataForm.id ? 'post' : 'put'}`,
-            data: this.dataForm
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          }).finally(() => {
-            this.$refs.dataForm.resetFields()
-          })
+          (!this.dataForm.id ? addDriver(this.dataForm) : updateDriver(this.dataForm.id, this.dataForm))
+            .then(({ data }) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            }).finally(() => {
+              this.$refs.dataForm.resetFields()
+            })
         }
       })
     },
