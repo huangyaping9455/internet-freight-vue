@@ -8,7 +8,7 @@
         <span>{{ userName }}</span>
       </el-form-item>
       <el-form-item label="原密码" prop="password">
-        <el-input type="password" v-model="dataForm.password"></el-input>
+        <el-input type="password" v-model="dataForm.oldPassword"></el-input>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword">
         <el-input type="password" v-model="dataForm.newPassword"></el-input>
@@ -26,6 +26,7 @@
 
 <script>
 import { clearLoginInfo } from '@/utils'
+import { changePassword } from '@/api/api'
 export default {
   data () {
     const validateConfirmPassword = (rule, value, callback) => {
@@ -38,12 +39,12 @@ export default {
     return {
       visible: false,
       dataForm: {
-        password: '',
+        oldPassword: '',
         newPassword: '',
         confirmPassword: ''
       },
       dataRule: {
-        password: [
+        oldPassword: [
           { required: true, message: '原密码不能为空', trigger: 'blur' }
         ],
         newPassword: [
@@ -77,14 +78,7 @@ export default {
     dataFormSubmit () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          this.$http({
-            url: this.$http.addUrl('/sys/user/password'),
-            method: 'post',
-            data: this.$http.addData({
-              password: this.dataForm.password,
-              newPassword: this.dataForm.newPassword
-            })
-          }).then(({ data }) => {
+          changePassword(this.$store.state.user.id, this.dataForm).then(({ data }) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',

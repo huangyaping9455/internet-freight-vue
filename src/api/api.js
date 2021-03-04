@@ -10,7 +10,6 @@ import {
   putAction,
   uploadImageAction
 } from '@/api/manage'
-import id from 'element-ui/src/locale/lang/id'
 
 /* ==================uaa系统模块========================== */
 const uaaModel = '/uaa'
@@ -27,7 +26,8 @@ const getResourceList = (params) => getAction(`${uaaModel}/sys/resource/resource
 // 用户管理
 const getLoginUserInfo = (params) => getAction(`${uaaModel}/sys/admin/me`, params)
 const getAdminList = (params) => getAction(`${uaaModel}/sys/admin`, params)
-const getUserInfo = (id) => getAction(`/uaa/sys/admin/${id}`)
+const getUserInfo = (id) => getAction(`${uaaModel}/sys/admin/${id}`)
+const changePassword = (id, data) => postAction(`${uaaModel}/sys/admin/${id}/changePassword`, data)
 // 角色管理
 const getRoleList = (params) => getAction(`${uaaModel}/sys/role`, params)
 const getRoleListByCondition = (params) => getAction(`${uaaModel}/sys/role/getByCondition`, params)
@@ -72,6 +72,7 @@ export {
   passwordLogin,
   getLoginUserInfo,
   getAdminList,
+  changePassword,
   getRoleList,
   getResourceList,
   getRolePage,
