@@ -14,6 +14,20 @@
           <icon-svg name="zhedie"></icon-svg>
         </el-menu-item>
       </el-menu>
+
+      <el-menu
+        class="site-navbar__menu"
+        :default-active="toIndex()"
+        mode="horizontal"
+        @select="handleSelect">
+        <template v-for="item in items">
+          <el-menu-item :index="item.index" :key="item.index">
+            <template slot="title">
+              <span slot="title">{{ item.title }}</span>
+            </template>
+          </el-menu-item>
+        </template>
+      </el-menu>
       <el-menu
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
@@ -50,7 +64,7 @@
       </el-menu>
     </div>
     <!-- 弹窗, 修改密码 -->
-    <update-password v-if="updatePassowrdVisible" ref="updatePassowrd"></update-password>
+    <update-password v-if="updatePasswordVisible" ref="updatePassowrd"></update-password>
   </nav>
 </template>
 
@@ -60,7 +74,14 @@ import { clearLoginInfo } from '@/utils'
 export default {
   data () {
     return {
-      updatePassowrdVisible: false
+      updatePasswordVisible: false,
+      items: [ // 水平一级菜单栏的菜单
+        { index: 'Home', title: '首页' },
+        { index: 'test1', title: '一级菜单1' },
+        { index: 'test2', title: '一级菜单2' },
+        { index: 'test3', title: '一级菜单3' },
+        { index: 'permission', title: '管理员权限' }
+      ]
     }
   },
   components: {
@@ -87,9 +108,19 @@ export default {
     }
   },
   methods: {
+
+    // 根据路径绑定到对应的一级菜单，防止页面刷新重新跳回第一个
+    toIndex () {
+      return this.$route.path.split('/')[1]
+    },
+    // 切换菜单栏
+    handleSelect (index) {
+      this.$router.push('/' + index)
+    },
+
     // 修改密码
     updatePasswordHandle () {
-      this.updatePassowrdVisible = true
+      this.updatePasswordVisible = true
       this.$nextTick(() => {
         this.$refs.updatePassowrd.init()
       })

@@ -30,6 +30,19 @@ img {
   flex: 1;
 }
 
+
+.el-menu--horizontal>.el-menu-item {
+  float: left;
+  height: 60px;
+  line-height: 60px;
+  margin: 0;
+  font-size: 18px;
+  border-bottom: 2px solid transparent;
+  color: #080808 ;
+}
+
+
+
 .el-drawer__header{
   -webkit-box-align: center;
   align-items: center;
