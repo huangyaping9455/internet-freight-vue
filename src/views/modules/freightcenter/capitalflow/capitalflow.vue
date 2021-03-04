@@ -5,6 +5,12 @@
         <el-input v-model="dataForm.documentNumber" placeholder="单证号" clearable></el-input>
       </el-form-item>
       <el-form-item>
+        <el-input v-model="dataForm.carrier" placeholder="实际承运人名称" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.vehicleNumber" placeholder="车辆牌照号" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('post/admin/**')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('driver:internetdriver:delete')" type="danger" @click="deleteHandle()"
@@ -90,11 +96,11 @@
         label="托运单号">
       </el-table-column>
       <el-table-column
-        prop="shippingNoteNumber"
+        prop="serialNumber"
         header-align="center"
         align="center"
         width="180"
-        label="托运单号">
+        label="分段分单号">
       </el-table-column>
       <el-table-column
         prop="financiallist"
@@ -196,16 +202,20 @@
 
 <script>
 import AddOrUpdate from './capitalflow-add-or-update'
-import { getFinancialPage } from '@/api/api'
+import {getFinancialPage} from '@/api/api'
 
 export default {
-  data () {
+  data() {
     return {
       dataForm: {
-        documentNumber: ''
+        documentNumber: '',
+        carrier: '',
+        vehicleNumber: '',
+        organizationId: '',
+        isdelete: ''
       },
       dataList: [],
-      pageIndex: 0,
+      pageIndex: 1,
       pageSize: 20,
       totalPage: 0,
       dataListLoading: false,
@@ -216,7 +226,7 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated () {
+  activated() {
     this.getDataList()
   },
   methods: {
@@ -225,10 +235,12 @@ export default {
       this.dataListLoading = true
       const params = {
         page: this.pageIndex,
-        limit: this.pageSize,
+        size: this.pageSize,
         documentNumber: this.dataForm.documentNumber,
-        // 'telephone': this.dataForm.telephone,
-        organizationId: this.$store.state.user.organization.id
+        carrier: this.dataForm.carrier,
+        vehicleNumber: this.dataForm.vehicleNumber,
+        organizationId: this.$store.state.user.organization.id,
+        isdelete: this.dataForm.isdelete
       }
       getFinancialPage(params).then(({ data }) => {
         if (data && data.code === 0) {
@@ -243,29 +255,29 @@ export default {
       })
     },
     // 每页数
-    sizeChangeHandle (val) {
+    sizeChangeHandle(val) {
       this.pageSize = val
       this.pageIndex = 1
       this.getDataList()
     },
     // 当前页
-    currentChangeHandle (val) {
+    currentChangeHandle(val) {
       this.pageIndex = val
       this.getDataList()
     },
     // 多选
-    selectionChangeHandle (val) {
+    selectionChangeHandle(val) {
       this.dataListSelections = val
     },
     // 新增 / 修改
-    addOrUpdateHandle (id) {
+    addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
-    deleteHandle (id) {
+    deleteHandle(id) {
       const ids = id
         ? [id]
         : this.dataListSelections.map(item => {
@@ -280,7 +292,7 @@ export default {
           url: this.$http.addUrl(`/internetfreight/financials/${ids}`),
           method: 'delete',
           data: this.$http.addData()
-        }).then(({ data }) => {
+        }).then(({data}) => {
           if (data && data.code === 0) {
             this.$message({
               message: '操作成功',
