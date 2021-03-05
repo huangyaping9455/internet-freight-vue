@@ -49,6 +49,17 @@
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
+      <el-form-item label="备注" prop="testaa">
+        <el-cascader
+          filterable
+          clearable
+          :show-all-levels="false"
+          size="large"
+          :options="options"
+          v-model="selectedOptions"
+          @change="handleChange">
+        </el-cascader>
+      </el-form-item>
 
       <!--文件上传-->
       <el-divider content-position="left" style="font-weight: bold; font-size: 22px">证件上传</el-divider>
@@ -77,7 +88,7 @@
 
 <script>
 import { uploadImage, deleteImage, getDriver, addDriver, updateDriver } from '@/api/api'
-
+import { regionDataPlus, CodeToText } from 'element-china-area-data'
 export default {
   data () {
     return {
@@ -86,6 +97,8 @@ export default {
       visible: false,
       dialogImageUrl: '',
       dialogVisible: false,
+      options: regionDataPlus,
+      selectedOptions: [],
       dataForm: {
         id: 0,
         organizationId: this.$store.state.user.organization.id,
@@ -100,7 +113,8 @@ export default {
         remark: '',
         driverAttachmentURLs: [],
         fileList: [],
-        delete: 1
+        delete: 1,
+        testaa: []
       },
       dataRule: {
         driverName: [
@@ -133,6 +147,16 @@ export default {
   },
   methods: {
 
+    handleChange (value) {
+      console.log(value) // value值为区域码
+      console.log(value[value.length - 1]) // value值为区域码
+      // 用CodeToText转换成中文
+      console.log(CodeToText[value[0]])
+      console.log(CodeToText[value[value.length - 1]])
+      this.dataForm.testaa = [value[value.length - 1]]
+      console.log(this.selectedOptions)
+    },
+
     init (id) {
       this.dataForm.id = id || 0
       if (this.dataForm.id) {
@@ -147,6 +171,7 @@ export default {
             this.dataForm.qualificationCertificate = data.data.qualificationCertificate
             this.dataForm.telephone = data.data.telephone
             this.dataForm.remark = data.data.remark
+            this.selectedOptions = data.data.remark
             this.dataForm.driverAttachmentURLs = data.data.driverAttachmentURLs
             this.dataForm.fileList = data.data.driverAttachmentURLs.map(item => {
               return { name: item.split('/')[0], url: window.SITE_CONFIG.baseUploadUrl + item }

@@ -86,7 +86,7 @@ router.beforeEach((to, from, next) => {
         sessionStorage.setItem('permissions', JSON.stringify(data.data.permissions || '[]'))
         next({ ...to, replace: true })
       } else {
-        if (data.error === 'unauthorized') {
+        if (data.error === 'unauthorized' || 'invalid_token') {
           clearLoginInfo()
           router.push({ name: 'login' })
         }
@@ -96,7 +96,8 @@ router.beforeEach((to, from, next) => {
       }
     }).catch((error) => {
       const errMsg = `%c${error}`
-      if (errMsg.includes('401')) {
+
+      if (errMsg.includes('401' || 'invalid_token')) {
         clearLoginInfo()
         router.push({ name: 'login' })
         console.log(`%c${error} 请求菜单列表和权限失败，跳转至登录页！！`, 'color:blue')

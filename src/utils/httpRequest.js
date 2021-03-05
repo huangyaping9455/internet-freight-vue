@@ -71,7 +71,6 @@ http.addData = (data = {}, openDefultdata = false, contentType = 'json') => {
     t: new Date().getTime()
   }
   data = openDefultdata ? merge(defaults, data) : data
-  console.log(contentType)
   if (contentType === 'multipart/form-data') return data // 如果是文件类型不需要序列化
   return contentType === 'json' ? JSON.stringify(data) : qs.stringify(data)
 }
