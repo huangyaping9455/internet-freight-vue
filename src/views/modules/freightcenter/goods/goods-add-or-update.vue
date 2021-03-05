@@ -1,31 +1,69 @@
 <template>
-  <el-dialog
+  <el-drawer
     :title="!dataForm.id ? '新增' : '修改'"
-    :close-on-click-modal="false"
+    :destroy-on-close="true"
+    :before-close="handleClose"
+    size="50%"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="120px">
-      <el-form-item label="货物名称" prop="descriptionOfGoods">
-        <el-input v-model="dataForm.descriptionOfGoods" placeholder="货物名称"></el-input>
-      </el-form-item>
-      <el-form-item label="货物类型分类代码" prop="cargoTypeClassificationCode">
-        <el-input v-model="dataForm.cargoTypeClassificationCode" placeholder="货物类型分类代码"></el-input>
-      </el-form-item>
-      <el-form-item label="货物项毛重" prop="goodsItemGrossWeight">
-        <el-input v-model="dataForm.goodsItemGrossWeight" placeholder="货物项毛重"></el-input>
-      </el-form-item>
-      <el-form-item label="体积" prop="cube">
-        <el-input v-model="dataForm.cube" placeholder="体积"></el-input>
-      </el-form-item>
-      <el-form-item label="总件数" prop="totalNumberOfPackages">
-        <el-input v-model="dataForm.totalNumberOfPackages" placeholder="总件数"></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="货物名称" prop="descriptionOfGoods">
+            <el-input v-model="dataForm.descriptionOfGoods" placeholder="货物名称"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="货物类型" prop="cargoTypeClassificationCode">
+            <el-select v-model="dataForm.cargoTypeClassificationCode" filterable clearable placeholder="货物类型"
+                       style="width: 100%">
+              <el-option v-for="(item,index) in this.$enum.getValueDescList('cargoTypeClassificationType')"
+                         :label="item.desc"
+                         :key="index"
+                         :value="item.value">
+              </el-option>
+
+            </el-select>
+          </el-form-item>
+
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+
+          <el-form-item label="货物项毛重" prop="goodsItemGrossWeight">
+            <el-input v-model="dataForm.goodsItemGrossWeight" placeholder="货物项毛重(KG)"></el-input>
+          </el-form-item>
+
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="体积" prop="cube">
+            <el-input v-model="dataForm.cube" placeholder="体积/立方米(选填)"></el-input>
+          </el-form-item>
+
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+
+          <el-form-item label="总件数" prop="totalNumberOfPackages">
+            <el-input v-model="dataForm.totalNumberOfPackages" placeholder="总件数(选填)"></el-input>
+          </el-form-item>
+
+        </el-col>
+      </el-row>
+
     </el-form>
-    <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
-    </span>
-  </el-dialog>
+
+  </el-drawer>
 </template>
 
 <script>
@@ -61,6 +99,23 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * 关闭弹出抽屉
+     * @param done
+     */
+    handleClose (done) {
+      this.$refs.dataForm.resetFields()
+      done()
+    },
+    /**
+     * 取消
+     * @param dataForm
+     */
+    cancel (dataForm) {
+      this.$refs.dataForm.resetFields()
+      this.visible = false
+    },
     init (id) {
       this.dataForm.id = id || 0
 

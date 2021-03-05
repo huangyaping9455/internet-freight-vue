@@ -188,7 +188,33 @@ const enumInfo = {
     O_HYBRID: { value: 'O', desc: '混合动力' },
     Y_NOTHING: { value: 'Y', desc: '无' },
     Z_OTHER: { value: 'Z', desc: '其他' }
+  },
+
+  /**
+   * 货物类型
+   */
+  cargoTypeClassificationType: {
+    COAL_AND_PRODUCTS: { value: '0100', desc: '煤炭及制品' },
+    OIL_NATURAL_GAS_AND_PRODUCTS: { value: '0200', desc: '石油、天然气及制品' },
+    METAL_ORES: { value: '0300', desc: '金属矿石' },
+    StEEl: { value: '0400', desc: '钢铁' },
+    MINING_CONSTRUCTION_MATERIALS: { value: '0500', desc: '矿建材料' },
+    CEMENT: { value: '0600', desc: '水泥' },
+    WOOD: { value: '0700', desc: '木材' },
+    NON_METALLIC_ORE: { value: '0800', desc: '非金属矿石' },
+    FERTILIZERS_AND_PESTICIDES: { value: '0900', desc: '化肥及农药' },
+    SALT: { value: '1000', desc: '盐' },
+    FOOD: { value: '1100', desc: '粮食' },
+    MECHANICAL_EQUIPMENT_ELECTRICAL: { value: '1200', desc: '机械、设备、电器' },
+    LIGHT_INDUSTRIAL_RAW_MATERIALS_AND_PRODUCTS: { value: '1300', desc: '轻工原料及制品' },
+    NON_FERROUS_METALS: { value: '1400', desc: '有色金属' },
+    LIGHT_INDUSTRY_PHARMACEUTICAL_PRODUCTS: { value: '1500', desc: '轻工医药产品' },
+    FRESH_AGRICULTURAL_PRODUCTS: { value: '1601', desc: '鲜活农产品' },
+    REFRIGERATED_FROZEN_GOODS: { value: '1602', desc: '冷藏冷冻货物' },
+    COMMODITY_CAR: { value: '1701', desc: '商品汽车' },
+    OTHER: { value: '1700', desc: '其他' }
   }
+
 }
 
 Vue.use(Enum, { enumInfo })
