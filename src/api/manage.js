@@ -77,7 +77,6 @@ export function getActionImageCode (url, params) {
     url: http.addUrl(url),
     method: 'get',
     headers: { deviceId: 'web' },
-    responseType: 'blob',
     params: http.addParams(params)
   })
 }

@@ -182,7 +182,7 @@ export default {
     // 获取验证码
     getVerifyCode () {
       getImageCode().then(res => {
-        this.verifyCode = window.URL.createObjectURL(res.data)
+        this.verifyCode = 'data:image/png;base64,' + res.data.data
       })
     }
   }
